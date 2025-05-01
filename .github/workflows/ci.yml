@@ -43,8 +43,38 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: true
 
-  build:
+  backup-test:
     needs: test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up PostgreSQL
+      uses: harmon758/postgresql-action@v1
+      with:
+        postgresql version: '14'
+        postgresql db: 'snap_codex_test'
+        postgresql user: 'postgres'
+        postgresql password: 'postgres'
+    
+    - name: Run backup test
+      run: |
+        chmod +x scripts/db-backup.sh
+        chmod +x scripts/recovery-test.sh
+        ./scripts/db-backup.sh
+        ./scripts/recovery-test.sh
+      env:
+        DB_HOST: localhost
+        DB_PORT: 5432
+        DB_NAME: snap_codex_test
+        DB_USER: postgres
+        DB_PASSWORD: postgres
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  build:
+    needs: backup-test
     runs-on: ubuntu-latest
     
     steps:
@@ -89,6 +119,8 @@ jobs:
       run: |
         kubectl apply -f k8s/deployment.yaml
         kubectl apply -f k8s/service.yaml
+        kubectl apply -f k8s/backup-pvc.yaml
+        kubectl apply -f k8s/backup-cronjob.yaml
         kubectl rollout status deployment/snap-codex-scheduler
       env:
         KUBECONFIG: kubeconfig.yaml 

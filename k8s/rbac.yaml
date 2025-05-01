@@ -1,0 +1,32 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: snap-codex-scheduler-role
+  namespace: default
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: snap-codex-scheduler-rolebinding
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: snap-codex-scheduler
+  namespace: default
+roleRef:
+  kind: Role
+  name: snap-codex-scheduler-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: snap-codex-scheduler
+  namespace: default 

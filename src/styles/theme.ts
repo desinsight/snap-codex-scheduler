@@ -1,116 +1,51 @@
 import { DefaultTheme } from 'styled-components';
 
-export const lightTheme: DefaultTheme = {
+const theme: DefaultTheme = {
   colors: {
-    primary: '#2196F3',
-    secondary: '#FF4081',
-    background: '#FFFFFF',
-    surface: '#F5F5F5',
-    text: '#212121',
-    textSecondary: '#757575',
-    error: '#F44336',
-    success: '#4CAF50',
-    warning: '#FFC107',
-    border: '#E0E0E0',
-    disabled: '#BDBDBD',
+    primary: '#007AFF',
+    secondary: '#5856D6',
+    success: '#34C759',
+    danger: '#FF3B30',
+    warning: '#FF9500',
+    info: '#5AC8FA',
+    light: '#F2F2F7',
+    dark: '#1C1C1E',
+    white: '#FFFFFF',
+    black: '#000000',
   },
-  spacing: {
-    xs: '4px',
-    sm: '8px',
-    md: '16px',
-    lg: '24px',
-    xl: '32px',
+  fonts: {
+    body: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
+    heading: 'inherit',
+    monospace: 'Menlo, monospace',
   },
-  typography: {
-    fontFamily: "'Noto Sans KR', sans-serif",
-    fontSize: {
-      xs: '12px',
-      sm: '14px',
-      md: '16px',
-      lg: '18px',
-      xl: '20px',
-    },
-    fontWeight: {
-      regular: 400,
-      medium: 500,
-      bold: 700,
-    },
+  fontSizes: {
+    xs: '0.75rem',
+    sm: '0.875rem',
+    md: '1rem',
+    lg: '1.125rem',
+    xl: '1.25rem',
+    '2xl': '1.5rem',
+    '3xl': '1.875rem',
+    '4xl': '2.25rem',
+    '5xl': '3rem',
   },
-  breakpoints: {
-    mobile: '320px',
-    tablet: '768px',
-    desktop: '1024px',
-    wide: '1440px',
+  space: {
+    xs: '0.25rem',
+    sm: '0.5rem',
+    md: '1rem',
+    lg: '1.5rem',
+    xl: '2rem',
+    '2xl': '4rem',
+    '3xl': '8rem',
   },
-  shadows: {
-    small: '0 2px 4px rgba(0,0,0,0.1)',
-    medium: '0 4px 8px rgba(0,0,0,0.1)',
-    large: '0 8px 16px rgba(0,0,0,0.1)',
-  },
-  borderRadius: {
-    small: '4px',
-    medium: '8px',
-    large: '12px',
+  radii: {
+    none: '0',
+    sm: '0.125rem',
+    md: '0.25rem',
+    lg: '0.5rem',
+    xl: '1rem',
+    full: '9999px',
   },
 };
 
-export const darkTheme: DefaultTheme = {
-  colors: {
-    primary: '#64B5F6',
-    secondary: '#FF80AB',
-    background: '#121212',
-    surface: '#1E1E1E',
-    text: '#FFFFFF',
-    textSecondary: '#B0B0B0',
-    error: '#EF5350',
-    success: '#66BB6A',
-    warning: '#FFD54F',
-    border: '#424242',
-    disabled: '#616161',
-  },
-  spacing: {
-    xs: '4px',
-    sm: '8px',
-    md: '16px',
-    lg: '24px',
-    xl: '32px',
-  },
-  typography: {
-    fontFamily: "'Noto Sans KR', sans-serif",
-    fontSize: {
-      xs: '12px',
-      sm: '14px',
-      md: '16px',
-      lg: '18px',
-      xl: '20px',
-    },
-    fontWeight: {
-      regular: 400,
-      medium: 500,
-      bold: 700,
-    },
-  },
-  breakpoints: {
-    mobile: '320px',
-    tablet: '768px',
-    desktop: '1024px',
-    wide: '1440px',
-  },
-  shadows: {
-    small: '0 2px 4px rgba(0,0,0,0.3)',
-    medium: '0 4px 8px rgba(0,0,0,0.3)',
-    large: '0 8px 16px rgba(0,0,0,0.3)',
-  },
-  borderRadius: {
-    small: '4px',
-    medium: '8px',
-    large: '12px',
-  },
-};
-
-export const media = {
-  mobile: `@media (min-width: ${lightTheme.breakpoints.mobile})`,
-  tablet: `@media (min-width: ${lightTheme.breakpoints.tablet})`,
-  desktop: `@media (min-width: ${lightTheme.breakpoints.desktop})`,
-  wide: `@media (min-width: ${lightTheme.breakpoints.wide})`,
-}; 
+export default theme; 

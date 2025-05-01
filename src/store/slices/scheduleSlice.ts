@@ -63,6 +63,13 @@ export const fetchScheduleStats = createAsyncThunk(
   }
 );
 
+export const exportSchedules = createAsyncThunk(
+  'schedules/export',
+  async () => {
+    return await scheduleService.exportSchedules();
+  }
+);
+
 const scheduleSlice = createSlice({
   name: 'schedules',
   initialState,
@@ -162,6 +169,19 @@ const scheduleSlice = createSlice({
       .addCase(fetchScheduleStats.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch schedule stats';
+      })
+      // Export Schedules
+      .addCase(exportSchedules.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(exportSchedules.fulfilled, (state, action) => {
+        state.loading = false;
+        // Handle the response from exporting schedules
+      })
+      .addCase(exportSchedules.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to export schedules';
       });
   }
 });

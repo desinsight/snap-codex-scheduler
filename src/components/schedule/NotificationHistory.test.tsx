@@ -1,14 +1,11 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { I18nextProvider } from 'react-i18next';
-import configureStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
-import i18n from '../../../i18n';
-import NotificationHistory from './NotificationHistory';
+import { ThemeProvider } from 'styled-components';
+import { store } from '../../store';
+import theme from '../../styles/theme';
+import NotificationHistory from '../NotificationHistory';
 import { NotificationHistory as NotificationHistoryType } from '../../types/notification';
-
-const mockStore = configureStore([thunk]);
 
 describe('NotificationHistory', () => {
   const mockHistory: NotificationHistoryType[] = [
@@ -29,21 +26,12 @@ describe('NotificationHistory', () => {
     },
   ];
 
-  const renderComponent = (initialState = {}) => {
-    const store = mockStore({
-      notifications: {
-        history: mockHistory,
-        loading: false,
-        error: null,
-      },
-      ...initialState,
-    });
-
+  const renderComponent = () => {
     return render(
       <Provider store={store}>
-        <I18nextProvider i18n={i18n}>
-          <NotificationHistory scheduleId="schedule-1" />
-        </I18nextProvider>
+        <ThemeProvider theme={theme}>
+          <NotificationHistory scheduleId="123" />
+        </ThemeProvider>
       </Provider>
     );
   };
@@ -77,40 +65,20 @@ describe('NotificationHistory', () => {
     expect(dateElements.length).toBe(2);
   });
 
-  it('shows empty state when no history exists', () => {
-    renderComponent({
-      notifications: {
-        history: [],
-        loading: false,
-        error: null,
-      },
-    });
-
-    expect(screen.getByText('알림 기록이 없습니다')).toBeInTheDocument();
+  it('renders loading spinner when loading', () => {
+    renderComponent();
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
   });
 
-  it('shows loading state', () => {
-    renderComponent({
-      notifications: {
-        history: [],
-        loading: true,
-        error: null,
-      },
-    });
-
-    expect(screen.getByText('알림 설정을 불러오는 중...')).toBeInTheDocument();
+  it('renders error message when there is an error', () => {
+    store.dispatch({ type: 'notifications/setError', payload: 'Error message' });
+    renderComponent();
+    expect(screen.getByText('notifications.error.fetchFailed')).toBeInTheDocument();
   });
 
-  it('shows error message', () => {
-    const errorMessage = 'Failed to fetch notification history';
-    renderComponent({
-      notifications: {
-        history: [],
-        loading: false,
-        error: errorMessage,
-      },
-    });
-
-    expect(screen.getByText(errorMessage)).toBeInTheDocument();
+  it('renders empty message when there is no history', () => {
+    store.dispatch({ type: 'notifications/setHistory', payload: [] });
+    renderComponent();
+    expect(screen.getByText('notifications.empty')).toBeInTheDocument();
   });
 }); 

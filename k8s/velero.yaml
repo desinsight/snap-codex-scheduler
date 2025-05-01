@@ -1,0 +1,42 @@
+apiVersion: velero.io/v1
+kind: BackupStorageLocation
+metadata:
+  name: default
+  namespace: velero
+spec:
+  provider: aws
+  objectStorage:
+    bucket: snap-codex-backups
+  config:
+    region: ap-northeast-2
+---
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: daily-backup
+  namespace: velero
+spec:
+  schedule: "0 0 * * *"
+  template:
+    hooks: {}
+    includedNamespaces:
+    - default
+    - monitoring
+    - logging
+    ttl: 720h
+    storageLocation: default
+    volumeSnapshotLocations:
+    - default
+---
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: disaster-recovery
+  namespace: velero
+spec:
+  backupName: daily-backup
+  includedNamespaces:
+  - default
+  - monitoring
+  - logging
+  restorePVs: true 

@@ -13,6 +13,10 @@ spec:
     metadata:
       labels:
         app: snap-codex-scheduler
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3000"
+        prometheus.io/path: "/metrics"
     spec:
       containers:
       - name: snap-codex-scheduler
@@ -26,6 +30,11 @@ spec:
           limits:
             memory: "512Mi"
             cpu: "500m"
+        envFrom:
+        - configMapRef:
+            name: snap-codex-scheduler-config
+        - secretRef:
+            name: snap-codex-scheduler-secrets
         readinessProbe:
           httpGet:
             path: /health
@@ -37,4 +46,11 @@ spec:
             path: /health
             port: 3000
           initialDelaySeconds: 15
-          periodSeconds: 20 
+          periodSeconds: 20
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: snap-codex-scheduler-config 

@@ -1,0 +1,40 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: snap-codex-cluster
+  region: ap-northeast-2
+  version: "1.28"
+
+vpc:
+  nat:
+    gateway: Single
+
+nodeGroups:
+  - name: ng-1
+    instanceType: t3.medium
+    desiredCapacity: 2
+    minSize: 1
+    maxSize: 3
+    volumeSize: 20
+    ssh:
+      allow: true
+      publicKeyName: snap-codex-key
+    labels:
+      role: worker
+    tags:
+      Environment: Development
+      Project: snap-codex
+
+managedNodeGroups:
+  - name: managed-ng-1
+    instanceType: t3.medium
+    desiredCapacity: 2
+    minSize: 1
+    maxSize: 3
+    volumeSize: 20
+    labels:
+      role: worker
+    tags:
+      Environment: Development
+      Project: snap-codex 

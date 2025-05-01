@@ -7,7 +7,7 @@ import { RootState } from '../../store';
 import { fetchScheduleById } from '../../store/slices/scheduleSlice';
 import { Schedule } from '../../types/schedule';
 import NotificationSettings from './NotificationSettings';
-import NotificationHistory from './NotificationHistory';
+import NotificationHistory from '../NotificationHistory';
 
 // ... existing styled components ...
 

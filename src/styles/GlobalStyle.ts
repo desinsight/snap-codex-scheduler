@@ -1,7 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 import { lightTheme, darkTheme } from './theme';
 
-export const GlobalStyle = createGlobalStyle<{ theme: typeof lightTheme | typeof darkTheme }>`
+const GlobalStyle = createGlobalStyle`
   * {
     margin: 0;
     padding: 0;
@@ -16,16 +16,16 @@ export const GlobalStyle = createGlobalStyle<{ theme: typeof lightTheme | typeof
   }
 
   body {
-    font-family: ${({ theme }) => theme.typography.fontFamily};
+    font-family: ${({ theme }) => theme.fonts.body};
     font-size: ${({ theme }) => theme.typography.fontSize.md};
     line-height: 1.5;
-    color: ${({ theme }) => theme.colors.text};
-    background-color: ${({ theme }) => theme.colors.background};
+    color: ${({ theme }) => theme.colors.dark};
+    background-color: ${({ theme }) => theme.colors.light};
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   a {
-    color: ${({ theme }) => theme.colors.primary};
+    color: inherit;
     text-decoration: none;
     transition: color 0.3s ease;
 
@@ -35,12 +35,9 @@ export const GlobalStyle = createGlobalStyle<{ theme: typeof lightTheme | typeof
   }
 
   button {
-    font-family: inherit;
-    font-size: inherit;
-    cursor: pointer;
-    border: none;
     background: none;
-    padding: 0;
+    border: none;
+    cursor: pointer;
   }
 
   input, textarea, select {
@@ -129,4 +126,10 @@ export const GlobalStyle = createGlobalStyle<{ theme: typeof lightTheme | typeof
       color: ${({ theme }) => theme.colors.text};
     }
   }
-`; 
+
+  ul, ol {
+    list-style: none;
+  }
+`;
+
+export default GlobalStyle; 
