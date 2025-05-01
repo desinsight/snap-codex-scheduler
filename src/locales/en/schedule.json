@@ -1,0 +1,268 @@
+{
+  "title": "Schedules",
+  "categories": {
+    "work": "Work",
+    "personal": "Personal",
+    "education": "Education",
+    "health": "Health"
+  },
+  "allDay": "All Day",
+  "shared": "Shared",
+  "actions": {
+    "create": "Create",
+    "edit": "Edit",
+    "update": "Update",
+    "delete": "Delete",
+    "share": "Share",
+    "export": "Export",
+    "import": "Import"
+  },
+  "filter": {
+    "search": "Search schedules",
+    "category": "Category",
+    "shared": "Shared"
+  },
+  "empty": {
+    "title": "No schedules found",
+    "description": "Create a new schedule to get started"
+  },
+  "error": {
+    "fetch": "Failed to fetch schedules",
+    "create": "Failed to create schedule",
+    "update": "Failed to update schedule",
+    "delete": "Failed to delete schedule",
+    "share": "Failed to share schedule",
+    "export": "Failed to export schedules",
+    "import": "Failed to import schedules"
+  },
+  "loading": "Loading schedules...",
+  "detail": {
+    "startTime": "Start Time",
+    "endTime": "End Time",
+    "notFound": "Schedule not found",
+    "deleteConfirm": "Are you sure you want to delete this schedule?"
+  },
+  "form": {
+    "title": "Title",
+    "description": "Description",
+    "startTime": "Start Time",
+    "endTime": "End Time",
+    "allDay": "All Day",
+    "category": "Category",
+    "shared": "Shared"
+  },
+  "share": {
+    "email": "Email",
+    "emailPlaceholder": "Enter email address",
+    "success": "Schedule shared successfully"
+  },
+  "common": {
+    "back": "Back",
+    "cancel": "Cancel",
+    "saving": "Saving...",
+    "sharing": "Sharing...",
+    "exporting": "Exporting...",
+    "importing": "Importing...",
+    "private": "Private"
+  },
+  "export": {
+    "success": "Schedules exported successfully"
+  },
+  "import": {
+    "success": "Schedules imported successfully"
+  },
+  "calendar": {
+    "month": "Month",
+    "week": "Week",
+    "day": "Day",
+    "agenda": "Agenda",
+    "today": "Today",
+    "previous": "Previous",
+    "next": "Next",
+    "date": "Date",
+    "time": "Time",
+    "event": "Event"
+  },
+  "notifications": {
+    "title": "Notification Settings",
+    "loading": "Loading notification settings...",
+    "types": {
+      "email": "Email Notification",
+      "browser": "Browser Notification"
+    },
+    "times": {
+      "5": "5 minutes before",
+      "10": "10 minutes before",
+      "15": "15 minutes before",
+      "30": "30 minutes before",
+      "60": "1 hour before",
+      "120": "2 hours before",
+      "1440": "1 day before"
+    },
+    "history": {
+      "title": "Notification History",
+      "empty": "No notification history",
+      "status": {
+        "success": "Success",
+        "failed": "Failed"
+      }
+    },
+    "templates": {
+      "title": "Notification Templates",
+      "loading": "Loading templates...",
+      "name": "Template Name",
+      "subject": "Subject",
+      "content": "Content",
+      "create": "Create Template",
+      "edit": "Edit",
+      "delete": "Delete",
+      "confirmDelete": "Are you sure you want to delete this template?",
+      "type": {
+        "email": "Email Template",
+        "browser": "Browser Template"
+      },
+      "variables": {
+        "title": "Schedule Title",
+        "description": "Schedule Description",
+        "startDate": "Start Date",
+        "endDate": "End Date",
+        "location": "Location",
+        "category": "Category",
+        "createdBy": "Created By"
+      },
+      "preview": "Preview",
+      "categories": {
+        "all": "All",
+        "work": "Work",
+        "personal": "Personal",
+        "education": "Education",
+        "health": "Health",
+        "system": "System"
+      },
+      "versions": "Version History",
+      "usage": {
+        "total": "Total Usage",
+        "success": "Success",
+        "failed": "Failed"
+      },
+      "import": "Import Templates",
+      "export": "Export Templates",
+      "clone": "Clone Template",
+      "rollback": "Rollback to this version",
+      "changes": "Changes"
+    },
+    "groups": {
+      "title": "Notification Groups",
+      "loading": "Loading groups...",
+      "name": "Group Name",
+      "description": "Description",
+      "create": "Create Group",
+      "edit": "Edit",
+      "delete": "Delete",
+      "confirmDelete": "Are you sure you want to delete this group?",
+      "active": "Active",
+      "inactive": "Inactive",
+      "activate": "Activate",
+      "deactivate": "Deactivate",
+      "type": "Notification Type",
+      "time": "Notification Time",
+      "priority": "Priority",
+      "scheduleCount": "Schedules in Group"
+    },
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "urgent": "Urgent"
+    },
+    "analytics": {
+      "title": "Notification Analytics Dashboard",
+      "successRate": "Success Rate",
+      "totalSent": "Total Notifications Sent",
+      "totalSuccess": "Total Successful",
+      "totalFailed": "Total Failed",
+      "hourlyDistribution": "Hourly Distribution",
+      "categoryDistribution": "Category Distribution",
+      "failureReasons": "Failure Reasons",
+      "userResponseRates": "User Response Rates"
+    },
+    "optimizer": {
+      "title": "Smart Notification Optimizer",
+      "userSelection": "User Selection",
+      "selectUser": "Select a User",
+      "smartSettings": "Smart Settings",
+      "optimalTimeStart": "Optimal Time Range Start",
+      "optimalTimeEnd": "Optimal Time Range End",
+      "priorityThreshold": "Priority Threshold",
+      "maxDailyNotifications": "Maximum Daily Notifications",
+      "saveSettings": "Save Settings",
+      "fatigueSettings": "Fatigue Settings",
+      "fatigueLevel": "Fatigue Level",
+      "cooldownPeriod": "Cooldown Period (minutes)",
+      "saveFatigue": "Save Fatigue Settings",
+      "actions": "Actions",
+      "adjustTiming": "Adjust Notification Timing"
+    },
+    "response": {
+      "title": "Notification Response Tracker",
+      "channelStatus": "Channel Status",
+      "successRate": "Success Rate",
+      "totalSent": "Total Sent",
+      "totalFailed": "Total Failed",
+      "channelTemplates": "Channel Templates",
+      "channel": "Channel",
+      "templateName": "Template Name",
+      "templateContent": "Template Content",
+      "createTemplate": "Create Template",
+      "channelSwitchRules": "Channel Switch Rules",
+      "sourceChannel": "Source Channel",
+      "targetChannel": "Target Channel",
+      "failureCount": "Failure Count",
+      "timeSinceLastAttempt": "Time Since Last Attempt (minutes)",
+      "createRule": "Create Rule"
+    },
+    "analysis": {
+      "title": "User Behavior Analysis",
+      "timePattern": "Time-based Response Pattern",
+      "channelPreference": "Channel Preference",
+      "priorityPattern": "Priority-based Response Pattern",
+      "engagementMetrics": "Engagement Metrics",
+      "totalNotifications": "Total Notifications",
+      "totalResponses": "Total Responses",
+      "averageResponseTime": "Average Response Time",
+      "responseRate": "Response Rate"
+    },
+    "followUp": {
+      "title": "Follow-up Notification Automation",
+      "createRule": "Create New Rule",
+      "ruleName": "Rule Name",
+      "conditions": "Conditions",
+      "responseType": "Response Type",
+      "timeSinceNotification": "Time Since Notification (hours)",
+      "priority": "Priority",
+      "actions": "Actions",
+      "channel": "Channel",
+      "delay": "Delay (hours)",
+      "maxRetries": "Maximum Retries",
+      "ignore": "Ignore",
+      "dismiss": "Dismiss",
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "create": "Create Rule",
+      "confirmDelete": "Are you sure you want to delete this rule?",
+      "active": "Active",
+      "inactive": "Inactive",
+      "activate": "Activate",
+      "deactivate": "Deactivate"
+    },
+    "optimization": {
+      "title": "Notification Optimization",
+      "optimalTime": "Optimal Time Range",
+      "preferredChannels": "Preferred Channels",
+      "responseRate": "Response Rate",
+      "averageResponseTime": "Average Response Time",
+      "lastUpdated": "Last Updated"
+    }
+  }
+} 

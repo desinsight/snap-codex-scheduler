@@ -1,0 +1,343 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ScheduleItem renders schedule title 1`] = `
+<div>
+  <div
+    class="sc-bczRLJ jQJQqE"
+  >
+    <div
+      class="sc-gsnTjR bQJQqE"
+    >
+      <h3
+        class="sc-dkzDqf bQJQqE"
+      >
+        Test Schedule
+      </h3>
+      <span
+        class="sc-hKMtZM bQJQqE"
+        category="WORK"
+      >
+        Work
+      </span>
+    </div>
+    <p
+      class="sc-eCYdqJ bQJQqE"
+    >
+      This is a test schedule
+    </p>
+    <div
+      class="sc-gKXOVf bQJQqE"
+    >
+      Mar 20, 2024 10:00 - Mar 20, 2024 12:00
+    </div>
+    <div
+      class="sc-iBkjds bQJQqE"
+    >
+      <div
+        class="sc-jSMfEi bQJQqE"
+      >
+        <button
+          class="sc-furwcr bQJQqE"
+        >
+          Edit
+        </button>
+        <button
+          class="sc-furwcr bQJQqE"
+        >
+          Delete
+        </button>
+      </div>
+      <span
+        class="sc-jrQzAO bQJQqE"
+      >
+        Shared
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ScheduleItem renders all-day text when schedule is all day 1`] = `
+<div>
+  <div
+    class="sc-bczRLJ jQJQqE"
+  >
+    <div
+      class="sc-gsnTjR bQJQqE"
+    >
+      <h3
+        class="sc-dkzDqf bQJQqE"
+      >
+        Test Schedule
+      </h3>
+      <span
+        class="sc-hKMtZM bQJQqE"
+        category="WORK"
+      >
+        Work
+      </span>
+    </div>
+    <p
+      class="sc-eCYdqJ bQJQqE"
+    >
+      This is a test schedule
+    </p>
+    <div
+      class="sc-gKXOVf bQJQqE"
+    >
+      All Day
+    </div>
+    <div
+      class="sc-iBkjds bQJQqE"
+    >
+      <div
+        class="sc-jSMfEi bQJQqE"
+      >
+        <button
+          class="sc-furwcr bQJQqE"
+        >
+          Edit
+        </button>
+        <button
+          class="sc-furwcr bQJQqE"
+        >
+          Delete
+        </button>
+      </div>
+      <span
+        class="sc-jrQzAO bQJQqE"
+      >
+        Shared
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ScheduleItem renders category badge 1`] = `
+<div>
+  <div
+    class="sc-bczRLJ jQJQqE"
+  >
+    <div
+      class="sc-gsnTjR bQJQqE"
+    >
+      <h3
+        class="sc-dkzDqf bQJQqE"
+      >
+        Test Schedule
+      </h3>
+      <span
+        class="sc-hKMtZM bQJQqE"
+        category="WORK"
+      >
+        Work
+      </span>
+    </div>
+    <p
+      class="sc-eCYdqJ bQJQqE"
+    >
+      This is a test schedule
+    </p>
+    <div
+      class="sc-gKXOVf bQJQqE"
+    >
+      Mar 20, 2024 10:00 - Mar 20, 2024 12:00
+    </div>
+    <div
+      class="sc-iBkjds bQJQqE"
+    >
+      <div
+        class="sc-jSMfEi bQJQqE"
+      >
+        <button
+          class="sc-furwcr bQJQqE"
+        >
+          Edit
+        </button>
+        <button
+          class="sc-furwcr bQJQqE"
+        >
+          Delete
+        </button>
+      </div>
+      <span
+        class="sc-jrQzAO bQJQqE"
+      >
+        Shared
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ScheduleItem renders schedule description 1`] = `
+<div>
+  <div
+    class="sc-bczRLJ jQJQqE"
+  >
+    <div
+      class="sc-gsnTjR bQJQqE"
+    >
+      <h3
+        class="sc-dkzDqf bQJQqE"
+      >
+        Test Schedule
+      </h3>
+      <span
+        class="sc-hKMtZM bQJQqE"
+        category="WORK"
+      >
+        Work
+      </span>
+    </div>
+    <p
+      class="sc-eCYdqJ bQJQqE"
+    >
+      This is a test schedule
+    </p>
+    <div
+      class="sc-gKXOVf bQJQqE"
+    >
+      Mar 20, 2024 10:00 - Mar 20, 2024 12:00
+    </div>
+    <div
+      class="sc-iBkjds bQJQqE"
+    >
+      <div
+        class="sc-jSMfEi bQJQqE"
+      >
+        <button
+          class="sc-furwcr bQJQqE"
+        >
+          Edit
+        </button>
+        <button
+          class="sc-furwcr bQJQqE"
+        >
+          Delete
+        </button>
+      </div>
+      <span
+        class="sc-jrQzAO bQJQqE"
+      >
+        Shared
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ScheduleItem renders schedule time correctly 1`] = `
+<div>
+  <div
+    class="sc-bczRLJ jQJQqE"
+  >
+    <div
+      class="sc-gsnTjR bQJQqE"
+    >
+      <h3
+        class="sc-dkzDqf bQJQqE"
+      >
+        Test Schedule
+      </h3>
+      <span
+        class="sc-hKMtZM bQJQqE"
+        category="WORK"
+      >
+        Work
+      </span>
+    </div>
+    <p
+      class="sc-eCYdqJ bQJQqE"
+    >
+      This is a test schedule
+    </p>
+    <div
+      class="sc-gKXOVf bQJQqE"
+    >
+      Mar 20, 2024 10:00 - Mar 20, 2024 12:00
+    </div>
+    <div
+      class="sc-iBkjds bQJQqE"
+    >
+      <div
+        class="sc-jSMfEi bQJQqE"
+      >
+        <button
+          class="sc-furwcr bQJQqE"
+        >
+          Edit
+        </button>
+        <button
+          class="sc-furwcr bQJQqE"
+        >
+          Delete
+        </button>
+      </div>
+      <span
+        class="sc-jrQzAO bQJQqE"
+      >
+        Shared
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ScheduleItem renders shared badge when schedule is shared 1`] = `
+<div>
+  <div
+    class="sc-bczRLJ jQJQqE"
+  >
+    <div
+      class="sc-gsnTjR bQJQqE"
+    >
+      <h3
+        class="sc-dkzDqf bQJQqE"
+      >
+        Test Schedule
+      </h3>
+      <span
+        class="sc-hKMtZM bQJQqE"
+        category="WORK"
+      >
+        Work
+      </span>
+    </div>
+    <p
+      class="sc-eCYdqJ bQJQqE"
+    >
+      This is a test schedule
+    </p>
+    <div
+      class="sc-gKXOVf bQJQqE"
+    >
+      Mar 20, 2024 10:00 - Mar 20, 2024 12:00
+    </div>
+    <div
+      class="sc-iBkjds bQJQqE"
+    >
+      <div
+        class="sc-jSMfEi bQJQqE"
+      >
+        <button
+          class="sc-furwcr bQJQqE"
+        >
+          Edit
+        </button>
+        <button
+          class="sc-furwcr bQJQqE"
+        >
+          Delete
+        </button>
+      </div>
+      <span
+        class="sc-jrQzAO bQJQqE"
+      >
+        Shared
+      </span>
+    </div>
+  </div>
+</div>
+`; 

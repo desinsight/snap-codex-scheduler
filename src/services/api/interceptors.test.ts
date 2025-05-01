@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import setupInterceptors from './interceptors';
+=======
+import axios from 'axios';
+import setupInterceptors from './interceptors';
+import { getToken, getRefreshToken } from '../../utils/token';
+>>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
 import { AuthService } from './auth.service';
 import { store } from '../../store';
 
@@ -44,8 +50,13 @@ Object.defineProperty(window, 'localStorage', {
 });
 
 describe('Axios Interceptors', () => {
+<<<<<<< HEAD
   let requestInterceptor: [(config: AxiosRequestConfig) => AxiosRequestConfig, (error: Error) => Promise<Error>];
   let responseInterceptor: [(response: AxiosResponse) => AxiosResponse, (error: Error) => Promise<Error>];
+=======
+  let requestInterceptor: any;
+  let responseInterceptor: any;
+>>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -89,7 +100,11 @@ describe('Axios Interceptors', () => {
         data: { message: 'Success' },
       };
 
+<<<<<<< HEAD
       const result = responseInterceptor[0](response as AxiosResponse);
+=======
+      const result = responseInterceptor[0](response);
+>>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
 
       expect(result).toEqual(response);
     });
@@ -119,7 +134,11 @@ describe('Axios Interceptors', () => {
         config: originalRequest,
       };
 
+<<<<<<< HEAD
       await responseInterceptor[1](error as Error);
+=======
+      await responseInterceptor[1](error);
+>>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
 
       expect(axiosMock).toHaveBeenCalledWith(expect.objectContaining({
         headers: { Authorization: `Bearer ${mockResponse.token}` }
@@ -143,8 +162,13 @@ describe('Axios Interceptors', () => {
       const dispatchSpy = jest.spyOn(store, 'dispatch');
 
       try {
+<<<<<<< HEAD
         await responseInterceptor[1](error as Error);
       } catch {
+=======
+        await responseInterceptor[1](error);
+      } catch (e) {
+>>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
         expect(dispatchSpy).toHaveBeenCalledWith({ type: 'auth/logout' });
       }
     });
@@ -161,9 +185,15 @@ describe('Axios Interceptors', () => {
       };
 
       try {
+<<<<<<< HEAD
         await responseInterceptor[1](error as Error);
       } catch (error) {
         expect(error).toEqual(error);
+=======
+        await responseInterceptor[1](error);
+      } catch (e) {
+        expect(e).toEqual(error);
+>>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
       }
     });
 
@@ -179,9 +209,15 @@ describe('Axios Interceptors', () => {
       };
 
       try {
+<<<<<<< HEAD
         await responseInterceptor[1](error as Error);
       } catch (error) {
         expect(error).toEqual(error);
+=======
+        await responseInterceptor[1](error);
+      } catch (e) {
+        expect(e).toEqual(error);
+>>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
       }
     });
   });

@@ -1,5 +1,9 @@
 import axios from 'axios';
+<<<<<<< HEAD
 import { getToken, getRefreshToken } from '../../utils/token';
+=======
+import { getToken, getRefreshToken, isTokenValid } from '../../utils/token';
+>>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
 import { AuthService } from './auth.service';
 import { store } from '../../store';
 
@@ -36,7 +40,11 @@ const setupInterceptors = () => {
           }
 
           const response = await AuthService.refreshToken();
+<<<<<<< HEAD
           const { token } = response;
+=======
+          const { token, expiresIn } = response;
+>>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
 
           // 새로운 토큰으로 원래 요청 재시도
           originalRequest.headers.Authorization = `Bearer ${token}`;

@@ -4,32 +4,56 @@ describe('Password Validation', () => {
   describe('validatePassword', () => {
     it('should return true for valid password', () => {
       const password = 'StrongPassword123!';
+<<<<<<< HEAD
       expect(validatePassword(password).isValid).toBe(true);
+=======
+      expect(validatePassword(password)).toBe(true);
+>>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
     });
 
     it('should return false for password shorter than 12 characters', () => {
       const password = 'Short123!';
+<<<<<<< HEAD
       expect(validatePassword(password).isValid).toBe(false);
+=======
+      expect(validatePassword(password)).toBe(false);
+>>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
     });
 
     it('should return false for password without uppercase letter', () => {
       const password = 'lowercase123!';
+<<<<<<< HEAD
       expect(validatePassword(password).isValid).toBe(false);
+=======
+      expect(validatePassword(password)).toBe(false);
+>>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
     });
 
     it('should return false for password without lowercase letter', () => {
       const password = 'UPPERCASE123!';
+<<<<<<< HEAD
       expect(validatePassword(password).isValid).toBe(false);
+=======
+      expect(validatePassword(password)).toBe(false);
+>>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
     });
 
     it('should return false for password without number', () => {
       const password = 'NoNumberHere!';
+<<<<<<< HEAD
       expect(validatePassword(password).isValid).toBe(false);
+=======
+      expect(validatePassword(password)).toBe(false);
+>>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
     });
 
     it('should return false for password without special character', () => {
       const password = 'NoSpecialChar123';
+<<<<<<< HEAD
       expect(validatePassword(password).isValid).toBe(false);
+=======
+      expect(validatePassword(password)).toBe(false);
+>>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
     });
   });
 

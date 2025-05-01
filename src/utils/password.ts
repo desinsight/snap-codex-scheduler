@@ -18,6 +18,7 @@ const defaultPolicy: PasswordPolicy = {
   historySize: 5,
 };
 
+<<<<<<< HEAD
 export interface PasswordValidationResult {
   isValid: boolean;
   errors: string[];
@@ -43,6 +44,32 @@ export const validatePassword = (password: string): PasswordValidationResult => 
   }
 
   if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+=======
+export const validatePassword = (
+  password: string,
+  policy: Partial<PasswordPolicy> = {}
+): { isValid: boolean; errors: string[] } => {
+  const mergedPolicy = { ...defaultPolicy, ...policy };
+  const errors: string[] = [];
+
+  if (password.length < mergedPolicy.minLength) {
+    errors.push(`Password must be at least ${mergedPolicy.minLength} characters long`);
+  }
+
+  if (mergedPolicy.requireUppercase && !/[A-Z]/.test(password)) {
+    errors.push('Password must contain at least one uppercase letter');
+  }
+
+  if (mergedPolicy.requireLowercase && !/[a-z]/.test(password)) {
+    errors.push('Password must contain at least one lowercase letter');
+  }
+
+  if (mergedPolicy.requireNumbers && !/[0-9]/.test(password)) {
+    errors.push('Password must contain at least one number');
+  }
+
+  if (mergedPolicy.requireSpecialChars && !/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+>>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
     errors.push('Password must contain at least one special character');
   }
 
@@ -52,6 +79,7 @@ export const validatePassword = (password: string): PasswordValidationResult => 
   };
 };
 
+<<<<<<< HEAD
 export const checkPasswordStrength = (password: string): 'weak' | 'medium' | 'strong' => {
   if (!password) {
     return 'weak';
@@ -78,6 +106,8 @@ export const checkPasswordStrength = (password: string): 'weak' | 'medium' | 'st
   return 'weak';
 };
 
+=======
+>>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
 export const isPasswordExpired = (lastChanged: Date, maxAgeDays: number = defaultPolicy.maxAgeDays): boolean => {
   const now = new Date();
   const diffTime = Math.abs(now.getTime() - lastChanged.getTime());

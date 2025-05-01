@@ -22,6 +22,15 @@ const mockStore = configureStore({
   },
 });
 
+<<<<<<< HEAD
+=======
+const mockUser = {
+  id: '1',
+  name: 'Test User',
+  email: 'test@example.com',
+};
+
+>>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
 const renderLoginForm = () => {
   return render(
     <Provider store={mockStore}>

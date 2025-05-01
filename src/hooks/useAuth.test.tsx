@@ -4,6 +4,10 @@ import { configureStore } from '@reduxjs/toolkit';
 import { useAuth } from './useAuth';
 import authReducer from '../store/slices/authSlice';
 import { AuthService } from '../services/api/auth.service';
+<<<<<<< HEAD
+=======
+import { isTokenValid, getToken, clearTokens } from '../utils/token';
+>>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
 
 // AuthService 모의 객체 생성
 jest.mock('../services/api/auth.service');
@@ -76,6 +80,10 @@ describe('useAuth', () => {
     expect(result.current.isAuthenticated).toBe(true);
     expect(result.current.user).toEqual(mockResponse.user);
     expect(result.current.token).toBe(mockResponse.token);
+<<<<<<< HEAD
+=======
+    expect(result.current.error).toBeNull();
+>>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
   });
 
   it('should handle successful registration', async () => {
@@ -183,7 +191,11 @@ describe('useAuth', () => {
     await act(async () => {
       try {
         await result.current.refreshToken();
+<<<<<<< HEAD
       } catch {
+=======
+      } catch (error) {
+>>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
         expect(result.current.isAuthenticated).toBe(false);
         expect(result.current.user).toBeNull();
         expect(result.current.token).toBeNull();
@@ -201,8 +213,13 @@ describe('useAuth', () => {
     };
 
     // Create a promise that we can resolve later
+<<<<<<< HEAD
     let resolveRefresh: (value: typeof mockResponse) => void;
     const refreshPromise = new Promise<typeof mockResponse>((resolve) => {
+=======
+    let resolveRefresh: (value: any) => void;
+    const refreshPromise = new Promise((resolve) => {
+>>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
       resolveRefresh = resolve;
     });
 
