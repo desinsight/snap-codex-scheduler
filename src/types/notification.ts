@@ -1,4 +1,4 @@
-export type NotificationType = 'email' | 'browser';
+export type NotificationType = 'BROWSER' | 'EMAIL' | 'BOTH';
 
 export type NotificationTime = '5' | '10' | '15' | '30' | '60' | '120' | '1440';
 
@@ -14,11 +14,12 @@ export interface NotificationSettings {
 
 export interface NotificationHistory {
   id: string;
-  scheduleId: string;
+  eventId: string;
+  eventTitle: string;
   type: NotificationType;
-  sentAt: Date;
-  status: 'success' | 'failed';
-  error?: string;
+  message: string;
+  timestamp: Date;
+  read: boolean;
 }
 
 export type NotificationTemplateType = 'email' | 'browser';
@@ -573,4 +574,21 @@ export interface SecurityState {
   errorHandling: ErrorHandling;
   loading: boolean;
   error: string | null;
+}
+
+export type NotificationTiming = {
+  value: number;
+  unit: 'minutes' | 'hours' | 'days';
+};
+
+export interface NotificationPreference {
+  enabled: boolean;
+  type: NotificationType;
+  timing: NotificationTiming[];
+}
+
+export interface NotificationState {
+  preferences: NotificationPreference;
+  history: NotificationHistory[];
+  unreadCount: number;
 } 
