@@ -1,6 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import Button from '../common/Button';
+import { Theme } from '../../types/theme';
+
+type SortOption = 'date-asc' | 'date-desc' | 'title-asc' | 'title-desc' | 'priority-asc' | 'priority-desc';
 
 interface CalendarFiltersProps {
   onSearch: (query: string) => void;
@@ -18,31 +21,44 @@ export interface CalendarFilters {
   };
 }
 
-export type SortOption = 'date-asc' | 'date-desc' | 'priority' | 'status';
-
-const FiltersContainer = styled.div`
+const FiltersContainer = styled.div<{ theme: Theme }>`
   display: flex;
-  flex-wrap: wrap;
-  gap: ${({ theme }) => theme.space.md};
-  margin-bottom: ${({ theme }) => theme.space.lg};
-  padding: ${({ theme }) => theme.space.md};
-  background: ${({ theme }) => theme.colors.surface};
-  border-radius: ${({ theme }) => theme.radii.lg};
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.md};
+  padding: ${({ theme }) => theme.spacing.md};
+  background-color: ${({ theme }) => theme.colors.background.paper};
+  border-radius: ${({ theme }) => theme.shape.borderRadius};
   box-shadow: ${({ theme }) => theme.shadows.sm};
 `;
 
-const SearchInput = styled.input`
-  padding: ${({ theme }) => theme.space.sm};
-  border: 1px solid ${({ theme }) => theme.colors.text.tertiary}20;
-  border-radius: ${({ theme }) => theme.radii.md};
-  font-size: ${({ theme }) => theme.fontSizes.md};
+const SearchBar = styled.div<{ theme: Theme }>`
+  display: flex;
+  align-items: center;
+  background-color: ${({ theme }) => theme.colors.background.paper};
+  border-radius: ${({ theme }) => theme.shape.borderRadius};
+  padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.sm};
+  border: 1px solid ${({ theme }) => theme.colors.divider};
   width: 300px;
-  transition: all ${({ theme }) => theme.transitions.fast};
 
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.primary};
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary}20;
+  input {
+    border: none;
+    background: none;
+    flex: 1;
+    padding: ${({ theme }) => theme.spacing.xs};
+    font-size: ${({ theme }) => theme.typography.body2.fontSize};
+    color: ${({ theme }) => theme.colors.text.primary};
+
+    &:focus {
+      outline: none;
+    }
+
+    &::placeholder {
+      color: ${({ theme }) => theme.colors.text.secondary};
+    }
+  }
+
+  svg {
+    color: ${({ theme }) => theme.colors.text.secondary};
   }
 `;
 
@@ -74,20 +90,20 @@ const FilterSelect = styled.select`
   }
 `;
 
-const FilterChip = styled.div<{ active?: boolean }>`
-  padding: ${({ theme }) => `${theme.space.xs} ${theme.space.sm}`};
-  border-radius: ${({ theme }) => theme.radii.full};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
+const FilterChip = styled.div<{ active?: boolean; theme: Theme }>`
+  padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.sm}`};
+  border-radius: ${({ theme }) => theme.shape.borderRadius};
+  font-size: ${({ theme }) => theme.typography.body2.fontSize};
   color: ${({ active, theme }) =>
-    active ? theme.colors.surface : theme.colors.text.primary};
+    active ? theme.colors.background.paper : theme.colors.text.primary};
   background: ${({ active, theme }) =>
-    active ? theme.colors.primary : theme.colors.text.tertiary}20;
+    active ? theme.colors.primary.main : `${theme.colors.text.tertiary}20`};
   cursor: pointer;
-  transition: all ${({ theme }) => theme.transitions.fast};
+  transition: all ${({ theme }) => theme.transitions.duration.short}ms ${({ theme }) => theme.transitions.easing.easeInOut};
 
   &:hover {
     background: ${({ active, theme }) =>
-      active ? theme.colors.primary : theme.colors.text.tertiary}40;
+      active ? theme.colors.primary.dark : `${theme.colors.text.tertiary}40`};
   }
 `;
 
@@ -135,13 +151,15 @@ const CalendarFilters: React.FC<CalendarFiltersProps> = ({
   };
 
   return (
-    <FiltersContainer>
-      <SearchInput
-        type="text"
-        placeholder="일정 검색..."
-        value={searchQuery}
-        onChange={handleSearchChange}
-      />
+    <FiltersContainer theme={theme}>
+      <SearchBar theme={theme}>
+        <input
+          type="text"
+          placeholder="일정 검색..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
+      </SearchBar>
 
       <FilterGroup>
         <FilterLabel>카테고리:</FilterLabel>

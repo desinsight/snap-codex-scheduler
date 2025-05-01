@@ -1,80 +1,112 @@
-import styled, { css } from 'styled-components';
 import React from 'react';
+import styled, { css } from 'styled-components';
+import { motion } from 'framer-motion';
 
-type CardVariant = 'default' | 'elevated' | 'outlined';
+type CardVariant = 'elevation' | 'outlined';
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: CardVariant;
-  interactive?: boolean;
-  header?: React.ReactNode;
-  footer?: React.ReactNode;
+  elevation?: 1 | 2 | 3;
+  noPadding?: boolean;
+  fullWidth?: boolean;
+  clickable?: boolean;
+  selected?: boolean;
 }
 
-const CardContainer = styled.div<CardProps>`
-  background: ${({ theme }) => theme.colors.surface};
-  border-radius: ${({ theme }) => theme.radii.lg};
-  overflow: hidden;
-  transition: all ${({ theme }) => theme.transitions.fast};
+const getElevation = (elevation: number) => {
+  switch (elevation) {
+    case 1:
+      return css`
+        box-shadow: ${({ theme }) => theme.shadows.small};
+      `;
+    case 2:
+      return css`
+        box-shadow: ${({ theme }) => theme.shadows.medium};
+      `;
+    case 3:
+      return css`
+        box-shadow: ${({ theme }) => theme.shadows.large};
+      `;
+    default:
+      return css`
+        box-shadow: ${({ theme }) => theme.shadows.small};
+      `;
+  }
+};
 
-  ${({ variant = 'default', theme }) => {
-    const variants = {
-      default: css`
-        box-shadow: ${theme.shadows.sm};
-      `,
-      elevated: css`
-        box-shadow: ${theme.shadows.lg};
-      `,
-      outlined: css`
-        border: 1px solid ${theme.colors.text.tertiary}20;
-      `,
-    };
-    return variants[variant];
-  }}
+const StyledCard = styled(motion.div)<CardProps>`
+  background-color: ${({ theme }) => theme.colors.background.paper};
+  border-radius: ${({ theme }) => theme.borderRadius.medium};
+  padding: ${({ noPadding }) => (noPadding ? '0' : '1rem')};
+  width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
+  transition: all ${({ theme }) => theme.transitions.short};
 
-  ${({ interactive, theme }) =>
-    interactive &&
+  ${({ variant = 'elevation', elevation = 1 }) =>
+    variant === 'elevation'
+      ? getElevation(elevation)
+      : css`
+          border: 1px solid ${({ theme }) => theme.colors.grey[200]};
+        `}
+
+  ${({ clickable }) =>
+    clickable &&
     css`
       cursor: pointer;
       &:hover {
-        transform: translateY(-4px);
-        box-shadow: ${theme.shadows.lg};
-      }
-      &:active {
         transform: translateY(-2px);
+        ${({ variant = 'elevation' }) =>
+          variant === 'elevation' &&
+          css`
+            box-shadow: ${({ theme }) => theme.shadows.medium};
+          `}
       }
+    `}
+
+  ${({ selected }) =>
+    selected &&
+    css`
+      border: 2px solid ${({ theme }) => theme.colors.primary.main};
     `}
 `;
 
 const CardHeader = styled.div`
-  padding: ${({ theme }) => theme.space.lg};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.text.tertiary}10;
+  padding: ${({ theme }) => theme.spacing(4)};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.grey[200]};
 `;
 
 const CardContent = styled.div`
-  padding: ${({ theme }) => theme.space.lg};
+  padding: ${({ theme }) => theme.spacing(4)};
 `;
 
 const CardFooter = styled.div`
-  padding: ${({ theme }) => theme.space.lg};
-  border-top: 1px solid ${({ theme }) => theme.colors.text.tertiary}10;
-  background: ${({ theme }) => theme.colors.background};
+  padding: ${({ theme }) => theme.spacing(4)};
+  border-top: 1px solid ${({ theme }) => theme.colors.grey[200]};
 `;
 
-const Card: React.FC<CardProps> = ({
-  children,
-  header,
-  footer,
-  variant = 'default',
-  interactive = false,
-  ...props
-}) => {
-  return (
-    <CardContainer variant={variant} interactive={interactive} {...props}>
-      {header && <CardHeader>{header}</CardHeader>}
-      <CardContent>{children}</CardContent>
-      {footer && <CardFooter>{footer}</CardFooter>}
-    </CardContainer>
-  );
+const CardTitle = styled.h3`
+  margin: 0;
+  color: ${({ theme }) => theme.colors.text.primary};
+  ${({ theme }) => theme.typography.h5};
+`;
+
+const CardSubtitle = styled.h4`
+  margin: ${({ theme }) => `${theme.spacing(1)} 0 0`};
+  color: ${({ theme }) => theme.colors.text.secondary};
+  ${({ theme }) => theme.typography.body2};
+`;
+
+export const Card: React.FC<CardProps> & {
+  Header: typeof CardHeader;
+  Content: typeof CardContent;
+  Footer: typeof CardFooter;
+  Title: typeof CardTitle;
+  Subtitle: typeof CardSubtitle;
+} = ({ children, ...props }) => {
+  return <StyledCard {...props}>{children}</StyledCard>;
 };
 
-export default Card; 
+Card.Header = CardHeader;
+Card.Content = CardContent;
+Card.Footer = CardFooter;
+Card.Title = CardTitle;
+Card.Subtitle = CardSubtitle; 

@@ -1,8 +1,10 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useDrop } from 'react-dnd';
 import { CalendarEvent } from './CalendarView';
 import DraggableEvent from './DraggableEvent';
+import { isSameDay } from 'date-fns';
+import { Theme } from '../../types/theme';
 
 interface DroppableDayProps {
   date: Date;
@@ -20,18 +22,19 @@ const DayCell = styled.div<{
   isToday?: boolean;
   isSelected?: boolean;
   isOver?: boolean;
+  theme: Theme;
 }>`
   min-height: 120px;
   border-right: 1px solid ${({ theme }) => theme.colors.text.tertiary}20;
   border-bottom: 1px solid ${({ theme }) => theme.colors.text.tertiary}20;
-  padding: ${({ theme }) => theme.space.xs};
+  padding: ${({ theme }) => theme.spacing.xs};
   background: ${({ isSelected, isOver, theme }) =>
     isOver
-      ? `${theme.colors.primary}05`
+      ? `${theme.colors.primary.main}05`
       : isSelected
-      ? `${theme.colors.primary}10`
+      ? `${theme.colors.primary.main}10`
       : 'transparent'};
-  transition: all ${({ theme }) => theme.transitions.fast};
+  transition: all ${({ theme }) => theme.transitions.duration.short}ms ${({ theme }) => theme.transitions.easing.easeInOut};
   cursor: pointer;
 
   &:last-child {
@@ -39,13 +42,13 @@ const DayCell = styled.div<{
   }
 
   &:hover {
-    background: ${({ theme }) => theme.colors.background};
+    background: ${({ theme }) => theme.colors.background.paper};
   }
 
   ${({ isToday, theme }) =>
     isToday &&
     css`
-      box-shadow: inset 0 0 0 1px ${theme.colors.primary};
+      box-shadow: inset 0 0 0 1px ${theme.colors.primary.main};
     `}
 `;
 
@@ -53,32 +56,33 @@ const DayNumber = styled.div<{
   isToday?: boolean;
   isWeekend?: boolean;
   isOtherMonth?: boolean;
+  theme: Theme;
 }>`
-  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-size: ${({ theme }) => theme.typography.body2.fontSize};
   font-weight: ${({ isToday }) => (isToday ? 600 : 400)};
   color: ${({ isWeekend, isOtherMonth, theme }) =>
     isOtherMonth
       ? theme.colors.text.tertiary
       : isWeekend
-      ? theme.colors.danger
+      ? theme.colors.error
       : theme.colors.text.primary};
-  margin-bottom: ${({ theme }) => theme.space.xs};
+  margin-bottom: ${({ theme }) => theme.spacing.xs};
 `;
 
-const EventList = styled.div`
+const EventList = styled.div<{ theme: Theme }>`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.space.xs};
+  gap: ${({ theme }) => theme.spacing.xs};
 `;
 
-const MoreEventsIndicator = styled.div`
-  font-size: ${({ theme }) => theme.fontSizes.xs};
+const MoreEventsIndicator = styled.div<{ theme: Theme }>`
+  font-size: ${({ theme }) => theme.typography.body2.fontSize};
   color: ${({ theme }) => theme.colors.text.secondary};
-  padding: ${({ theme }) => theme.space.xs};
+  padding: ${({ theme }) => theme.spacing.xs};
   cursor: pointer;
   
   &:hover {
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.primary.main};
   }
 `;
 

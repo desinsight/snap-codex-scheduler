@@ -7,105 +7,100 @@ import { format } from 'date-fns';
 import { createSchedule, updateSchedule, fetchScheduleById } from '../../store/slices/scheduleSlice';
 import { Schedule, ScheduleCategory } from '../../types/schedule';
 import { RootState } from '../../store';
+import { motion } from 'framer-motion';
+import { FiCalendar, FiClock, FiMapPin, FiUsers } from 'react-icons/fi';
+import Button from '../Button/Button';
+import Card from '../Card/Card';
 
-const FormContainer = styled.div`
+const FormContainer = styled(Card)`
+  width: 100%;
   max-width: 600px;
   margin: 0 auto;
-  padding: 20px;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
 `;
 
 const FormGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
 
 const Label = styled.label`
+  display: block;
+  margin-bottom: ${({ theme }) => theme.spacing.xs};
   font-weight: 500;
-  color: ${({ theme }) => theme.colors.text};
+  color: ${({ theme }) => theme.colors.text.primary};
 `;
 
 const Input = styled.input`
-  padding: 10px;
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 4px;
-  font-size: 16px;
+  width: 100%;
+  padding: ${({ theme }) => theme.spacing.sm};
+  border: 1px solid ${({ theme }) => theme.colors.divider};
+  border-radius: ${({ theme }) => theme.spacing.xs};
+  font-size: ${({ theme }) => theme.typography.body1.fontSize};
+  color: ${({ theme }) => theme.colors.text.primary};
+  background-color: ${({ theme }) => theme.colors.background.paper};
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.primary.main};
+  }
 `;
 
 const TextArea = styled.textarea`
-  padding: 10px;
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 4px;
-  font-size: 16px;
+  width: 100%;
+  padding: ${({ theme }) => theme.spacing.sm};
+  border: 1px solid ${({ theme }) => theme.colors.divider};
+  border-radius: ${({ theme }) => theme.spacing.xs};
+  font-size: ${({ theme }) => theme.typography.body1.fontSize};
+  color: ${({ theme }) => theme.colors.text.primary};
+  background-color: ${({ theme }) => theme.colors.background.paper};
   min-height: 100px;
   resize: vertical;
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.primary.main};
+  }
 `;
 
 const Select = styled.select`
-  padding: 10px;
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 4px;
-  font-size: 16px;
+  width: 100%;
+  padding: ${({ theme }) => theme.spacing.sm};
+  border: 1px solid ${({ theme }) => theme.colors.divider};
+  border-radius: ${({ theme }) => theme.spacing.xs};
+  font-size: ${({ theme }) => theme.typography.body1.fontSize};
+  color: ${({ theme }) => theme.colors.text.primary};
+  background-color: ${({ theme }) => theme.colors.background.paper};
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.primary.main};
+  }
 `;
 
-const CheckboxContainer = styled.div`
+const ParticipantChips = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: ${({ theme }) => theme.spacing.xs};
+  margin-top: ${({ theme }) => theme.spacing.xs};
+`;
+
+const ParticipantChip = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
-`;
+  gap: ${({ theme }) => theme.spacing.xs};
+  padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.sm}`};
+  background-color: ${({ theme }) => theme.colors.primary.main}20;
+  color: ${({ theme }) => theme.colors.primary.main};
+  border-radius: ${({ theme }) => theme.spacing.xs};
+  font-size: ${({ theme }) => theme.typography.caption.fontSize};
 
-const Checkbox = styled.input`
-  width: 20px;
-  height: 20px;
-`;
-
-const ButtonGroup = styled.div`
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-`;
-
-const Button = styled.button`
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+  button {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+    font-size: inherit;
   }
-`;
-
-const SubmitButton = styled(Button)`
-  background-color: ${({ theme }) => theme.colors.primary};
-  color: white;
-
-  &:hover:not(:disabled) {
-    background-color: ${({ theme }) => theme.colors.primaryDark};
-  }
-`;
-
-const CancelButton = styled(Button)`
-  background-color: ${({ theme }) => theme.colors.gray};
-  color: white;
-
-  &:hover:not(:disabled) {
-    background-color: ${({ theme }) => theme.colors.grayDark};
-  }
-`;
-
-const ErrorMessage = styled.div`
-  color: ${({ theme }) => theme.colors.error};
-  font-size: 14px;
 `;
 
 const ScheduleForm: React.FC = () => {
@@ -125,6 +120,8 @@ const ScheduleForm: React.FC = () => {
     isShared: false,
   });
 
+  const [newParticipant, setNewParticipant] = useState('');
+
   useEffect(() => {
     if (id) {
       dispatch(fetchScheduleById(id));
@@ -141,11 +138,37 @@ const ScheduleForm: React.FC = () => {
     }
   }, [selectedSchedule]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value, type } = e.target;
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
+      [name]: value,
+    }));
+  };
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: new Date(value),
+    }));
+  };
+
+  const handleAddParticipant = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && newParticipant.trim()) {
+      e.preventDefault();
+      setFormData(prev => ({
+        ...prev,
+        participants: [...(prev.participants || []), newParticipant.trim()],
+      }));
+      setNewParticipant('');
+    }
+  };
+
+  const handleRemoveParticipant = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      participants: prev.participants?.filter((_, i) => i !== index),
     }));
   };
 
@@ -175,104 +198,134 @@ const ScheduleForm: React.FC = () => {
 
   return (
     <FormContainer>
-      <h2>{id ? t('actions.edit') : t('actions.create')}</h2>
-      <Form onSubmit={handleSubmit}>
-        <FormGroup>
-          <Label htmlFor="title">{t('title')}</Label>
-          <Input
-            type="text"
-            id="title"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            required
-          />
-        </FormGroup>
+      <Card.Header>
+        <h2>{id ? t('actions.edit') : t('actions.create')}</h2>
+      </Card.Header>
+      <Card.Content>
+        <form onSubmit={handleSubmit}>
+          <FormGroup>
+            <Label htmlFor="title">{t('title')}</Label>
+            <Input
+              type="text"
+              id="title"
+              name="title"
+              value={formData.title}
+              onChange={handleInputChange}
+              required
+            />
+          </FormGroup>
 
-        <FormGroup>
-          <Label htmlFor="description">{t('description')}</Label>
-          <TextArea
-            id="description"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-          />
-        </FormGroup>
+          <FormGroup>
+            <Label htmlFor="description">{t('description')}</Label>
+            <TextArea
+              id="description"
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              required
+            />
+          </FormGroup>
 
-        <FormGroup>
-          <Label htmlFor="startDate">{t('detail.startTime')}</Label>
-          <Input
-            type="datetime-local"
-            id="startDate"
-            name="startDate"
-            value={formData.startDate}
-            onChange={handleChange}
-            required
-          />
-        </FormGroup>
+          <FormGroup>
+            <Label htmlFor="startDate">{t('detail.startTime')}</Label>
+            <Input
+              type="datetime-local"
+              id="startDate"
+              name="startDate"
+              value={formData.startDate}
+              onChange={handleDateChange}
+              required
+            />
+          </FormGroup>
 
-        <FormGroup>
-          <Label htmlFor="endDate">{t('detail.endTime')}</Label>
-          <Input
-            type="datetime-local"
-            id="endDate"
-            name="endDate"
-            value={formData.endDate}
-            onChange={handleChange}
-            required
-          />
-        </FormGroup>
+          <FormGroup>
+            <Label htmlFor="endDate">{t('detail.endTime')}</Label>
+            <Input
+              type="datetime-local"
+              id="endDate"
+              name="endDate"
+              value={formData.endDate}
+              onChange={handleDateChange}
+              required
+            />
+          </FormGroup>
 
-        <CheckboxContainer>
-          <Checkbox
-            type="checkbox"
-            id="isAllDay"
-            name="isAllDay"
-            checked={formData.isAllDay}
-            onChange={handleChange}
-          />
-          <Label htmlFor="isAllDay">{t('allDay')}</Label>
-        </CheckboxContainer>
+          <FormGroup>
+            <Label htmlFor="location">{t('location')}</Label>
+            <Input
+              type="text"
+              id="location"
+              name="location"
+              value={formData.location}
+              onChange={handleInputChange}
+            />
+          </FormGroup>
 
-        <FormGroup>
-          <Label htmlFor="category">{t('filter.category')}</Label>
-          <Select
-            id="category"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-          >
-            {Object.values(ScheduleCategory).map(category => (
-              <option key={category} value={category}>
-                {t(`category.${category.toLowerCase()}`)}
-              </option>
-            ))}
-          </Select>
-        </FormGroup>
+          <FormGroup>
+            <Label htmlFor="priority">{t('priority')}</Label>
+            <Select
+              id="priority"
+              name="priority"
+              value={formData.priority}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </Select>
+          </FormGroup>
 
-        <CheckboxContainer>
-          <Checkbox
-            type="checkbox"
-            id="isShared"
-            name="isShared"
-            checked={formData.isShared}
-            onChange={handleChange}
-          />
-          <Label htmlFor="isShared">{t('shared')}</Label>
-        </CheckboxContainer>
+          <FormGroup>
+            <Label htmlFor="status">{t('status')}</Label>
+            <Select
+              id="status"
+              name="status"
+              value={formData.status}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="upcoming">Upcoming</option>
+              <option value="ongoing">Ongoing</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </Select>
+          </FormGroup>
 
-        {error && <ErrorMessage>{error}</ErrorMessage>}
+          <FormGroup>
+            <Label htmlFor="participants">{t('participants')}</Label>
+            <Input
+              type="text"
+              id="participants"
+              value={newParticipant}
+              onChange={(e) => setNewParticipant(e.target.value)}
+              onKeyDown={handleAddParticipant}
+              placeholder="Type name and press Enter"
+            />
+            <ParticipantChips>
+              {formData.participants?.map((participant, index) => (
+                <ParticipantChip key={index}>
+                  {participant}
+                  <button type="button" onClick={() => handleRemoveParticipant(index)}>×</button>
+                </ParticipantChip>
+              ))}
+            </ParticipantChips>
+          </FormGroup>
 
-        <ButtonGroup>
-          <CancelButton type="button" onClick={handleCancel}>
-            {t('common.cancel')}
-          </CancelButton>
-          <SubmitButton type="submit" disabled={loading}>
-            {loading ? t('common.saving') : (id ? t('actions.update') : t('actions.create'))}
-          </SubmitButton>
-        </ButtonGroup>
-      </Form>
+          {error && <ErrorMessage>{error}</ErrorMessage>}
+
+          <Card.Footer>
+            <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+              <Button variant="outlined" color="error" onClick={handleCancel}>
+                {t('common.cancel')}
+              </Button>
+              <Button type="submit" color="primary" disabled={loading}>
+                {loading ? t('common.saving') : (id ? t('actions.update') : t('actions.create'))}
+              </Button>
+            </div>
+          </Card.Footer>
+        </form>
+      </Card.Content>
     </FormContainer>
   );
 };

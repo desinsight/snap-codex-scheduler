@@ -9,6 +9,9 @@ COPY package*.json ./
 # Install dependencies
 RUN npm ci --legacy-peer-deps
 
+# Install additional dependencies
+RUN npm install -D tailwindcss@latest postcss@latest autoprefixer@latest @tailwindcss/nesting --legacy-peer-deps
+
 # Copy source code
 COPY . .
 
@@ -16,23 +19,6 @@ COPY . .
 RUN npm run build
 
 # Production stage
-FROM node:18-alpine
-
-WORKDIR /app
-
-# Copy built assets from builder stage
-COPY --from=builder /app/build ./build
-COPY --from=builder /app/package*.json ./
-
-# Install production dependencies only
-RUN npm ci --only=production
-
-# Expose port
-EXPOSE 3000
-
-# Start the application
-CMD ["npm", "start"]
-
 FROM nginx:alpine
 
 COPY --from=builder /app/build /usr/share/nginx/html

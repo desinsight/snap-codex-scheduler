@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { CalendarEvent } from './CalendarView';
 import Button from '../common/Button';
+import { Theme } from '../../types/theme';
 
 interface EventPopoverProps {
   event: CalendarEvent;
@@ -10,65 +11,37 @@ interface EventPopoverProps {
   onDelete?: () => void;
 }
 
-const PopoverContainer = styled.div`
+const PopoverContainer = styled.div<{ theme: Theme }>`
   position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: ${({ theme }) => theme.colors.background.paper};
+  border-radius: ${({ theme }) => theme.shape.borderRadius};
+  box-shadow: ${({ theme }) => theme.shadows.md};
+  padding: ${({ theme }) => theme.spacing.md};
+  min-width: 200px;
   z-index: 1000;
-  background: ${({ theme }) => theme.colors.surface};
-  border-radius: ${({ theme }) => theme.radii.lg};
-  box-shadow: ${({ theme }) => theme.shadows.lg};
-  padding: ${({ theme }) => theme.space.lg};
-  min-width: 300px;
-  max-width: 400px;
 `;
 
-const EventTitle = styled.h3`
-  margin: 0;
+const EventTitle = styled.h3<{ theme: Theme }>`
+  font-size: ${({ theme }) => theme.typography.h6.fontSize};
+  font-weight: ${({ theme }) => theme.typography.h6.fontWeight};
   color: ${({ theme }) => theme.colors.text.primary};
-  font-size: ${({ theme }) => theme.fontSizes.lg};
-  font-weight: 600;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
 `;
 
-const EventTime = styled.div`
+const EventDetails = styled.div<{ theme: Theme }>`
+  font-size: ${({ theme }) => theme.typography.body2.fontSize};
   color: ${({ theme }) => theme.colors.text.secondary};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  margin-top: ${({ theme }) => theme.space.xs};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
 
-const EventCategory = styled.div<{ color?: string }>`
-  display: inline-flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.space.xs};
-  padding: ${({ theme }) => `${theme.space.xs} ${theme.space.sm}`};
-  border-radius: ${({ theme }) => theme.radii.full};
-  background: ${({ color }) => color || 'transparent'}15;
-  color: ${({ color }) => color};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  margin-top: ${({ theme }) => theme.space.sm};
-
-  &::before {
-    content: '';
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: ${({ color }) => color};
-  }
-`;
-
-const Actions = styled.div`
+const ButtonGroup = styled.div<{ theme: Theme }>`
   display: flex;
-  gap: ${({ theme }) => theme.space.sm};
-  margin-top: ${({ theme }) => theme.space.lg};
+  gap: ${({ theme }) => theme.spacing.sm};
+  justify-content: flex-end;
 `;
-
-const formatDateTime = (date: Date) => {
-  return new Intl.DateTimeFormat('ko-KR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-  }).format(date);
-};
 
 const EventPopover: React.FC<EventPopoverProps> = ({
   event,
@@ -76,34 +49,30 @@ const EventPopover: React.FC<EventPopoverProps> = ({
   onEdit,
   onDelete,
 }) => {
-  const categoryColor = event.color || getCategoryColor(event.category);
-
   return (
     <PopoverContainer>
       <EventTitle>{event.title}</EventTitle>
-      <EventTime>
-        {formatDateTime(event.startDate)}
-        {event.endDate && ` - ${formatDateTime(event.endDate)}`}
-      </EventTime>
-      <EventCategory color={categoryColor}>
-        {event.category.charAt(0).toUpperCase() + event.category.slice(1)}
-      </EventCategory>
-      
-      <Actions>
+      <EventDetails>
+        <div>Start: {event.start.toLocaleString()}</div>
+        <div>End: {event.end.toLocaleString()}</div>
+        {event.description && <div>{event.description}</div>}
+        {event.location && <div>Location: {event.location}</div>}
+      </EventDetails>
+      <ButtonGroup>
+        <Button variant="outlined" onClick={onClose}>
+          Close
+        </Button>
         {onEdit && (
-          <Button variant="outline" size="sm" onClick={onEdit}>
-            수정
+          <Button color="primary" onClick={onEdit}>
+            Edit
           </Button>
         )}
         {onDelete && (
-          <Button variant="ghost" size="sm" onClick={onDelete}>
-            삭제
+          <Button color="error" onClick={onDelete}>
+            Delete
           </Button>
         )}
-        <Button variant="ghost" size="sm" onClick={onClose}>
-          닫기
-        </Button>
-      </Actions>
+      </ButtonGroup>
     </PopoverContainer>
   );
 };
