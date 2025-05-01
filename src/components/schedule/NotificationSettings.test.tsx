@@ -148,4 +148,4 @@ describe('NotificationSettings', () => {
 
     expect(screen.getByText(errorMessage)).toBeInTheDocument();
   });
-}); 
+});

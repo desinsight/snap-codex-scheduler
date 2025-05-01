@@ -35,15 +35,16 @@ interface InputProps {
 
 export const Input = styled.input<InputProps>`
   padding: 0.75rem;
-  border: 1px solid ${props => props.hasError ? '#ff4d4f' : '#d9d9d9'};
+  border: 1px solid ${props => (props.hasError ? '#ff4d4f' : '#d9d9d9')};
   border-radius: 4px;
   font-size: 1rem;
   outline: none;
   transition: all 0.3s;
 
   &:focus {
-    border-color: ${props => props.hasError ? '#ff4d4f' : '#1890ff'};
-    box-shadow: 0 0 0 2px ${props => props.hasError ? 'rgba(255, 77, 79, 0.2)' : 'rgba(24, 144, 255, 0.2)'};
+    border-color: ${props => (props.hasError ? '#ff4d4f' : '#1890ff')};
+    box-shadow: 0 0 0 2px
+      ${props => (props.hasError ? 'rgba(255, 77, 79, 0.2)' : 'rgba(24, 144, 255, 0.2)')};
   }
 `;
 
@@ -71,4 +72,4 @@ export const ErrorMessage = styled.p`
   color: #ff4d4f;
   font-size: 0.8rem;
   margin: 0.25rem 0;
-`; 
+`;

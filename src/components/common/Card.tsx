@@ -109,4 +109,4 @@ Card.Header = CardHeader;
 Card.Content = CardContent;
 Card.Footer = CardFooter;
 Card.Title = CardTitle;
-Card.Subtitle = CardSubtitle; 
+Card.Subtitle = CardSubtitle;

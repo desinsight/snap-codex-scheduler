@@ -15,7 +15,7 @@ const Icon = styled.div`
   align-items: center;
   justify-content: center;
   color: ${({ theme }) => theme.colors.text.secondary};
-  
+
   &:hover {
     color: ${({ theme }) => theme.colors.text.primary};
   }
@@ -41,7 +41,7 @@ const Badge = styled.div`
 const NotificationIcon: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
-  
+
   const notificationService = NotificationService.getInstance();
 
   useEffect(() => {
@@ -81,4 +81,4 @@ const NotificationIcon: React.FC = () => {
   );
 };
 
-export default NotificationIcon; 
+export default NotificationIcon;

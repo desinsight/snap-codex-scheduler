@@ -7,16 +7,13 @@ const initialState: AutomationState = {
   error: null,
 };
 
-export const fetchAutomationRules = createAsyncThunk(
-  'automation/fetchRules',
-  async () => {
-    const response = await fetch('/api/automation/rules');
-    if (!response.ok) {
-      throw new Error('Failed to fetch automation rules');
-    }
-    return response.json();
+export const fetchAutomationRules = createAsyncThunk('automation/fetchRules', async () => {
+  const response = await fetch('/api/automation/rules');
+  if (!response.ok) {
+    throw new Error('Failed to fetch automation rules');
   }
-);
+  return response.json();
+});
 
 export const createAutomationRule = createAsyncThunk(
   'automation/createRule',
@@ -82,9 +79,9 @@ const automationSlice = createSlice({
   name: 'automation',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchAutomationRules.pending, (state) => {
+      .addCase(fetchAutomationRules.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -100,16 +97,16 @@ const automationSlice = createSlice({
         state.rules.push(action.payload);
       })
       .addCase(updateAutomationRule.fulfilled, (state, action) => {
-        const index = state.rules.findIndex((rule) => rule.id === action.payload.id);
+        const index = state.rules.findIndex(rule => rule.id === action.payload.id);
         if (index !== -1) {
           state.rules[index] = action.payload;
         }
       })
       .addCase(deleteAutomationRule.fulfilled, (state, action) => {
-        state.rules = state.rules.filter((rule) => rule.id !== action.payload);
+        state.rules = state.rules.filter(rule => rule.id !== action.payload);
       })
       .addCase(toggleAutomationRule.fulfilled, (state, action) => {
-        const index = state.rules.findIndex((rule) => rule.id === action.payload.id);
+        const index = state.rules.findIndex(rule => rule.id === action.payload.id);
         if (index !== -1) {
           state.rules[index] = action.payload;
         }
@@ -117,4 +114,4 @@ const automationSlice = createSlice({
   },
 });
 
-export default automationSlice.reducer; 
+export default automationSlice.reducer;

@@ -1,217 +1,63 @@
 import axios from 'axios';
-<<<<<<< HEAD
 import { LoginCredentials, RegisterCredentials, AuthResponse, User } from '../../types/auth';
 import { API_URL } from '../../config';
 import { getCsrfToken } from '../../utils/csrf';
-import { validatePassword } from '../../utils/password';
-import { isAccountLocked, recordLoginAttempt } from '../../utils/loginAttempts';
-=======
-import { LoginCredentials, RegisterCredentials, AuthResponse } from '../../types/auth';
-import { getCsrfToken } from '../../utils/csrf';
-import { validatePassword } from '../../utils/password';
-import { isAccountLocked, recordLoginAttempt, clearLoginAttempts } from '../../utils/loginAttempts';
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
-import { User } from '../../types/user';
+import { handleApiError } from '../../utils/errorHandling';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000/api';
+class AuthService {
+  private baseUrl = `${API_URL}/auth`;
 
-export const AuthService = {
-  login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
-    // Check if account is locked
-    if (isAccountLocked(credentials.email)) {
-      throw new Error('Account is temporarily locked due to too many failed attempts');
-    }
-
-<<<<<<< HEAD
-    const csrfToken = getCsrfToken();
-    if (!csrfToken) {
-      throw new Error('CSRF token missing');
-    }
-
+  async login(credentials: LoginCredentials): Promise<AuthResponse> {
     try {
-=======
-    try {
-      const csrfToken = getCsrfToken();
-      if (!csrfToken) {
-        throw new Error('CSRF token missing');
-      }
-
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
-      const response = await axios.post(`${API_URL}/auth/login`, credentials, {
+      const response = await axios.post(`${this.baseUrl}/login`, credentials, {
         headers: {
-          'X-CSRF-Token': csrfToken,
+          'X-CSRF-Token': getCsrfToken(),
         },
       });
-
-      recordLoginAttempt(credentials.email, true);
       return response.data;
     } catch (error) {
-      recordLoginAttempt(credentials.email, false);
-      throw error;
+      throw handleApiError(error);
     }
-  },
+  }
 
-  register: async (credentials: RegisterCredentials): Promise<AuthResponse> => {
-    // Validate password strength
-    const passwordValidation = validatePassword(credentials.password);
-    if (!passwordValidation.isValid) {
-      throw new Error(passwordValidation.errors.join(', '));
-    }
-
-<<<<<<< HEAD
-    const csrfToken = getCsrfToken();
-    if (!csrfToken) {
-      throw new Error('CSRF token missing');
-    }
-
-    const response = await axios.post(`${API_URL}/auth/register`, credentials, {
-      headers: {
-        'X-CSRF-Token': csrfToken,
-      },
-    });
-
-    return response.data;
-  },
-
-  logout: async (): Promise<void> => {
-    const csrfToken = getCsrfToken();
-    if (!csrfToken) {
-      throw new Error('CSRF token missing');
-    }
-
-    await axios.post(`${API_URL}/auth/logout`, null, {
-      headers: {
-        'X-CSRF-Token': csrfToken,
-      },
-    });
-  },
-
-  refreshToken: async (): Promise<AuthResponse> => {
-    const csrfToken = getCsrfToken();
-    if (!csrfToken) {
-      throw new Error('CSRF token missing');
-    }
-
-    const response = await axios.post(`${API_URL}/auth/refresh-token`, null, {
-      headers: {
-        'X-CSRF-Token': csrfToken,
-      },
-    });
-
-    return response.data;
-  },
-
-  getCurrentUser: async (): Promise<AuthResponse> => {
-    const csrfToken = getCsrfToken();
-    if (!csrfToken) {
-      throw new Error('CSRF token missing');
-    }
-
-    const response = await axios.get(`${API_URL}/auth/me`, {
-      headers: {
-        'X-CSRF-Token': csrfToken,
-      },
-    });
-
-    return response.data;
-=======
+  async register(credentials: RegisterCredentials): Promise<AuthResponse> {
     try {
-      const csrfToken = getCsrfToken();
-      if (!csrfToken) {
-        throw new Error('CSRF token missing');
-      }
-
-      const response = await axios.post(`${API_URL}/auth/register`, credentials, {
+      const response = await axios.post(`${this.baseUrl}/register`, credentials, {
         headers: {
-          'X-CSRF-Token': csrfToken,
+          'X-CSRF-Token': getCsrfToken(),
         },
       });
-
       return response.data;
     } catch (error) {
-      throw error;
+      throw handleApiError(error);
     }
-  },
-
-  logout: async (): Promise<void> => {
-    try {
-      const csrfToken = getCsrfToken();
-      if (!csrfToken) {
-        throw new Error('CSRF token missing');
-      }
-
-      await axios.post(`${API_URL}/auth/logout`, null, {
-        headers: {
-          'X-CSRF-Token': csrfToken,
-        },
-      });
-    } catch (error) {
-      throw error;
-    }
-  },
-
-  refreshToken: async (): Promise<AuthResponse> => {
-    try {
-      const csrfToken = getCsrfToken();
-      if (!csrfToken) {
-        throw new Error('CSRF token missing');
-      }
-
-      const response = await axios.post(`${API_URL}/auth/refresh-token`, null, {
-        headers: {
-          'X-CSRF-Token': csrfToken,
-        },
-      });
-
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  },
-
-  getCurrentUser: async (): Promise<AuthResponse> => {
-    try {
-      const csrfToken = getCsrfToken();
-      if (!csrfToken) {
-        throw new Error('CSRF token missing');
-      }
-
-      const response = await axios.get(`${API_URL}/auth/me`, {
-        headers: {
-          'X-CSRF-Token': csrfToken,
-        },
-      });
-
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
-  },
-};
-
-export const authService = {
-  async login(email: string, password: string): Promise<AuthResponse> {
-    const response = await axios.post(`${API_URL}/auth/login`, { email, password });
-    return response.data;
-  },
-
-  async register(userData: Partial<User>): Promise<AuthResponse> {
-    const response = await axios.post(`${API_URL}/auth/register`, userData);
-    return response.data;
-  },
-
-  async logout(): Promise<void> {
-    await axios.post(`${API_URL}/auth/logout`);
-  },
+  }
 
   async refreshToken(): Promise<AuthResponse> {
-    const response = await axios.post(`${API_URL}/auth/refresh-token`);
-    return response.data;
-  },
+    try {
+      const response = await axios.post(`${this.baseUrl}/refresh-token`);
+      return response.data;
+    } catch (error) {
+      throw handleApiError(error);
+    }
+  }
+
+  async logout(): Promise<void> {
+    try {
+      await axios.post(`${this.baseUrl}/logout`);
+    } catch (error) {
+      throw handleApiError(error);
+    }
+  }
 
   async getCurrentUser(): Promise<User> {
-    const response = await axios.get(`${API_URL}/auth/me`);
-    return response.data;
-  },
-}; 
+    try {
+      const response = await axios.get(`${this.baseUrl}/me`);
+      return response.data;
+    } catch (error) {
+      throw handleApiError(error);
+    }
+  }
+}
+
+export default new AuthService(); 

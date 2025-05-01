@@ -43,12 +43,7 @@ const ButtonGroup = styled.div<{ theme: Theme }>`
   justify-content: flex-end;
 `;
 
-const EventPopover: React.FC<EventPopoverProps> = ({
-  event,
-  onClose,
-  onEdit,
-  onDelete,
-}) => {
+const EventPopover: React.FC<EventPopoverProps> = ({ event, onClose, onEdit, onDelete }) => {
   return (
     <PopoverContainer>
       <EventTitle>{event.title}</EventTitle>
@@ -77,4 +72,4 @@ const EventPopover: React.FC<EventPopoverProps> = ({
   );
 };
 
-export default EventPopover; 
+export default EventPopover;

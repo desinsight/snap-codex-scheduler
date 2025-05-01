@@ -8,16 +8,13 @@ const initialState: ResponseAnalysisState = {
   error: null,
 };
 
-export const fetchReports = createAsyncThunk(
-  'responseAnalysis/fetchReports',
-  async () => {
-    const response = await fetch('/api/notification-analysis/reports');
-    if (!response.ok) {
-      throw new Error('Failed to fetch analysis reports');
-    }
-    return response.json();
+export const fetchReports = createAsyncThunk('responseAnalysis/fetchReports', async () => {
+  const response = await fetch('/api/notification-analysis/reports');
+  if (!response.ok) {
+    throw new Error('Failed to fetch analysis reports');
   }
-);
+  return response.json();
+});
 
 export const fetchReportById = createAsyncThunk(
   'responseAnalysis/fetchReportById',
@@ -64,13 +61,13 @@ const responseAnalysisSlice = createSlice({
   name: 'responseAnalysis',
   initialState,
   reducers: {
-    clearCurrentReport: (state) => {
+    clearCurrentReport: state => {
       state.currentReport = null;
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchReports.pending, (state) => {
+      .addCase(fetchReports.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -82,7 +79,7 @@ const responseAnalysisSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch reports';
       })
-      .addCase(fetchReportById.pending, (state) => {
+      .addCase(fetchReportById.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -94,7 +91,7 @@ const responseAnalysisSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch report';
       })
-      .addCase(generateReport.pending, (state) => {
+      .addCase(generateReport.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -107,11 +104,11 @@ const responseAnalysisSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to generate report';
       })
-      .addCase(exportReport.pending, (state) => {
+      .addCase(exportReport.pending, state => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(exportReport.fulfilled, (state) => {
+      .addCase(exportReport.fulfilled, state => {
         state.loading = false;
       })
       .addCase(exportReport.rejected, (state, action) => {
@@ -122,4 +119,4 @@ const responseAnalysisSlice = createSlice({
 });
 
 export const { clearCurrentReport } = responseAnalysisSlice.actions;
-export default responseAnalysisSlice.reducer; 
+export default responseAnalysisSlice.reducer;

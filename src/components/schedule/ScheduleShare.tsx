@@ -98,7 +98,7 @@ const ScheduleShare: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (id) {
       await dispatch(shareSchedule({ id, email }));
       if (!error) {
@@ -122,7 +122,7 @@ const ScheduleShare: React.FC = () => {
             type="email"
             id="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={e => setEmail(e.target.value)}
             placeholder={t('share.emailPlaceholder')}
             required
           />
@@ -144,4 +144,4 @@ const ScheduleShare: React.FC = () => {
   );
 };
 
-export default ScheduleShare; 
+export default ScheduleShare;

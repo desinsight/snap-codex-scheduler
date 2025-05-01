@@ -8,16 +8,13 @@ const initialState: AnalysisState = {
   error: null,
 };
 
-export const fetchPerformanceReports = createAsyncThunk(
-  'analysis/fetchReports',
-  async () => {
-    const response = await fetch('/api/analysis/reports');
-    if (!response.ok) {
-      throw new Error('Failed to fetch performance reports');
-    }
-    return response.json();
+export const fetchPerformanceReports = createAsyncThunk('analysis/fetchReports', async () => {
+  const response = await fetch('/api/analysis/reports');
+  if (!response.ok) {
+    throw new Error('Failed to fetch performance reports');
   }
-);
+  return response.json();
+});
 
 export const generatePerformanceReport = createAsyncThunk(
   'analysis/generateReport',
@@ -47,30 +44,27 @@ export const fetchReportById = createAsyncThunk(
   }
 );
 
-export const exportReport = createAsyncThunk(
-  'analysis/exportReport',
-  async (reportId: string) => {
-    const response = await fetch(`/api/analysis/reports/${reportId}/export`, {
-      method: 'GET',
-    });
-    if (!response.ok) {
-      throw new Error('Failed to export report');
-    }
-    return response.blob();
+export const exportReport = createAsyncThunk('analysis/exportReport', async (reportId: string) => {
+  const response = await fetch(`/api/analysis/reports/${reportId}/export`, {
+    method: 'GET',
+  });
+  if (!response.ok) {
+    throw new Error('Failed to export report');
   }
-);
+  return response.blob();
+});
 
 const analysisSlice = createSlice({
   name: 'analysis',
   initialState,
   reducers: {
-    clearCurrentReport: (state) => {
+    clearCurrentReport: state => {
       state.currentReport = null;
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchPerformanceReports.pending, (state) => {
+      .addCase(fetchPerformanceReports.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -93,4 +87,4 @@ const analysisSlice = createSlice({
 });
 
 export const { clearCurrentReport } = analysisSlice.actions;
-export default analysisSlice.reducer; 
+export default analysisSlice.reducer;

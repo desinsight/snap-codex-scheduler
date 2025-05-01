@@ -92,7 +92,8 @@ const StyledCalendar = styled(FullCalendar)`
     font-size: ${({ theme }) => theme.typography.button.fontSize} !important;
     font-weight: ${({ theme }) => theme.typography.button.fontWeight} !important;
     border-radius: ${({ theme }) => theme.spacing.xs} !important;
-    transition: all ${({ theme }) => theme.transitions.duration.short}ms ${({ theme }) => theme.transitions.easing.easeInOut} !important;
+    transition: all ${({ theme }) => theme.transitions.duration.short}ms
+      ${({ theme }) => theme.transitions.easing.easeInOut} !important;
 
     &:hover {
       background-color: ${({ theme }) => theme.colors.primary.dark} !important;
@@ -108,7 +109,8 @@ const StyledCalendar = styled(FullCalendar)`
     padding: ${({ theme }) => theme.spacing.xs};
     font-size: ${({ theme }) => theme.typography.body2.fontSize};
     cursor: pointer;
-    transition: all ${({ theme }) => theme.transitions.duration.short}ms ${({ theme }) => theme.transitions.easing.easeInOut};
+    transition: all ${({ theme }) => theme.transitions.duration.short}ms
+      ${({ theme }) => theme.transitions.easing.easeInOut};
 
     &:hover {
       transform: translateY(-2px);
@@ -205,11 +207,9 @@ const Calendar: React.FC = () => {
 
   const handleEventDrop = useCallback((eventDropInfo: any) => {
     const { event } = eventDropInfo;
-    setEvents(prev => prev.map(e => 
-      e.id === event.id 
-        ? { ...e, start: event.start, end: event.end }
-        : e
-    ));
+    setEvents(prev =>
+      prev.map(e => (e.id === event.id ? { ...e, start: event.start, end: event.end } : e))
+    );
   }, []);
 
   return (
@@ -221,17 +221,10 @@ const Calendar: React.FC = () => {
             <FiSearch />
             <input type="text" placeholder="Search events..." />
           </SearchBar>
-          <Button
-            variant="outlined"
-            color="primary"
-            startIcon={<FiFilter />}
-          >
+          <Button variant="outlined" color="primary" startIcon={<FiFilter />}>
             Filter
           </Button>
-          <Button
-            color="primary"
-            startIcon={<FiPlus />}
-          >
+          <Button color="primary" startIcon={<FiPlus />}>
             New Event
           </Button>
         </CalendarActions>
@@ -302,4 +295,4 @@ const Calendar: React.FC = () => {
   );
 };
 
-export default Calendar; 
+export default Calendar;

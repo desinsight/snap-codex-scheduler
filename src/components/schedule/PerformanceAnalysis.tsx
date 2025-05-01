@@ -105,16 +105,17 @@ const RecommendationCard = styled.div<{ impact: string }>`
   border-radius: 8px;
   padding: 15px;
   margin-bottom: 10px;
-  border-left: 4px solid ${(props) => {
-    switch (props.impact) {
-      case 'high':
-        return '#f44336';
-      case 'medium':
-        return '#ff9800';
-      default:
-        return '#4CAF50';
-    }
-  }};
+  border-left: 4px solid
+    ${props => {
+      switch (props.impact) {
+        case 'high':
+          return '#f44336';
+        case 'medium':
+          return '#ff9800';
+        default:
+          return '#4CAF50';
+      }
+    }};
 `;
 
 const Form = styled.form`
@@ -149,7 +150,7 @@ const Select = styled.select`
 `;
 
 const Button = styled.button`
-  background: #2196F3;
+  background: #2196f3;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -199,7 +200,7 @@ const PerformanceAnalysis: React.FC = () => {
           <Label>{t('notifications.analysis.reportType')}</Label>
           <Select
             value={reportType}
-            onChange={(e) => setReportType(e.target.value as 'weekly' | 'monthly')}
+            onChange={e => setReportType(e.target.value as 'weekly' | 'monthly')}
           >
             <option value="weekly">{t('notifications.analysis.weekly')}</option>
             <option value="monthly">{t('notifications.analysis.monthly')}</option>
@@ -210,18 +211,13 @@ const PerformanceAnalysis: React.FC = () => {
           <Input
             type="date"
             value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
+            onChange={e => setStartDate(e.target.value)}
             required
           />
         </FormGroup>
         <FormGroup>
           <Label>{t('notifications.analysis.endDate')}</Label>
-          <Input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            required
-          />
+          <Input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} required />
         </FormGroup>
         <Button type="submit">{t('notifications.analysis.generate')}</Button>
       </Form>
@@ -237,10 +233,12 @@ const PerformanceAnalysis: React.FC = () => {
                 {new Date(report.period.end).toLocaleDateString()}
               </ReportPeriod>
             </ReportHeader>
-            <Button onClick={(e) => {
-              e.stopPropagation();
-              handleExportReport(report.id);
-            }}>
+            <Button
+              onClick={e => {
+                e.stopPropagation();
+                handleExportReport(report.id);
+              }}
+            >
               {t('notifications.analysis.export')}
             </Button>
           </ReportCard>
@@ -275,7 +273,7 @@ const PerformanceAnalysis: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {currentReport.metrics.channelPerformance.map((channel) => (
+                {currentReport.metrics.channelPerformance.map(channel => (
                   <tr key={channel.channel}>
                     <TableCell>{channel.channel}</TableCell>
                     <TableCell>{channel.successRate}%</TableCell>
@@ -293,7 +291,9 @@ const PerformanceAnalysis: React.FC = () => {
               <RecommendationCard key={index} impact={recommendation.impact}>
                 <h4>{t(`notifications.analysis.types.${recommendation.type}`)}</h4>
                 <p>{recommendation.description}</p>
-                <p>{t('notifications.analysis.implementation')}: {recommendation.implementation}</p>
+                <p>
+                  {t('notifications.analysis.implementation')}: {recommendation.implementation}
+                </p>
               </RecommendationCard>
             ))}
           </Recommendations>
@@ -303,4 +303,4 @@ const PerformanceAnalysis: React.FC = () => {
   );
 };
 
-export default PerformanceAnalysis; 
+export default PerformanceAnalysis;

@@ -126,4 +126,4 @@ describe('ScheduleDetail', () => {
 
     expect(screen.getByText('Back')).toBeInTheDocument();
   });
-}); 
+});

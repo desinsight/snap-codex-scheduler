@@ -26,7 +26,7 @@ class EmailService {
     const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${this.config.apiKey}`,
+        Authorization: `Bearer ${this.config.apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -49,7 +49,7 @@ class EmailService {
     const response = await fetch('https://email.us-east-1.amazonaws.com/v2/email/outbound-emails', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${this.config.apiKey}`,
+        Authorization: `Bearer ${this.config.apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -75,14 +75,14 @@ class EmailService {
     variables: Record<string, string>
   ) {
     const html = this.renderTemplate(template.content, variables);
-    
+
     try {
       if (this.config.provider === 'sendgrid') {
         await this.sendWithSendGrid(to, template.subject || '', html);
       } else {
         await this.sendWithSES(to, template.subject || '', html);
       }
-      
+
       return { success: true };
     } catch (error) {
       console.error('이메일 전송 실패:', error);
@@ -95,4 +95,4 @@ class EmailService {
   }
 }
 
-export default EmailService; 
+export default EmailService;

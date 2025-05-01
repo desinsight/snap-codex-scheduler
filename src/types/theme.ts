@@ -82,4 +82,4 @@ export interface Theme {
       sharp: string;
     };
   };
-} 
+}

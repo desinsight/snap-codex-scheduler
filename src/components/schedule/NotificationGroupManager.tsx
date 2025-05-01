@@ -10,7 +10,12 @@ import {
   deleteGroup,
   toggleGroupActive,
 } from '../../store/slices/notificationGroupSlice';
-import { NotificationGroup, NotificationType, NotificationTime, NotificationPriority } from '../../types/notification';
+import {
+  NotificationGroup,
+  NotificationType,
+  NotificationTime,
+  NotificationPriority,
+} from '../../types/notification';
 
 const Container = styled.div`
   padding: 20px;
@@ -164,9 +169,7 @@ const LoadingMessage = styled.div`
 const NotificationGroupManager: React.FC = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation('schedule');
-  const { groups, loading, error } = useSelector(
-    (state: RootState) => state.notificationGroups
-  );
+  const { groups, loading, error } = useSelector((state: RootState) => state.notificationGroups);
 
   const [newGroup, setNewGroup] = useState<Partial<NotificationGroup>>({
     name: '',
@@ -187,7 +190,9 @@ const NotificationGroupManager: React.FC = () => {
   const handleCreateGroup = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newGroup.name && newGroup.settings) {
-      await dispatch(createGroup(newGroup as Omit<NotificationGroup, 'id' | 'createdAt' | 'updatedAt'>));
+      await dispatch(
+        createGroup(newGroup as Omit<NotificationGroup, 'id' | 'createdAt' | 'updatedAt'>)
+      );
       setNewGroup({
         name: '',
         description: '',
@@ -231,13 +236,13 @@ const NotificationGroupManager: React.FC = () => {
           type="text"
           placeholder={t('notifications.groups.name')}
           value={newGroup.name}
-          onChange={(e) => setNewGroup((prev) => ({ ...prev, name: e.target.value }))}
+          onChange={e => setNewGroup(prev => ({ ...prev, name: e.target.value }))}
         />
 
         <TextArea
           placeholder={t('notifications.groups.description')}
           value={newGroup.description}
-          onChange={(e) => setNewGroup((prev) => ({ ...prev, description: e.target.value }))}
+          onChange={e => setNewGroup(prev => ({ ...prev, description: e.target.value }))}
         />
 
         <GroupSettings>
@@ -245,8 +250,8 @@ const NotificationGroupManager: React.FC = () => {
             <SettingLabel>{t('notifications.groups.type')}</SettingLabel>
             <Select
               value={newGroup.settings?.type}
-              onChange={(e) =>
-                setNewGroup((prev) => ({
+              onChange={e =>
+                setNewGroup(prev => ({
                   ...prev,
                   settings: { ...prev.settings!, type: e.target.value as NotificationType },
                 }))
@@ -261,8 +266,8 @@ const NotificationGroupManager: React.FC = () => {
             <SettingLabel>{t('notifications.groups.time')}</SettingLabel>
             <Select
               value={newGroup.settings?.time}
-              onChange={(e) =>
-                setNewGroup((prev) => ({
+              onChange={e =>
+                setNewGroup(prev => ({
                   ...prev,
                   settings: { ...prev.settings!, time: e.target.value as NotificationTime },
                 }))
@@ -282,8 +287,8 @@ const NotificationGroupManager: React.FC = () => {
             <SettingLabel>{t('notifications.groups.priority')}</SettingLabel>
             <Select
               value={newGroup.settings?.priority}
-              onChange={(e) =>
-                setNewGroup((prev) => ({
+              onChange={e =>
+                setNewGroup(prev => ({
                   ...prev,
                   settings: { ...prev.settings!, priority: e.target.value as NotificationPriority },
                 }))
@@ -303,7 +308,7 @@ const NotificationGroupManager: React.FC = () => {
       </Form>
 
       <GroupList>
-        {groups.map((group) => (
+        {groups.map(group => (
           <GroupItem key={group.id} priority={group.settings.priority}>
             <GroupHeader>
               <GroupName>{group.name}</GroupName>
@@ -316,24 +321,19 @@ const NotificationGroupManager: React.FC = () => {
 
             {group.description && (
               <GroupContent>
-                <strong>{t('notifications.groups.description')}:</strong>{' '}
-                {group.description}
+                <strong>{t('notifications.groups.description')}:</strong> {group.description}
               </GroupContent>
             )}
 
             <GroupSettings>
               <SettingItem>
                 <SettingLabel>{t('notifications.groups.type')}</SettingLabel>
-                <SettingValue>
-                  {t(`notifications.types.${group.settings.type}`)}
-                </SettingValue>
+                <SettingValue>{t(`notifications.types.${group.settings.type}`)}</SettingValue>
               </SettingItem>
 
               <SettingItem>
                 <SettingLabel>{t('notifications.groups.time')}</SettingLabel>
-                <SettingValue>
-                  {t(`notifications.times.${group.settings.time}`)}
-                </SettingValue>
+                <SettingValue>{t(`notifications.times.${group.settings.time}`)}</SettingValue>
               </SettingItem>
 
               <SettingItem>
@@ -367,4 +367,4 @@ const NotificationGroupManager: React.FC = () => {
   );
 };
 
-export default NotificationGroupManager; 
+export default NotificationGroupManager;

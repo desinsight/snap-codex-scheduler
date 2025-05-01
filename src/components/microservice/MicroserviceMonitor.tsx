@@ -6,7 +6,7 @@ import {
   fetchServiceConfigs,
   fetchServiceHealth,
   fetchServiceMetrics,
-  updateCircuitBreaker
+  updateCircuitBreaker,
 } from '../../store/slices/microserviceSlice';
 import { RootState } from '../../store';
 
@@ -33,10 +33,13 @@ const ServiceCard = styled.div<{ status: string }>`
   background: ${({ theme }) => theme.colors.background};
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  border-left: 4px solid ${({ theme, status }) =>
-    status === 'healthy' ? theme.colors.success :
-    status === 'degraded' ? theme.colors.warning :
-    theme.colors.error};
+  border-left: 4px solid
+    ${({ theme, status }) =>
+      status === 'healthy'
+        ? theme.colors.success
+        : status === 'degraded'
+          ? theme.colors.warning
+          : theme.colors.error};
 `;
 
 const ServiceHeader = styled.div`
@@ -55,9 +58,11 @@ const ServiceStatus = styled.span<{ status: string }>`
   border-radius: 4px;
   font-size: 12px;
   background: ${({ theme, status }) =>
-    status === 'healthy' ? theme.colors.success :
-    status === 'degraded' ? theme.colors.warning :
-    theme.colors.error};
+    status === 'healthy'
+      ? theme.colors.success
+      : status === 'degraded'
+        ? theme.colors.warning
+        : theme.colors.error};
   color: white;
 `;
 
@@ -90,13 +95,9 @@ const ErrorMessage = styled.div`
 const MicroserviceMonitor: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const {
-    services,
-    health,
-    metrics,
-    loading,
-    error
-  } = useSelector((state: RootState) => state.microservice);
+  const { services, health, metrics, loading, error } = useSelector(
+    (state: RootState) => state.microservice
+  );
 
   useEffect(() => {
     dispatch(fetchServiceConfigs());
@@ -126,10 +127,7 @@ const MicroserviceMonitor: React.FC = () => {
       <Title>{t('microservice.monitor')}</Title>
       <ServicesGrid>
         {Object.entries(services).map(([name, service]) => (
-          <ServiceCard
-            key={name}
-            status={health[name]?.status || 'unknown'}
-          >
+          <ServiceCard key={name} status={health[name]?.status || 'unknown'}>
             <ServiceHeader>
               <ServiceName>{name}</ServiceName>
               <ServiceStatus status={health[name]?.status || 'unknown'}>
@@ -139,27 +137,19 @@ const MicroserviceMonitor: React.FC = () => {
             <MetricsGrid>
               <MetricItem>
                 <MetricLabel>{t('microservice.uptime')}</MetricLabel>
-                <MetricValue>
-                  {Math.floor(health[name]?.uptime || 0)}s
-                </MetricValue>
+                <MetricValue>{Math.floor(health[name]?.uptime || 0)}s</MetricValue>
               </MetricItem>
               <MetricItem>
                 <MetricLabel>{t('microservice.memoryUsage')}</MetricLabel>
-                <MetricValue>
-                  {Math.round(health[name]?.memoryUsage || 0)}%
-                </MetricValue>
+                <MetricValue>{Math.round(health[name]?.memoryUsage || 0)}%</MetricValue>
               </MetricItem>
               <MetricItem>
                 <MetricLabel>{t('microservice.cpuUsage')}</MetricLabel>
-                <MetricValue>
-                  {Math.round(health[name]?.cpuUsage || 0)}%
-                </MetricValue>
+                <MetricValue>{Math.round(health[name]?.cpuUsage || 0)}%</MetricValue>
               </MetricItem>
               <MetricItem>
                 <MetricLabel>{t('microservice.requestCount')}</MetricLabel>
-                <MetricValue>
-                  {metrics[name]?.requestCount || 0}
-                </MetricValue>
+                <MetricValue>{metrics[name]?.requestCount || 0}</MetricValue>
               </MetricItem>
             </MetricsGrid>
           </ServiceCard>
@@ -169,4 +159,4 @@ const MicroserviceMonitor: React.FC = () => {
   );
 };
 
-export default MicroserviceMonitor; 
+export default MicroserviceMonitor;

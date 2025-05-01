@@ -1,357 +1,222 @@
-<<<<<<< HEAD
-/// <reference types="@testing-library/jest-dom" />
-
-import { configureStore } from '@reduxjs/toolkit';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
-import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
-import i18next from '../../utils/i18n';
-import loadingReducer from '../../store/slices/loadingSlice';
-import authReducer from '../../store/slices/authSlice';
+import { I18nextProvider } from 'react-i18next';
+import store from '../../store';
+import i18n from '../../i18n';
 import LoginForm from '../../components/auth/LoginForm';
 import RegisterForm from '../../components/auth/RegisterForm';
-import { handleApiError } from '../../utils/errorHandling';
-import { useAuth } from '../../hooks/useAuth';
-import { act } from 'react-dom/test-utils';
-import { ErrorCode } from '../../utils/errorHandling';
-import { mockUser, mockAuthResponse, mockErrorResponse } from '../../utils/testUtils';
+import { clearLoginAttempts } from '../../utils/loginAttempts';
+import AuthService from '../../services/api/auth.service';
+import { renderWithProviders } from '../../utils/testUtils.tsx';
 
-interface AuthState {
-  user: {
-    id: string;
-    email: string;
-  } | null;
-  token: {
-    accessToken: string;
-  } | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  error: string | null;
-}
+jest.mock('../../services/api/auth.service');
 
-interface RootState {
-  auth: AuthState;
-  loading: {
-    isLoading: boolean;
-  };
-}
-
-const createTestStore = () => {
-  const store = configureStore({
-    reducer: {
-      loading: loadingReducer,
-      auth: authReducer as any,
-    },
-    preloadedState: {
-      auth: {
-        user: null,
-        token: null,
-        isAuthenticated: false,
-        isLoading: false,
-        error: null,
-      },
-      loading: {
-        isLoading: false,
-      },
-    },
-  });
-
-  return {
-    ...store,
-    getState: () => store.getState() as RootState,
-  };
-};
-
-describe('Authentication Integration', () => {
-  let store: ReturnType<typeof createTestStore>;
-
+describe('Authentication Integration Tests', () => {
   beforeEach(() => {
-    store = createTestStore();
+    clearLoginAttempts();
+    jest.clearAllMocks();
   });
 
   describe('Login Form', () => {
-    it('should render login form correctly', () => {
-      render(
-        <Provider store={store}>
-          <I18nextProvider i18n={i18next}>
-=======
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import { I18nextProvider } from 'react-i18next';
-import i18n from '../../utils/i18n';
-import { configureStore } from '@reduxjs/toolkit';
-import authReducer from '../../store/slices/authSlice';
-import loadingReducer from '../../store/slices/loadingSlice';
-import LoginForm from '../../components/auth/LoginForm';
-import RegisterForm from '../../components/auth/RegisterForm';
-import { setupTestEnvironment, cleanupTestEnvironment } from '../../utils/testUtils';
-
-const mockStore = configureStore({
-  reducer: {
-    auth: authReducer,
-    loading: loadingReducer,
-  },
-});
-
-const mockNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigate,
-}));
-
-describe('Authentication Flow', () => {
-  beforeEach(() => {
-    setupTestEnvironment();
-    mockNavigate.mockClear();
-  });
-
-  afterEach(() => {
-    cleanupTestEnvironment();
-  });
-
-  describe('Login', () => {
-    const renderLoginForm = () => {
-      return render(
-        <Provider store={mockStore}>
-          <I18nextProvider i18n={i18n}>
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
-            <BrowserRouter>
-              <LoginForm />
-            </BrowserRouter>
-          </I18nextProvider>
-        </Provider>
-      );
-<<<<<<< HEAD
-
-      expect(screen.getByText('로그인')).toBeInTheDocument();
-      expect(screen.getByLabelText('이메일')).toBeInTheDocument();
-      expect(screen.getByLabelText('비밀번호')).toBeInTheDocument();
-    });
-
-    it('should handle login success', async () => {
-      render(
-        <Provider store={store}>
-          <I18nextProvider i18n={i18next}>
-            <BrowserRouter>
-              <LoginForm />
-            </BrowserRouter>
-          </I18nextProvider>
-        </Provider>
-      );
-
-      await act(async () => {
-        store.dispatch({
-          type: 'auth/login/fulfilled',
-          payload: mockAuthResponse,
-        });
+    it('should handle successful login', async () => {
+      const mockLogin = jest.spyOn(AuthService, 'login').mockResolvedValueOnce({
+        token: 'test-token',
+        user: {
+          id: '1',
+          email: 'test@example.com',
+          name: 'Test User',
+        },
       });
 
-      expect(store.getState().auth.isAuthenticated).toBe(true);
-      expect(store.getState().auth.user).toEqual(mockUser);
-      expect(store.getState().auth.token).toEqual({ accessToken: mockAuthResponse.accessToken });
+      renderWithProviders(
+        <BrowserRouter>
+          <LoginForm />
+        </BrowserRouter>
+      );
+
+      fireEvent.change(screen.getByLabelText(/email/i), {
+        target: { value: 'test@example.com' },
+      });
+      fireEvent.change(screen.getByLabelText(/password/i), {
+        target: { value: 'password123' },
+      });
+      fireEvent.click(screen.getByRole('button', { name: /login/i }));
+
+      await waitFor(() => {
+        expect(mockLogin).toHaveBeenCalledWith({
+          email: 'test@example.com',
+          password: 'password123',
+        });
+      });
     });
 
     it('should handle login failure', async () => {
-      render(
-        <Provider store={store}>
-          <I18nextProvider i18n={i18next}>
-            <BrowserRouter>
-              <LoginForm />
-            </BrowserRouter>
-          </I18nextProvider>
-        </Provider>
+      const mockLogin = jest.spyOn(AuthService, 'login').mockRejectedValueOnce(
+        new Error('Invalid credentials')
       );
 
-      await act(async () => {
-        store.dispatch({
-          type: 'auth/login/rejected',
-          payload: '이메일 또는 비밀번호가 올바르지 않습니다',
-        });
-      });
+      renderWithProviders(
+        <BrowserRouter>
+          <LoginForm />
+        </BrowserRouter>
+      );
 
-      expect(screen.getByText('이메일 또는 비밀번호가 올바르지 않습니다')).toBeInTheDocument();
-      expect(store.getState().auth.isAuthenticated).toBe(false);
-      expect(store.getState().auth.error).toBe('이메일 또는 비밀번호가 올바르지 않습니다');
+      fireEvent.change(screen.getByLabelText(/email/i), {
+        target: { value: 'test@example.com' },
+      });
+      fireEvent.change(screen.getByLabelText(/password/i), {
+        target: { value: 'wrongpassword' },
+      });
+      fireEvent.click(screen.getByRole('button', { name: /login/i }));
+
+      await waitFor(() => {
+        expect(mockLogin).toHaveBeenCalledWith({
+          email: 'test@example.com',
+          password: 'wrongpassword',
+        });
+        expect(screen.getByText(/invalid credentials/i)).toBeInTheDocument();
+      });
+    });
+
+    it('should handle account lockout', async () => {
+      const mockLogin = jest.spyOn(AuthService, 'login').mockRejectedValue(
+        new Error('Invalid credentials')
+      );
+
+      renderWithProviders(
+        <BrowserRouter>
+          <LoginForm />
+        </BrowserRouter>
+      );
+
+      // Attempt login multiple times
+      for (let i = 0; i < 5; i++) {
+        fireEvent.change(screen.getByLabelText(/email/i), {
+          target: { value: 'test@example.com' },
+        });
+        fireEvent.change(screen.getByLabelText(/password/i), {
+          target: { value: 'wrongpassword' },
+        });
+        fireEvent.click(screen.getByRole('button', { name: /login/i }));
+
+        await waitFor(() => {
+          expect(mockLogin).toHaveBeenCalled();
+        });
+      }
+
+      // Verify account is locked
+      fireEvent.change(screen.getByLabelText(/email/i), {
+        target: { value: 'test@example.com' },
+      });
+      fireEvent.change(screen.getByLabelText(/password/i), {
+        target: { value: 'password123' },
+      });
+      fireEvent.click(screen.getByRole('button', { name: /login/i }));
+
+      await waitFor(() => {
+        expect(screen.getByText(/account is locked/i)).toBeInTheDocument();
+      });
     });
   });
 
   describe('Register Form', () => {
-    it('should render register form correctly', () => {
-      render(
-        <Provider store={store}>
-          <I18nextProvider i18n={i18next}>
-=======
-    };
-
-    it('잘못된 인증 정보로 로그인 시도 시 에러 메시지를 표시한다', async () => {
-      renderLoginForm();
-
-      const emailInput = screen.getByTestId('login-email');
-      const passwordInput = screen.getByTestId('login-password');
-      const submitButton = screen.getByTestId('login-submit');
-
-      fireEvent.change(emailInput, { target: { value: 'invalid@email.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'wrongpassword' } });
-      fireEvent.click(submitButton);
-
-      await waitFor(() => {
-        expect(screen.getByText('이메일 또는 비밀번호가 올바르지 않습니다')).toBeInTheDocument();
+    it('should handle successful registration', async () => {
+      const mockRegister = jest.spyOn(AuthService, 'register').mockResolvedValueOnce({
+        token: 'test-token',
+        user: {
+          id: '1',
+          email: 'test@example.com',
+          name: 'Test User',
+        },
       });
-    });
 
-    it('로그인 시도 중 로딩 상태를 표시한다', async () => {
-      renderLoginForm();
-
-      const emailInput = screen.getByTestId('login-email');
-      const passwordInput = screen.getByTestId('login-password');
-      const submitButton = screen.getByTestId('login-submit');
-
-      fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'Password123!' } });
-      fireEvent.click(submitButton);
-
-      await waitFor(() => {
-        expect(mockStore.getState().loading.isLoading).toBe(true);
-      });
-    });
-
-    it('로그인 성공 시 대시보드로 이동한다', async () => {
-      renderLoginForm();
-
-      const emailInput = screen.getByTestId('login-email');
-      const passwordInput = screen.getByTestId('login-password');
-      const submitButton = screen.getByTestId('login-submit');
-
-      fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'Password123!' } });
-      fireEvent.click(submitButton);
-
-      await waitFor(() => {
-        expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
-      });
-    });
-  });
-
-  describe('Registration', () => {
-    const renderRegisterForm = () => {
-      return render(
-        <Provider store={mockStore}>
-          <I18nextProvider i18n={i18n}>
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
-            <BrowserRouter>
-              <RegisterForm />
-            </BrowserRouter>
-          </I18nextProvider>
-        </Provider>
-      );
-<<<<<<< HEAD
-
-      expect(screen.getByText('회원가입')).toBeInTheDocument();
-      expect(screen.getByLabelText('이메일')).toBeInTheDocument();
-      expect(screen.getByLabelText('비밀번호')).toBeInTheDocument();
-      expect(screen.getByLabelText('비밀번호 확인')).toBeInTheDocument();
-    });
-
-    it('should handle registration success', async () => {
-      render(
-        <Provider store={store}>
-          <I18nextProvider i18n={i18next}>
-            <BrowserRouter>
-              <RegisterForm />
-            </BrowserRouter>
-          </I18nextProvider>
-        </Provider>
+      renderWithProviders(
+        <BrowserRouter>
+          <RegisterForm />
+        </BrowserRouter>
       );
 
-      await act(async () => {
-        store.dispatch({
-          type: 'auth/register/fulfilled',
-          payload: mockAuthResponse,
+      fireEvent.change(screen.getByLabelText(/name/i), {
+        target: { value: 'Test User' },
+      });
+      fireEvent.change(screen.getByLabelText(/email/i), {
+        target: { value: 'test@example.com' },
+      });
+      fireEvent.change(screen.getByLabelText(/^password$/i), {
+        target: { value: 'Password123!' },
+      });
+      fireEvent.change(screen.getByLabelText(/confirm password/i), {
+        target: { value: 'Password123!' },
+      });
+      fireEvent.click(screen.getByRole('button', { name: /register/i }));
+
+      await waitFor(() => {
+        expect(mockRegister).toHaveBeenCalledWith({
+          name: 'Test User',
+          email: 'test@example.com',
+          password: 'Password123!',
         });
       });
-
-      expect(store.getState().auth.isAuthenticated).toBe(true);
-      expect(store.getState().auth.user).toEqual(mockUser);
-      expect(store.getState().auth.token).toEqual({ accessToken: mockAuthResponse.accessToken });
     });
 
     it('should handle registration failure', async () => {
+      const mockRegister = jest.spyOn(AuthService, 'register').mockRejectedValueOnce(
+        new Error('Email already exists')
+      );
+
+      renderWithProviders(
+        <BrowserRouter>
+          <RegisterForm />
+        </BrowserRouter>
+      );
+
+      fireEvent.change(screen.getByLabelText(/name/i), {
+        target: { value: 'Test User' },
+      });
+      fireEvent.change(screen.getByLabelText(/email/i), {
+        target: { value: 'test@example.com' },
+      });
+      fireEvent.change(screen.getByLabelText(/^password$/i), {
+        target: { value: 'Password123!' },
+      });
+      fireEvent.change(screen.getByLabelText(/confirm password/i), {
+        target: { value: 'Password123!' },
+      });
+      fireEvent.click(screen.getByRole('button', { name: /register/i }));
+
+      await waitFor(() => {
+        expect(mockRegister).toHaveBeenCalledWith({
+          name: 'Test User',
+          email: 'test@example.com',
+          password: 'Password123!',
+        });
+        expect(screen.getByText(/email already exists/i)).toBeInTheDocument();
+      });
+    });
+
+    it('should validate password requirements', async () => {
       render(
         <Provider store={store}>
-          <I18nextProvider i18n={i18next}>
+          <I18nextProvider i18n={i18n}>
             <BrowserRouter>
-              <RegisterForm />
+              <LoginForm />
             </BrowserRouter>
           </I18nextProvider>
         </Provider>
       );
 
-      await act(async () => {
-        store.dispatch({
-          type: 'auth/register/rejected',
-          payload: '이미 사용 중인 이메일입니다',
-        });
+      fireEvent.change(screen.getByLabelText(/email/i), {
+        target: { value: 'test@example.com' },
       });
-
-      expect(screen.getByText('이미 사용 중인 이메일입니다')).toBeInTheDocument();
-      expect(store.getState().auth.isAuthenticated).toBe(false);
-      expect(store.getState().auth.error).toBe('이미 사용 중인 이메일입니다');
-    });
-  });
-
-  describe('Error Handling', () => {
-    it('should handle validation error', () => {
-      const result = handleApiError(new Error('Invalid input'));
-      expect(result.code).toBe(ErrorCode.VALIDATION_ERROR);
-      expect(result.message).toBe('Invalid input');
-    });
-
-    it('should handle network error', () => {
-      const result = handleApiError(new Error('Network Error'));
-      expect(result.code).toBe(ErrorCode.NETWORK_ERROR);
-      expect(result.message).toBe('Network Error');
-=======
-    };
-
-    it('이미 사용 중인 이메일로 회원가입 시도 시 에러 메시지를 표시한다', async () => {
-      renderRegisterForm();
-
-      const nameInput = screen.getByTestId('register-name');
-      const emailInput = screen.getByTestId('register-email');
-      const passwordInput = screen.getByTestId('register-password');
-      const submitButton = screen.getByTestId('register-submit');
-
-      fireEvent.change(nameInput, { target: { value: 'Test User' } });
-      fireEvent.change(emailInput, { target: { value: 'existing@email.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'Password123!' } });
-      fireEvent.click(submitButton);
+      fireEvent.change(screen.getByLabelText(/password/i), {
+        target: { value: 'weak' },
+      });
+      fireEvent.click(screen.getByRole('button', { name: /login/i }));
 
       await waitFor(() => {
-        expect(screen.getByText('이미 사용 중인 이메일입니다')).toBeInTheDocument();
+        expect(screen.getByText(/password must be at least/i)).toBeInTheDocument();
       });
-    });
-
-    it('회원가입 성공 시 로그인 페이지로 이동한다', async () => {
-      renderRegisterForm();
-
-      const nameInput = screen.getByTestId('register-name');
-      const emailInput = screen.getByTestId('register-email');
-      const passwordInput = screen.getByTestId('register-password');
-      const submitButton = screen.getByTestId('register-submit');
-
-      fireEvent.change(nameInput, { target: { value: 'New User' } });
-      fireEvent.change(emailInput, { target: { value: 'new@email.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'Password123!' } });
-      fireEvent.click(submitButton);
-
-      await waitFor(() => {
-        expect(mockNavigate).toHaveBeenCalledWith('/login');
-      });
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
     });
   });
 }); 

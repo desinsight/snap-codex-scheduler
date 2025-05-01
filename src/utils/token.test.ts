@@ -136,7 +136,7 @@ describe('Token Utils', () => {
     it('should return time until expiry', () => {
       const expiryTime = Date.now() + 3600000;
       mockLocalStorage.setItem('token_expiry', expiryTime.toString());
-      
+
       const timeUntilExpiry = getTimeUntilExpiry();
       expect(timeUntilExpiry).toBeGreaterThan(0);
       expect(timeUntilExpiry).toBeLessThanOrEqual(3600000);
@@ -145,7 +145,7 @@ describe('Token Utils', () => {
     it('should return 0 when token is expired', () => {
       const expiryTime = Date.now() - 1000;
       mockLocalStorage.setItem('token_expiry', expiryTime.toString());
-      
+
       expect(getTimeUntilExpiry()).toBe(0);
     });
   });
@@ -154,14 +154,14 @@ describe('Token Utils', () => {
     it('should indicate token needs refresh when close to expiry', () => {
       const expiryTime = Date.now() + 300000; // 5 minutes
       mockLocalStorage.setItem('token_expiry', expiryTime.toString());
-      
+
       expect(getTimeUntilExpiry()).toBeLessThanOrEqual(300000);
     });
 
     it('should indicate token is fresh when far from expiry', () => {
       const expiryTime = Date.now() + 7200000; // 2 hours
       mockLocalStorage.setItem('token_expiry', expiryTime.toString());
-      
+
       expect(getTimeUntilExpiry()).toBeGreaterThan(300000);
     });
   });
@@ -198,12 +198,14 @@ describe('Token Management', () => {
 
   describe('isTokenExpired', () => {
     it('should return true for expired token', () => {
-      const expiredToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTY5NzA0MDAsImlhdCI6MTYxNjk3MDQwMH0.';
+      const expiredToken =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTY5NzA0MDAsImlhdCI6MTYxNjk3MDQwMH0.';
       expect(isTokenExpired(expiredToken)).toBe(true);
     });
 
     it('should return false for valid token', () => {
-      const validToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE5MTY5NzA0MDAsImlhdCI6MTYxNjk3MDQwMH0.';
+      const validToken =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE5MTY5NzA0MDAsImlhdCI6MTYxNjk3MDQwMH0.';
       expect(isTokenExpired(validToken)).toBe(false);
     });
 
@@ -220,7 +222,8 @@ describe('Token Management', () => {
 
   describe('getTokenExpiration', () => {
     it('should return correct expiration time', () => {
-      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTY5NzA0MDAsImlhdCI6MTYxNjk3MDQwMH0.';
+      const token =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTY5NzA0MDAsImlhdCI6MTYxNjk3MDQwMH0.';
       const expiration = getTokenExpiration(token);
       expect(expiration).toBe(1616970400);
     });
@@ -237,4 +240,4 @@ describe('Token Management', () => {
       expect(expiration).toBeNull();
     });
   });
-}); 
+});

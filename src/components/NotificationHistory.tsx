@@ -26,7 +26,7 @@ const HistoryList = styled.ul`
 const HistoryItem = styled.li`
   padding: 1rem;
   border-bottom: 1px solid ${({ theme }) => theme.colors.light};
-  
+
   &:last-child {
     border-bottom: none;
   }
@@ -72,7 +72,7 @@ const NotificationHistory: React.FC<NotificationHistoryProps> = ({ scheduleId })
   return (
     <HistoryContainer>
       <HistoryList>
-        {history.map((notification) => (
+        {history.map(notification => (
           <HistoryItem key={notification.id}>
             <Timestamp>{new Date(notification.timestamp).toLocaleString()}</Timestamp>
             <Message>{notification.message}</Message>
@@ -83,4 +83,4 @@ const NotificationHistory: React.FC<NotificationHistoryProps> = ({ scheduleId })
   );
 };
 
-export default NotificationHistory; 
+export default NotificationHistory;

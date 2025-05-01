@@ -53,7 +53,7 @@ const Checkbox = styled.input`
 `;
 
 const Button = styled.button`
-  background: #2196F3;
+  background: #2196f3;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -74,7 +74,7 @@ const SatisfactionScore = styled.div`
 `;
 
 const Star = styled.span<{ active: boolean }>`
-  color: ${(props) => (props.active ? '#FFD700' : '#ddd')};
+  color: ${props => (props.active ? '#FFD700' : '#ddd')};
   cursor: pointer;
   font-size: 24px;
 `;
@@ -100,7 +100,7 @@ const UserPreferences: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     if (!currentUser) return;
     const { name, value, type } = e.target;
-    setCurrentUser((prev) => {
+    setCurrentUser(prev => {
       if (!prev) return null;
       if (type === 'checkbox') {
         return {
@@ -135,11 +135,13 @@ const UserPreferences: React.FC = () => {
   const handleFeedbackSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (currentUser) {
-      dispatch(submitFeedback({
-        userId: currentUser.userId,
-        satisfactionScore,
-        feedbackText,
-      }));
+      dispatch(
+        submitFeedback({
+          userId: currentUser.userId,
+          satisfactionScore,
+          feedbackText,
+        })
+      );
       setSatisfactionScore(0);
       setFeedbackText('');
     }
@@ -163,18 +165,20 @@ const UserPreferences: React.FC = () => {
       <Form onSubmit={handleSubmit}>
         <FormGroup>
           <Label>{t('notifications.preferences.preferredChannels')}</Label>
-          {Object.values(NotificationChannel).map((channel) => (
+          {Object.values(NotificationChannel).map(channel => (
             <div key={channel}>
               <Checkbox
                 type="checkbox"
                 name="preferredChannels"
                 value={channel}
                 checked={currentUser.preferredChannels.includes(channel)}
-                onChange={(e) => {
+                onChange={e => {
                   const newChannels = e.target.checked
                     ? [...currentUser.preferredChannels, channel]
-                    : currentUser.preferredChannels.filter((c) => c !== channel);
-                  setCurrentUser((prev) => prev ? { ...prev, preferredChannels: newChannels } : null);
+                    : currentUser.preferredChannels.filter(c => c !== channel);
+                  setCurrentUser(prev =>
+                    prev ? { ...prev, preferredChannels: newChannels } : null
+                  );
                 }}
               />
               {t(`notifications.channels.${channel}`)}
@@ -251,7 +255,7 @@ const UserPreferences: React.FC = () => {
           <FormGroup>
             <Label>{t('notifications.preferences.satisfactionScore')}</Label>
             <SatisfactionScore>
-              {[1, 2, 3, 4, 5].map((score) => (
+              {[1, 2, 3, 4, 5].map(score => (
                 <Star
                   key={score}
                   active={score <= satisfactionScore}
@@ -267,7 +271,7 @@ const UserPreferences: React.FC = () => {
             <Input
               type="text"
               value={feedbackText}
-              onChange={(e) => setFeedbackText(e.target.value)}
+              onChange={e => setFeedbackText(e.target.value)}
               placeholder={t('notifications.preferences.feedbackPlaceholder')}
             />
           </FormGroup>
@@ -278,4 +282,4 @@ const UserPreferences: React.FC = () => {
   );
 };
 
-export default UserPreferences; 
+export default UserPreferences;

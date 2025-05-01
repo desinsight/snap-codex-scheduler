@@ -17,7 +17,7 @@ const initialState: ScheduleState = {
   stats: null,
   loading: false,
   error: null,
-  filter: {}
+  filter: {},
 };
 
 export const fetchSchedules = createAsyncThunk(
@@ -27,12 +27,9 @@ export const fetchSchedules = createAsyncThunk(
   }
 );
 
-export const fetchScheduleById = createAsyncThunk(
-  'schedules/fetchById',
-  async (id: string) => {
-    return await scheduleService.getScheduleById(id);
-  }
-);
+export const fetchScheduleById = createAsyncThunk('schedules/fetchById', async (id: string) => {
+  return await scheduleService.getScheduleById(id);
+});
 
 export const createSchedule = createAsyncThunk(
   'schedules/create',
@@ -48,27 +45,18 @@ export const updateSchedule = createAsyncThunk(
   }
 );
 
-export const deleteSchedule = createAsyncThunk(
-  'schedules/delete',
-  async (id: string) => {
-    await scheduleService.deleteSchedule(id);
-    return id;
-  }
-);
+export const deleteSchedule = createAsyncThunk('schedules/delete', async (id: string) => {
+  await scheduleService.deleteSchedule(id);
+  return id;
+});
 
-export const fetchScheduleStats = createAsyncThunk(
-  'schedules/fetchStats',
-  async () => {
-    return await scheduleService.getScheduleStats();
-  }
-);
+export const fetchScheduleStats = createAsyncThunk('schedules/fetchStats', async () => {
+  return await scheduleService.getScheduleStats();
+});
 
-export const exportSchedules = createAsyncThunk(
-  'schedules/export',
-  async () => {
-    return await scheduleService.exportSchedules();
-  }
-);
+export const exportSchedules = createAsyncThunk('schedules/export', async () => {
+  return await scheduleService.exportSchedules();
+});
 
 const scheduleSlice = createSlice({
   name: 'schedules',
@@ -77,14 +65,14 @@ const scheduleSlice = createSlice({
     setFilter: (state, action: PayloadAction<ScheduleFilter>) => {
       state.filter = action.payload;
     },
-    clearError: (state) => {
+    clearError: state => {
       state.error = null;
-    }
+    },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
       // Fetch Schedules
-      .addCase(fetchSchedules.pending, (state) => {
+      .addCase(fetchSchedules.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -97,7 +85,7 @@ const scheduleSlice = createSlice({
         state.error = action.error.message || 'Failed to fetch schedules';
       })
       // Fetch Schedule by ID
-      .addCase(fetchScheduleById.pending, (state) => {
+      .addCase(fetchScheduleById.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -110,7 +98,7 @@ const scheduleSlice = createSlice({
         state.error = action.error.message || 'Failed to fetch schedule';
       })
       // Create Schedule
-      .addCase(createSchedule.pending, (state) => {
+      .addCase(createSchedule.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -123,7 +111,7 @@ const scheduleSlice = createSlice({
         state.error = action.error.message || 'Failed to create schedule';
       })
       // Update Schedule
-      .addCase(updateSchedule.pending, (state) => {
+      .addCase(updateSchedule.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -142,7 +130,7 @@ const scheduleSlice = createSlice({
         state.error = action.error.message || 'Failed to update schedule';
       })
       // Delete Schedule
-      .addCase(deleteSchedule.pending, (state) => {
+      .addCase(deleteSchedule.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -158,7 +146,7 @@ const scheduleSlice = createSlice({
         state.error = action.error.message || 'Failed to delete schedule';
       })
       // Fetch Stats
-      .addCase(fetchScheduleStats.pending, (state) => {
+      .addCase(fetchScheduleStats.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -171,7 +159,7 @@ const scheduleSlice = createSlice({
         state.error = action.error.message || 'Failed to fetch schedule stats';
       })
       // Export Schedules
-      .addCase(exportSchedules.pending, (state) => {
+      .addCase(exportSchedules.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -183,8 +171,8 @@ const scheduleSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to export schedules';
       });
-  }
+  },
 });
 
 export const { setFilter, clearError } = scheduleSlice.actions;
-export default scheduleSlice.reducer; 
+export default scheduleSlice.reducer;

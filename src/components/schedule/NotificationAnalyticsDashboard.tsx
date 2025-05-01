@@ -77,14 +77,9 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 const NotificationAnalyticsDashboard: React.FC = () => {
   const { t } = useTranslation('schedule');
   const dispatch = useDispatch();
-  const {
-    stats,
-    userPatterns,
-    fatigueLevels,
-    smartSettings,
-    loading,
-    error,
-  } = useSelector((state: RootState) => state.notificationAnalytics);
+  const { stats, userPatterns, fatigueLevels, smartSettings, loading, error } = useSelector(
+    (state: RootState) => state.notificationAnalytics
+  );
 
   useEffect(() => {
     dispatch(fetchNotificationStats());
@@ -192,4 +187,4 @@ const NotificationAnalyticsDashboard: React.FC = () => {
   );
 };
 
-export default NotificationAnalyticsDashboard; 
+export default NotificationAnalyticsDashboard;

@@ -88,4 +88,4 @@ export interface ServiceMonitoring {
     enabled: boolean;
     samplingRate: number;
   };
-} 
+}

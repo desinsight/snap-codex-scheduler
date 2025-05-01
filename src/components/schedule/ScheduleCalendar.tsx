@@ -15,7 +15,7 @@ import ScheduleForm from './ScheduleForm';
 
 const locales = {
   'en-US': require('date-fns/locale/en-US'),
-  'ko': require('date-fns/locale/ko'),
+  ko: require('date-fns/locale/ko'),
 };
 
 const localizer = dateFnsLocalizer({
@@ -47,14 +47,12 @@ const ViewButton = styled.button<{ active: boolean }>`
   padding: 8px 16px;
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 4px;
-  background-color: ${({ active, theme }) => 
-    active ? theme.colors.primary : 'transparent'};
-  color: ${({ active, theme }) => 
-    active ? 'white' : theme.colors.text};
+  background-color: ${({ active, theme }) => (active ? theme.colors.primary : 'transparent')};
+  color: ${({ active, theme }) => (active ? 'white' : theme.colors.text)};
   cursor: pointer;
 
   &:hover {
-    background-color: ${({ active, theme }) => 
+    background-color: ${({ active, theme }) =>
       active ? theme.colors.primaryDark : theme.colors.grayLight};
   }
 `;
@@ -145,22 +143,13 @@ const ScheduleCalendar: React.FC = () => {
       <CalendarContainer>
         <ToolbarContainer>
           <ViewButtons>
-            <ViewButton
-              active={view === Views.MONTH}
-              onClick={() => setView(Views.MONTH)}
-            >
+            <ViewButton active={view === Views.MONTH} onClick={() => setView(Views.MONTH)}>
               {t('calendar.month')}
             </ViewButton>
-            <ViewButton
-              active={view === Views.WEEK}
-              onClick={() => setView(Views.WEEK)}
-            >
+            <ViewButton active={view === Views.WEEK} onClick={() => setView(Views.WEEK)}>
               {t('calendar.week')}
             </ViewButton>
-            <ViewButton
-              active={view === Views.DAY}
-              onClick={() => setView(Views.DAY)}
-            >
+            <ViewButton active={view === Views.DAY} onClick={() => setView(Views.DAY)}>
               {t('calendar.day')}
             </ViewButton>
           </ViewButtons>
@@ -197,13 +186,10 @@ const ScheduleCalendar: React.FC = () => {
       </CalendarContainer>
 
       {showForm && selectedEvent && (
-        <ScheduleForm
-          schedule={selectedEvent}
-          onClose={handleCloseForm}
-        />
+        <ScheduleForm schedule={selectedEvent} onClose={handleCloseForm} />
       )}
     </>
   );
 };
 
-export default ScheduleCalendar; 
+export default ScheduleCalendar;

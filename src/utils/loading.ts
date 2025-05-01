@@ -24,7 +24,7 @@ const loadingSlice = createSlice({
     updateLoadingProgress: (state, action: PayloadAction<number>) => {
       state.loadingProgress = action.payload;
     },
-    stopLoading: (state) => {
+    stopLoading: state => {
       state.isLoading = false;
       state.loadingMessage = null;
       state.loadingProgress = null;
@@ -33,4 +33,4 @@ const loadingSlice = createSlice({
 });
 
 export const { startLoading, updateLoadingProgress, stopLoading } = loadingSlice.actions;
-export default loadingSlice.reducer; 
+export default loadingSlice.reducer;

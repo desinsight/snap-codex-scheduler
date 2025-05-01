@@ -53,16 +53,17 @@ const ChannelCard = styled.div<{ status: string }>`
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 15px;
-  border-left: 4px solid ${(props) => {
-    switch (props.status) {
-      case 'active':
-        return '#4CAF50';
-      case 'error':
-        return '#f44336';
-      default:
-        return '#ff9800';
-    }
-  }};
+  border-left: 4px solid
+    ${props => {
+      switch (props.status) {
+        case 'active':
+          return '#4CAF50';
+        case 'error':
+          return '#f44336';
+        default:
+          return '#ff9800';
+      }
+    }};
 `;
 
 const ChannelHeader = styled.div`
@@ -77,7 +78,7 @@ const ChannelName = styled.h3`
 `;
 
 const ChannelStatus = styled.span<{ status: string }>`
-  color: ${(props) => {
+  color: ${props => {
     switch (props.status) {
       case 'active':
         return '#4CAF50';
@@ -113,7 +114,7 @@ const NotificationItem = styled.div<{ status: string }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: ${(props) => (props.status === 'success' ? '#4CAF50' : '#f44336')};
+  color: ${props => (props.status === 'success' ? '#4CAF50' : '#f44336')};
 `;
 
 const MonitoringDashboard: React.FC = () => {
@@ -125,7 +126,7 @@ const MonitoringDashboard: React.FC = () => {
     dispatch(fetchMonitoringDashboard());
     const subscription = dispatch(subscribeToRealtimeUpdates());
     return () => {
-      subscription.then((eventSource) => {
+      subscription.then(eventSource => {
         if (eventSource) {
           eventSource.close();
         }
@@ -163,7 +164,7 @@ const MonitoringDashboard: React.FC = () => {
         </MetricCard>
       </MetricsGrid>
       <ChannelStatusGrid>
-        {dashboard.channelStatus.map((channel) => (
+        {dashboard.channelStatus.map(channel => (
           <ChannelCard key={channel.channel} status={channel.status}>
             <ChannelHeader>
               <ChannelName>{channel.channel}</ChannelName>
@@ -195,14 +196,12 @@ const MonitoringDashboard: React.FC = () => {
       <RecentNotifications>
         <h3>{t('notifications.monitoring.recentNotifications')}</h3>
         <NotificationList>
-          {dashboard.recentNotifications.map((notification) => (
+          {dashboard.recentNotifications.map(notification => (
             <NotificationItem key={notification.id} status={notification.status}>
               <div>
                 {notification.userId} - {notification.channel}
               </div>
-              <div>
-                {new Date(notification.timestamp).toLocaleTimeString()}
-              </div>
+              <div>{new Date(notification.timestamp).toLocaleTimeString()}</div>
             </NotificationItem>
           ))}
         </NotificationList>
@@ -211,4 +210,4 @@ const MonitoringDashboard: React.FC = () => {
   );
 };
 
-export default MonitoringDashboard; 
+export default MonitoringDashboard;

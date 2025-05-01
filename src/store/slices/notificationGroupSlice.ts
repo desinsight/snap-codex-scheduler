@@ -7,17 +7,14 @@ const initialState: NotificationGroupState = {
   error: null,
 };
 
-export const fetchGroups = createAsyncThunk(
-  'notificationGroups/fetchGroups',
-  async () => {
-    // TODO: Replace with actual API call
-    const response = await fetch('/api/notification-groups');
-    if (!response.ok) {
-      throw new Error('Failed to fetch groups');
-    }
-    return response.json();
+export const fetchGroups = createAsyncThunk('notificationGroups/fetchGroups', async () => {
+  // TODO: Replace with actual API call
+  const response = await fetch('/api/notification-groups');
+  if (!response.ok) {
+    throw new Error('Failed to fetch groups');
   }
-);
+  return response.json();
+});
 
 export const createGroup = createAsyncThunk(
   'notificationGroups/createGroup',
@@ -91,10 +88,10 @@ const notificationGroupSlice = createSlice({
   name: 'notificationGroups',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
       // Fetch groups
-      .addCase(fetchGroups.pending, (state) => {
+      .addCase(fetchGroups.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -107,7 +104,7 @@ const notificationGroupSlice = createSlice({
         state.error = action.error.message || 'Failed to fetch groups';
       })
       // Create group
-      .addCase(createGroup.pending, (state) => {
+      .addCase(createGroup.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -120,13 +117,13 @@ const notificationGroupSlice = createSlice({
         state.error = action.error.message || 'Failed to create group';
       })
       // Update group
-      .addCase(updateGroup.pending, (state) => {
+      .addCase(updateGroup.pending, state => {
         state.loading = true;
         state.error = null;
       })
       .addCase(updateGroup.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.groups.findIndex((g) => g.id === action.payload.id);
+        const index = state.groups.findIndex(g => g.id === action.payload.id);
         if (index !== -1) {
           state.groups[index] = action.payload;
         }
@@ -136,26 +133,26 @@ const notificationGroupSlice = createSlice({
         state.error = action.error.message || 'Failed to update group';
       })
       // Delete group
-      .addCase(deleteGroup.pending, (state) => {
+      .addCase(deleteGroup.pending, state => {
         state.loading = true;
         state.error = null;
       })
       .addCase(deleteGroup.fulfilled, (state, action) => {
         state.loading = false;
-        state.groups = state.groups.filter((g) => g.id !== action.payload);
+        state.groups = state.groups.filter(g => g.id !== action.payload);
       })
       .addCase(deleteGroup.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to delete group';
       })
       // Toggle group active
-      .addCase(toggleGroupActive.pending, (state) => {
+      .addCase(toggleGroupActive.pending, state => {
         state.loading = true;
         state.error = null;
       })
       .addCase(toggleGroupActive.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.groups.findIndex((g) => g.id === action.payload.id);
+        const index = state.groups.findIndex(g => g.id === action.payload.id);
         if (index !== -1) {
           state.groups[index] = action.payload;
         }
@@ -167,4 +164,4 @@ const notificationGroupSlice = createSlice({
   },
 });
 
-export default notificationGroupSlice.reducer; 
+export default notificationGroupSlice.reducer;

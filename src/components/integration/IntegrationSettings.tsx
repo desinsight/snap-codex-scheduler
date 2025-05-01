@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { fetchIntegrations, addService, updateService, addWebhook } from '../../store/slices/integrationSlice';
+import {
+  fetchIntegrations,
+  addService,
+  updateService,
+  addWebhook,
+} from '../../store/slices/integrationSlice';
 import { ExternalServiceConfig, WebhookConfig } from '../../types/integration';
 
 const Container = styled.div`
@@ -144,7 +149,7 @@ const IntegrationSettings: React.FC = () => {
             <Label>{t('integration.serviceType')}</Label>
             <Select
               value={newService.serviceType}
-              onChange={(e) => setNewService({ ...newService, serviceType: e.target.value as any })}
+              onChange={e => setNewService({ ...newService, serviceType: e.target.value as any })}
             >
               <option value="slack">Slack</option>
               <option value="teams">Microsoft Teams</option>
@@ -157,7 +162,7 @@ const IntegrationSettings: React.FC = () => {
             <Input
               type="text"
               value={newService.name}
-              onChange={(e) => setNewService({ ...newService, name: e.target.value })}
+              onChange={e => setNewService({ ...newService, name: e.target.value })}
             />
           </FormGroup>
 
@@ -166,7 +171,7 @@ const IntegrationSettings: React.FC = () => {
             <Input
               type="text"
               value={newService.webhookUrl}
-              onChange={(e) => setNewService({ ...newService, webhookUrl: e.target.value })}
+              onChange={e => setNewService({ ...newService, webhookUrl: e.target.value })}
             />
           </FormGroup>
 
@@ -182,10 +187,14 @@ const IntegrationSettings: React.FC = () => {
               </div>
               <div>
                 <Button
-                  onClick={() => dispatch(updateService({
-                    id: service.name,
-                    service: { enabled: !service.enabled }
-                  }))}
+                  onClick={() =>
+                    dispatch(
+                      updateService({
+                        id: service.name,
+                        service: { enabled: !service.enabled },
+                      })
+                    )
+                  }
                 >
                   {service.enabled ? t('integration.disable') : t('integration.enable')}
                 </Button>
@@ -203,7 +212,7 @@ const IntegrationSettings: React.FC = () => {
             <Input
               type="text"
               value={newWebhook.url}
-              onChange={(e) => setNewWebhook({ ...newWebhook, url: e.target.value })}
+              onChange={e => setNewWebhook({ ...newWebhook, url: e.target.value })}
             />
           </FormGroup>
 
@@ -212,7 +221,7 @@ const IntegrationSettings: React.FC = () => {
             <Input
               type="password"
               value={newWebhook.secret}
-              onChange={(e) => setNewWebhook({ ...newWebhook, secret: e.target.value })}
+              onChange={e => setNewWebhook({ ...newWebhook, secret: e.target.value })}
             />
           </FormGroup>
 
@@ -225,4 +234,4 @@ const IntegrationSettings: React.FC = () => {
   );
 };
 
-export default IntegrationSettings; 
+export default IntegrationSettings;

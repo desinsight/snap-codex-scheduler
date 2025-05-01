@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { NotificationHistory, NotificationPreference, NotificationTiming } from '../../types/notification';
+import {
+  NotificationHistory,
+  NotificationPreference,
+  NotificationTiming,
+} from '../../types/notification';
 import NotificationService from '../../services/NotificationService';
 
 const Container = styled.div`
@@ -34,7 +38,7 @@ const CloseButton = styled.button`
   border: none;
   cursor: pointer;
   color: ${({ theme }) => theme.colors.text.secondary};
-  
+
   &:hover {
     color: ${({ theme }) => theme.colors.text.primary};
   }
@@ -50,12 +54,10 @@ const Tab = styled.button<{ active: boolean }>`
   padding: ${({ theme }) => theme.space.sm};
   background: none;
   border: none;
-  border-bottom: 2px solid ${({ active, theme }) =>
-    active ? theme.colors.primary : 'transparent'};
-  color: ${({ active, theme }) =>
-    active ? theme.colors.primary : theme.colors.text.secondary};
+  border-bottom: 2px solid ${({ active, theme }) => (active ? theme.colors.primary : 'transparent')};
+  color: ${({ active, theme }) => (active ? theme.colors.primary : theme.colors.text.secondary)};
   cursor: pointer;
-  
+
   &:hover {
     color: ${({ theme }) => theme.colors.primary};
   }
@@ -69,10 +71,9 @@ const Content = styled.div`
 const NotificationItem = styled.div<{ unread: boolean }>`
   padding: ${({ theme }) => theme.space.md};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  background: ${({ unread, theme }) =>
-    unread ? `${theme.colors.primary}05` : 'transparent'};
+  background: ${({ unread, theme }) => (unread ? `${theme.colors.primary}05` : 'transparent')};
   cursor: pointer;
-  
+
   &:hover {
     background: ${({ theme }) => theme.colors.background};
   }
@@ -167,16 +168,10 @@ const NotificationCenter: React.FC<Props> = ({ isOpen, onClose }) => {
       </Header>
 
       <TabContainer>
-        <Tab
-          active={activeTab === 'notifications'}
-          onClick={() => setActiveTab('notifications')}
-        >
+        <Tab active={activeTab === 'notifications'} onClick={() => setActiveTab('notifications')}>
           알림
         </Tab>
-        <Tab
-          active={activeTab === 'preferences'}
-          onClick={() => setActiveTab('preferences')}
-        >
+        <Tab active={activeTab === 'preferences'} onClick={() => setActiveTab('preferences')}>
           설정
         </Tab>
       </TabContainer>
@@ -191,9 +186,7 @@ const NotificationCenter: React.FC<Props> = ({ isOpen, onClose }) => {
             >
               <h4>{notification.eventTitle}</h4>
               <p>{notification.message}</p>
-              <small>
-                {new Date(notification.timestamp).toLocaleString()}
-              </small>
+              <small>{new Date(notification.timestamp).toLocaleString()}</small>
             </NotificationItem>
           ))
         ) : (
@@ -240,9 +233,7 @@ const NotificationCenter: React.FC<Props> = ({ isOpen, onClose }) => {
                       setPreferences(prev => ({
                         ...prev,
                         timing: prev.timing.map((t, i) =>
-                          i === index
-                            ? { ...t, value: parseInt(e.target.value) }
-                            : t
+                          i === index ? { ...t, value: parseInt(e.target.value) } : t
                         ),
                       }))
                     }
@@ -265,10 +256,7 @@ const NotificationCenter: React.FC<Props> = ({ isOpen, onClose }) => {
                     <option value="hours">시간</option>
                     <option value="days">일</option>
                   </Select>
-                  <button
-                    type="button"
-                    onClick={() => removeTiming(index)}
-                  >
+                  <button type="button" onClick={() => removeTiming(index)}>
                     삭제
                   </button>
                 </TimingContainer>
@@ -286,4 +274,4 @@ const NotificationCenter: React.FC<Props> = ({ isOpen, onClose }) => {
   );
 };
 
-export default NotificationCenter; 
+export default NotificationCenter;

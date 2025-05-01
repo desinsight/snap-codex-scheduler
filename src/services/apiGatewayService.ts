@@ -1,4 +1,10 @@
-import { GatewayConfig, RouteConfig, GatewayResponse, GatewayError, GatewayStats } from '../types/apiGateway';
+import {
+  GatewayConfig,
+  RouteConfig,
+  GatewayResponse,
+  GatewayError,
+  GatewayStats,
+} from '../types/apiGateway';
 
 class APIGatewayService {
   private config: GatewayConfig;
@@ -126,10 +132,13 @@ class APIGatewayService {
     );
 
     if (!route) {
-      return new Response(JSON.stringify({
-        error: 'Route not found',
-        status: 404,
-      }), { status: 404 });
+      return new Response(
+        JSON.stringify({
+          error: 'Route not found',
+          status: 404,
+        }),
+        { status: 404 }
+      );
     }
 
     // CORS 처리
@@ -137,20 +146,26 @@ class APIGatewayService {
     if (corsResponse) return corsResponse;
 
     // 인증 확인
-    if (!await this.authenticateRequest(route, request.headers)) {
-      return new Response(JSON.stringify({
-        error: 'Unauthorized',
-        status: 401,
-      }), { status: 401 });
+    if (!(await this.authenticateRequest(route, request.headers))) {
+      return new Response(
+        JSON.stringify({
+          error: 'Unauthorized',
+          status: 401,
+        }),
+        { status: 401 }
+      );
     }
 
     // Rate limiting
     const clientId = request.headers.get('X-Client-ID') || 'anonymous';
     if (!this.checkRateLimit(route, clientId)) {
-      return new Response(JSON.stringify({
-        error: 'Too many requests',
-        status: 429,
-      }), { status: 429 });
+      return new Response(
+        JSON.stringify({
+          error: 'Too many requests',
+          status: 429,
+        }),
+        { status: 429 }
+      );
     }
 
     // 요청 처리
@@ -169,11 +184,14 @@ class APIGatewayService {
       return response;
     } catch (error) {
       this.updateStats(route.path, false, 0);
-      return new Response(JSON.stringify({
-        error: 'Internal server error',
-        status: 500,
-        details: error.message,
-      }), { status: 500 });
+      return new Response(
+        JSON.stringify({
+          error: 'Internal server error',
+          status: 500,
+          details: error.message,
+        }),
+        { status: 500 }
+      );
     }
   }
 
@@ -193,7 +211,7 @@ class APIGatewayService {
     routeStats.requests++;
     if (!success) routeStats.errors++;
 
-    routeStats.averageLatency = 
+    routeStats.averageLatency =
       (routeStats.averageLatency * (routeStats.requests - 1) + latency) / routeStats.requests;
   }
 
@@ -218,4 +236,4 @@ export const apiGatewayService = new APIGatewayService({
     level: 'info',
     format: 'json',
   },
-}); 
+});

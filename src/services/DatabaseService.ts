@@ -42,9 +42,9 @@ class DatabaseService {
         resolve();
       };
 
-      request.onupgradeneeded = (event) => {
+      request.onupgradeneeded = event => {
         const db = (event.target as IDBOpenDBRequest).result;
-        
+
         if (!db.objectStoreNames.contains('notifications')) {
           const store = db.createObjectStore('notifications', { keyPath: 'id' });
           store.createIndex('timestamp', 'timestamp', { unique: false });
@@ -100,10 +100,7 @@ class DatabaseService {
     return [];
   }
 
-  public async updateNotification(
-    id: string,
-    updates: Partial<NotificationHistory>
-  ) {
+  public async updateNotification(id: string, updates: Partial<NotificationHistory>) {
     if (this.config.type === 'indexeddb' && this.db) {
       return new Promise<void>((resolve, reject) => {
         const transaction = this.db!.transaction(['notifications'], 'readwrite');
@@ -125,10 +122,7 @@ class DatabaseService {
     }
   }
 
-  public async savePreferences(
-    userId: string,
-    preferences: NotificationPreference
-  ) {
+  public async savePreferences(userId: string, preferences: NotificationPreference) {
     if (this.config.type === 'indexeddb' && this.db) {
       return new Promise<void>((resolve, reject) => {
         const transaction = this.db!.transaction(['preferences'], 'readwrite');
@@ -159,7 +153,7 @@ class DatabaseService {
     if (this.config.type === 'indexeddb' && this.db) {
       const notifications = await this.getNotifications(Infinity);
       const preferences = await this.getPreferences('currentUser');
-      
+
       const backup = {
         timestamp: new Date().toISOString(),
         notifications,
@@ -180,31 +174,31 @@ class DatabaseService {
   public async restore(backupFile: File) {
     return new Promise<void>((resolve, reject) => {
       const reader = new FileReader();
-      
-      reader.onload = async (event) => {
+
+      reader.onload = async event => {
         try {
           const backup = JSON.parse(event.target?.result as string);
-          
+
           // 알림 복원
           for (const notification of backup.notifications) {
             await this.saveNotification(notification);
           }
-          
+
           // 설정 복원
           if (backup.preferences) {
             await this.savePreferences('currentUser', backup.preferences);
           }
-          
+
           resolve();
         } catch (error) {
           reject(error);
         }
       };
-      
+
       reader.onerror = () => reject(reader.error);
       reader.readAsText(backupFile);
     });
   }
 }
 
-export default DatabaseService; 
+export default DatabaseService;

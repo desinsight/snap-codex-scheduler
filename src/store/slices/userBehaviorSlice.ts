@@ -39,9 +39,9 @@ const userBehaviorSlice = createSlice({
   name: 'userBehavior',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchUserBehaviorPatterns.pending, (state) => {
+      .addCase(fetchUserBehaviorPatterns.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -53,15 +53,13 @@ const userBehaviorSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch user behavior patterns';
       })
-      .addCase(updateUserBehaviorPattern.pending, (state) => {
+      .addCase(updateUserBehaviorPattern.pending, state => {
         state.loading = true;
         state.error = null;
       })
       .addCase(updateUserBehaviorPattern.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.patterns.findIndex(
-          (p) => p.userId === action.payload.userId
-        );
+        const index = state.patterns.findIndex(p => p.userId === action.payload.userId);
         if (index !== -1) {
           state.patterns[index] = action.payload;
         }
@@ -73,4 +71,4 @@ const userBehaviorSlice = createSlice({
   },
 });
 
-export default userBehaviorSlice.reducer; 
+export default userBehaviorSlice.reducer;

@@ -1,5 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { NotificationAnalyticsState, NotificationStats, UserBehaviorPattern, NotificationFatigue, SmartNotificationSettings } from '../../types/notification';
+import {
+  NotificationAnalyticsState,
+  NotificationStats,
+  UserBehaviorPattern,
+  NotificationFatigue,
+  SmartNotificationSettings,
+} from '../../types/notification';
 
 const initialState: NotificationAnalyticsState = {
   stats: {
@@ -114,9 +120,9 @@ const notificationAnalyticsSlice = createSlice({
   name: 'notificationAnalytics',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchNotificationStats.pending, (state) => {
+      .addCase(fetchNotificationStats.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -128,7 +134,7 @@ const notificationAnalyticsSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch notification stats';
       })
-      .addCase(fetchUserBehaviorPatterns.pending, (state) => {
+      .addCase(fetchUserBehaviorPatterns.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -140,7 +146,7 @@ const notificationAnalyticsSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch user behavior patterns';
       })
-      .addCase(fetchFatigueLevels.pending, (state) => {
+      .addCase(fetchFatigueLevels.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -152,7 +158,7 @@ const notificationAnalyticsSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch fatigue levels';
       })
-      .addCase(fetchSmartSettings.pending, (state) => {
+      .addCase(fetchSmartSettings.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -164,13 +170,13 @@ const notificationAnalyticsSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch smart settings';
       })
-      .addCase(updateSmartSettings.pending, (state) => {
+      .addCase(updateSmartSettings.pending, state => {
         state.loading = true;
         state.error = null;
       })
       .addCase(updateSmartSettings.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.smartSettings.findIndex((s) => s.userId === action.payload.userId);
+        const index = state.smartSettings.findIndex(s => s.userId === action.payload.userId);
         if (index !== -1) {
           state.smartSettings[index] = action.payload;
         }
@@ -179,13 +185,13 @@ const notificationAnalyticsSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to update smart settings';
       })
-      .addCase(adjustNotificationTiming.pending, (state) => {
+      .addCase(adjustNotificationTiming.pending, state => {
         state.loading = true;
         state.error = null;
       })
       .addCase(adjustNotificationTiming.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.smartSettings.findIndex((s) => s.userId === action.payload.userId);
+        const index = state.smartSettings.findIndex(s => s.userId === action.payload.userId);
         if (index !== -1) {
           state.smartSettings[index] = action.payload;
         }
@@ -194,13 +200,13 @@ const notificationAnalyticsSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to adjust notification timing';
       })
-      .addCase(updateFatigueSettings.pending, (state) => {
+      .addCase(updateFatigueSettings.pending, state => {
         state.loading = true;
         state.error = null;
       })
       .addCase(updateFatigueSettings.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.fatigueLevels.findIndex((f) => f.userId === action.payload.userId);
+        const index = state.fatigueLevels.findIndex(f => f.userId === action.payload.userId);
         if (index !== -1) {
           state.fatigueLevels[index] = action.payload;
         }
@@ -212,4 +218,4 @@ const notificationAnalyticsSlice = createSlice({
   },
 });
 
-export default notificationAnalyticsSlice.reducer; 
+export default notificationAnalyticsSlice.reducer;

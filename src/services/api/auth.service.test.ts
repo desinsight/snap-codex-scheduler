@@ -131,4 +131,4 @@ describe('Auth Service', () => {
       await expect(authService.getCurrentUser()).rejects.toEqual(mockErrorResponse);
     });
   });
-}); 
+});

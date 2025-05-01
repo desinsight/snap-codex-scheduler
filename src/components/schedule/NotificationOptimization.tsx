@@ -2,7 +2,10 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { fetchRecommendations, updateRecommendation } from '../../store/slices/notificationOptimizationSlice';
+import {
+  fetchRecommendations,
+  updateRecommendation,
+} from '../../store/slices/notificationOptimizationSlice';
 import { NotificationRecommendation } from '../../types/notification';
 
 const Container = styled.div`
@@ -110,12 +113,12 @@ const NotificationOptimization: React.FC = () => {
               <CardTitle>{recommendation.userId}</CardTitle>
             </CardHeader>
             <TimeRange>
-              {t('notifications.optimization.optimalTime')}:{' '}
-              {recommendation.optimalTime.start} - {recommendation.optimalTime.end}
+              {t('notifications.optimization.optimalTime')}: {recommendation.optimalTime.start} -{' '}
+              {recommendation.optimalTime.end}
             </TimeRange>
             <ChannelList>
               {t('notifications.optimization.preferredChannels')}:
-              {recommendation.preferredChannels.map((channel) => (
+              {recommendation.preferredChannels.map(channel => (
                 <ChannelTag key={channel}>{channel}</ChannelTag>
               ))}
             </ChannelList>
@@ -139,4 +142,4 @@ const NotificationOptimization: React.FC = () => {
   );
 };
 
-export default NotificationOptimization; 
+export default NotificationOptimization;

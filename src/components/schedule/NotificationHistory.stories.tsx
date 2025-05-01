@@ -11,7 +11,7 @@ export default {
   title: 'Components/NotificationHistory',
   component: NotificationHistory,
   decorators: [
-    (Story) => (
+    Story => (
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <Story />
@@ -21,7 +21,7 @@ export default {
   ],
 } as Meta;
 
-const Template: Story = (args) => <NotificationHistory {...args} />;
+const Template: Story = args => <NotificationHistory {...args} />;
 
 const mockHistory: NotificationHistoryType[] = [
   {
@@ -51,7 +51,7 @@ Empty.args = {
   scheduleId: 'schedule-1',
 };
 Empty.decorators = [
-  (Story) => (
+  Story => (
     <Provider
       store={mockStore({
         notifications: {
@@ -71,7 +71,7 @@ Loading.args = {
   scheduleId: 'schedule-1',
 };
 Loading.decorators = [
-  (Story) => (
+  Story => (
     <Provider
       store={mockStore({
         notifications: {
@@ -91,7 +91,7 @@ Error.args = {
   scheduleId: 'schedule-1',
 };
 Error.decorators = [
-  (Story) => (
+  Story => (
     <Provider
       store={mockStore({
         notifications: {
@@ -111,7 +111,7 @@ ManyItems.args = {
   scheduleId: 'schedule-1',
 };
 ManyItems.decorators = [
-  (Story) => (
+  Story => (
     <Provider
       store={mockStore({
         notifications: {
@@ -148,4 +148,4 @@ ManyItems.decorators = [
       <Story />
     </Provider>
   ),
-]; 
+];

@@ -1,5 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { ChannelOptimizationState, ChannelPerformanceMetrics, ChannelOptimizationRule } from '../../types/notification';
+import {
+  ChannelOptimizationState,
+  ChannelPerformanceMetrics,
+  ChannelOptimizationRule,
+} from '../../types/notification';
 
 const initialState: ChannelOptimizationState = {
   metrics: [],
@@ -94,9 +98,9 @@ const channelOptimizationSlice = createSlice({
   name: 'channelOptimization',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchChannelMetrics.pending, (state) => {
+      .addCase(fetchChannelMetrics.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -108,7 +112,7 @@ const channelOptimizationSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch channel metrics';
       })
-      .addCase(fetchOptimizationRules.pending, (state) => {
+      .addCase(fetchOptimizationRules.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -120,7 +124,7 @@ const channelOptimizationSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch optimization rules';
       })
-      .addCase(createOptimizationRule.pending, (state) => {
+      .addCase(createOptimizationRule.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -132,13 +136,13 @@ const channelOptimizationSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to create optimization rule';
       })
-      .addCase(updateOptimizationRule.pending, (state) => {
+      .addCase(updateOptimizationRule.pending, state => {
         state.loading = true;
         state.error = null;
       })
       .addCase(updateOptimizationRule.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.rules.findIndex((rule) => rule.id === action.payload.id);
+        const index = state.rules.findIndex(rule => rule.id === action.payload.id);
         if (index !== -1) {
           state.rules[index] = action.payload;
         }
@@ -147,25 +151,25 @@ const channelOptimizationSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to update optimization rule';
       })
-      .addCase(deleteOptimizationRule.pending, (state) => {
+      .addCase(deleteOptimizationRule.pending, state => {
         state.loading = true;
         state.error = null;
       })
       .addCase(deleteOptimizationRule.fulfilled, (state, action) => {
         state.loading = false;
-        state.rules = state.rules.filter((rule) => rule.id !== action.payload);
+        state.rules = state.rules.filter(rule => rule.id !== action.payload);
       })
       .addCase(deleteOptimizationRule.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to delete optimization rule';
       })
-      .addCase(toggleOptimizationRule.pending, (state) => {
+      .addCase(toggleOptimizationRule.pending, state => {
         state.loading = true;
         state.error = null;
       })
       .addCase(toggleOptimizationRule.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.rules.findIndex((rule) => rule.id === action.payload.id);
+        const index = state.rules.findIndex(rule => rule.id === action.payload.id);
         if (index !== -1) {
           state.rules[index] = action.payload;
         }
@@ -177,4 +181,4 @@ const channelOptimizationSlice = createSlice({
   },
 });
 
-export default channelOptimizationSlice.reducer; 
+export default channelOptimizationSlice.reducer;

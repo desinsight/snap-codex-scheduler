@@ -41,7 +41,9 @@ const ScheduleDetail: React.FC = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation('schedule');
   const { schedule, loading, error } = useSelector((state: RootState) => state.schedules);
-  const [activeTab, setActiveTab] = React.useState<'details' | 'notifications' | 'history'>('details');
+  const [activeTab, setActiveTab] = React.useState<'details' | 'notifications' | 'history'>(
+    'details'
+  );
 
   useEffect(() => {
     if (id) {
@@ -92,22 +94,13 @@ const ScheduleDetail: React.FC = () => {
       </Content>
 
       <Tabs>
-        <Tab
-          active={activeTab === 'details'}
-          onClick={() => setActiveTab('details')}
-        >
+        <Tab active={activeTab === 'details'} onClick={() => setActiveTab('details')}>
           {t('details')}
         </Tab>
-        <Tab
-          active={activeTab === 'notifications'}
-          onClick={() => setActiveTab('notifications')}
-        >
+        <Tab active={activeTab === 'notifications'} onClick={() => setActiveTab('notifications')}>
           {t('notifications.title')}
         </Tab>
-        <Tab
-          active={activeTab === 'history'}
-          onClick={() => setActiveTab('history')}
-        >
+        <Tab active={activeTab === 'history'} onClick={() => setActiveTab('history')}>
           {t('notifications.history.title')}
         </Tab>
       </Tabs>
@@ -115,9 +108,7 @@ const ScheduleDetail: React.FC = () => {
       <TabContent>
         {activeTab === 'details' && (
           <Footer>
-            <Button onClick={() => navigate(`/schedules/${schedule.id}/edit`)}>
-              {t('edit')}
-            </Button>
+            <Button onClick={() => navigate(`/schedules/${schedule.id}/edit`)}>{t('edit')}</Button>
             <Button onClick={() => navigate(`/schedules/${schedule.id}/share`)}>
               {t('share')}
             </Button>
@@ -126,15 +117,11 @@ const ScheduleDetail: React.FC = () => {
             </Button>
           </Footer>
         )}
-        {activeTab === 'notifications' && (
-          <NotificationSettings scheduleId={schedule.id} />
-        )}
-        {activeTab === 'history' && (
-          <NotificationHistory scheduleId={schedule.id} />
-        )}
+        {activeTab === 'notifications' && <NotificationSettings scheduleId={schedule.id} />}
+        {activeTab === 'history' && <NotificationHistory scheduleId={schedule.id} />}
       </TabContent>
     </Container>
   );
 };
 
-export default ScheduleDetail; 
+export default ScheduleDetail;

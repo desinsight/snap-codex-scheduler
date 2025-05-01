@@ -114,8 +114,7 @@ const StyledButton = styled(motion.button)<ButtonProps>`
   position: relative;
   overflow: hidden;
 
-  ${({ variant = 'contained', color = 'primary', theme }) =>
-    getButtonStyles(variant, color, theme)}
+  ${({ variant = 'contained', color = 'primary', theme }) => getButtonStyles(variant, color, theme)}
   ${({ size = 'medium' }) => getButtonSize(size)}
   ${({ fullWidth }) =>
     fullWidth &&
@@ -210,4 +209,4 @@ export const Button: React.FC<ButtonProps> = ({
       {!loading && endIcon}
     </StyledButton>
   );
-}; 
+};

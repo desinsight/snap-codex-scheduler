@@ -60,11 +60,8 @@ const TableCell = styled.td`
 `;
 
 const ErrorRate = styled.span<{ rate: number }>`
-  color: ${({ theme, rate }) => 
-    rate > 0.1 ? theme.colors.error : 
-    rate > 0.05 ? theme.colors.warning : 
-    theme.colors.success
-  };
+  color: ${({ theme, rate }) =>
+    rate > 0.1 ? theme.colors.error : rate > 0.05 ? theme.colors.warning : theme.colors.success};
 `;
 
 const GatewayMonitor: React.FC = () => {
@@ -107,9 +104,7 @@ const GatewayMonitor: React.FC = () => {
 
         <StatCard>
           <StatValue>
-            <ErrorRate rate={stats.errorRate}>
-              {(stats.errorRate * 100).toFixed(2)}%
-            </ErrorRate>
+            <ErrorRate rate={stats.errorRate}>{(stats.errorRate * 100).toFixed(2)}%</ErrorRate>
           </StatValue>
           <StatLabel>{t('apiGateway.errorRate')}</StatLabel>
         </StatCard>
@@ -139,4 +134,4 @@ const GatewayMonitor: React.FC = () => {
   );
 };
 
-export default GatewayMonitor; 
+export default GatewayMonitor;

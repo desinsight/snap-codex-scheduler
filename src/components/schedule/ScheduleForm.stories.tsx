@@ -15,7 +15,7 @@ export default {
   title: 'Components/Schedule/ScheduleForm',
   component: ScheduleForm,
   decorators: [
-    (Story) => (
+    Story => (
       <Provider store={mockStore({})}>
         <I18nextProvider i18n={i18n}>
           <MemoryRouter initialEntries={['/schedules/new']}>
@@ -30,7 +30,7 @@ export default {
   ],
 } as Meta;
 
-const Template: Story<{ schedule?: Schedule }> = (args) => {
+const Template: Story<{ schedule?: Schedule }> = args => {
   const store = mockStore({
     schedules: {
       selectedSchedule: args.schedule,
@@ -147,4 +147,4 @@ export const Error = () => {
       <ScheduleForm />
     </Provider>
   );
-}; 
+};

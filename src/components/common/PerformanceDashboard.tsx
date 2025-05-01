@@ -71,7 +71,7 @@ export const PerformanceDashboard: React.FC = () => {
       // 실제 성능 메트릭을 수집하는 로직
       const performance = window.performance;
       const memory = (performance as any).memory;
-      
+
       setMetrics({
         loadTime: performance.timing.loadEventEnd - performance.timing.navigationStart,
         memoryUsage: memory ? memory.usedJSHeapSize / 1048576 : 0, // MB 단위로 변환
@@ -89,23 +89,23 @@ export const PerformanceDashboard: React.FC = () => {
   return (
     <Dashboard>
       <Title>{t('performance.title')}</Title>
-      
+
       <MetricsGrid>
         <MetricCard>
           <MetricValue>{metrics.loadTime}ms</MetricValue>
           <MetricLabel>{t('performance.loadTime')}</MetricLabel>
         </MetricCard>
-        
+
         <MetricCard>
           <MetricValue>{metrics.memoryUsage.toFixed(2)}MB</MetricValue>
           <MetricLabel>{t('performance.memoryUsage')}</MetricLabel>
         </MetricCard>
-        
+
         <MetricCard>
           <MetricValue>{metrics.cpuUsage}%</MetricValue>
           <MetricLabel>{t('performance.cpuUsage')}</MetricLabel>
         </MetricCard>
-        
+
         <MetricCard>
           <MetricValue>{metrics.networkLatency}ms</MetricValue>
           <MetricLabel>{t('performance.networkLatency')}</MetricLabel>
@@ -118,4 +118,4 @@ export const PerformanceDashboard: React.FC = () => {
       </ChartContainer>
     </Dashboard>
   );
-}; 
+};

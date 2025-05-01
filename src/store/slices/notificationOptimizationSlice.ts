@@ -1,5 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { NotificationOptimizationState, NotificationRecommendation } from '../../types/notification';
+import {
+  NotificationOptimizationState,
+  NotificationRecommendation,
+} from '../../types/notification';
 
 const initialState: NotificationOptimizationState = {
   recommendations: [],
@@ -21,13 +24,16 @@ export const fetchRecommendations = createAsyncThunk(
 export const updateRecommendation = createAsyncThunk(
   'notificationOptimization/updateRecommendation',
   async (recommendation: NotificationRecommendation) => {
-    const response = await fetch(`/api/notification-optimization/recommendations/${recommendation.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(recommendation),
-    });
+    const response = await fetch(
+      `/api/notification-optimization/recommendations/${recommendation.id}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(recommendation),
+      }
+    );
     if (!response.ok) {
       throw new Error('Failed to update recommendation');
     }
@@ -39,9 +45,9 @@ const notificationOptimizationSlice = createSlice({
   name: 'notificationOptimization',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchRecommendations.pending, (state) => {
+      .addCase(fetchRecommendations.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -53,15 +59,13 @@ const notificationOptimizationSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch recommendations';
       })
-      .addCase(updateRecommendation.pending, (state) => {
+      .addCase(updateRecommendation.pending, state => {
         state.loading = true;
         state.error = null;
       })
       .addCase(updateRecommendation.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.recommendations.findIndex(
-          (r) => r.id === action.payload.id
-        );
+        const index = state.recommendations.findIndex(r => r.id === action.payload.id);
         if (index !== -1) {
           state.recommendations[index] = action.payload;
         }
@@ -73,4 +77,4 @@ const notificationOptimizationSlice = createSlice({
   },
 });
 
-export default notificationOptimizationSlice.reducer; 
+export default notificationOptimizationSlice.reducer;

@@ -165,4 +165,4 @@ describe('NotificationTemplateManager', () => {
     fireEvent.change(typeSelect, { target: { value: 'browser' } });
     expect(screen.queryByPlaceholderText('제목')).not.toBeInTheDocument();
   });
-}); 
+});

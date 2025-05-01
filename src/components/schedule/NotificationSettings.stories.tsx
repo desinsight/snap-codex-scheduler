@@ -14,7 +14,7 @@ export default {
   title: 'Components/Schedule/NotificationSettings',
   component: NotificationSettings,
   decorators: [
-    (Story) => (
+    Story => (
       <Provider store={mockStore({})}>
         <I18nextProvider i18n={i18n}>
           <Story />
@@ -24,7 +24,7 @@ export default {
   ],
 } as Meta;
 
-const Template: Story = (args) => <NotificationSettings {...args} />;
+const Template: Story = args => <NotificationSettings {...args} />;
 
 const mockSettings: NotificationSettingsType[] = [
   {
@@ -52,7 +52,7 @@ Default.args = {
   scheduleId: 'schedule-1',
 };
 Default.decorators = [
-  (Story) => (
+  Story => (
     <Provider
       store={mockStore({
         notifications: {
@@ -72,7 +72,7 @@ Loading.args = {
   scheduleId: 'schedule-1',
 };
 Loading.decorators = [
-  (Story) => (
+  Story => (
     <Provider
       store={mockStore({
         notifications: {
@@ -92,7 +92,7 @@ Error.args = {
   scheduleId: 'schedule-1',
 };
 Error.decorators = [
-  (Story) => (
+  Story => (
     <Provider
       store={mockStore({
         notifications: {
@@ -112,11 +112,11 @@ AllEnabled.args = {
   scheduleId: 'schedule-1',
 };
 AllEnabled.decorators = [
-  (Story) => (
+  Story => (
     <Provider
       store={mockStore({
         notifications: {
-          settings: mockSettings.map((setting) => ({
+          settings: mockSettings.map(setting => ({
             ...setting,
             enabled: true,
           })),
@@ -135,11 +135,11 @@ AllDisabled.args = {
   scheduleId: 'schedule-1',
 };
 AllDisabled.decorators = [
-  (Story) => (
+  Story => (
     <Provider
       store={mockStore({
         notifications: {
-          settings: mockSettings.map((setting) => ({
+          settings: mockSettings.map(setting => ({
             ...setting,
             enabled: false,
           })),
@@ -151,4 +151,4 @@ AllDisabled.decorators = [
       <Story />
     </Provider>
   ),
-]; 
+];

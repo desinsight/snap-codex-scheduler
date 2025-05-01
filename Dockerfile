@@ -7,12 +7,9 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci --legacy-peer-deps
+RUN npm ci
 
-# Install additional dependencies
-RUN npm install -D tailwindcss@latest postcss@latest autoprefixer@latest @tailwindcss/nesting --legacy-peer-deps
-
-# Copy source code
+# Copy project files
 COPY . .
 
 # Build the application
@@ -21,10 +18,24 @@ RUN npm run build
 # Production stage
 FROM nginx:alpine
 
-COPY --from=builder /app/build /usr/share/nginx/html
+# Copy built assets
+COPY --from=builder /app/dist /usr/share/nginx/html
 
+# Copy nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
+# Set proper permissions
+RUN chown -R nginx:nginx /usr/share/nginx/html && \
+    chmod -R 755 /usr/share/nginx/html && \
+    chown -R nginx:nginx /var/cache/nginx && \
+    chown -R nginx:nginx /var/log/nginx && \
+    chown -R nginx:nginx /etc/nginx/conf.d && \
+    touch /var/run/nginx.pid && \
+    chown -R nginx:nginx /var/run/nginx.pid
+
+# Switch to non-root user
+USER nginx
+
+EXPOSE 8080
 
 CMD ["nginx", "-g", "daemon off;"] 

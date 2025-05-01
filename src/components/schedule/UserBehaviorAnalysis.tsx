@@ -73,9 +73,7 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 const UserBehaviorAnalysis: React.FC = () => {
   const { t } = useTranslation('schedule');
   const dispatch = useDispatch();
-  const { patterns, loading, error } = useSelector(
-    (state: any) => state.userBehavior
-  );
+  const { patterns, loading, error } = useSelector((state: any) => state.userBehavior);
 
   useEffect(() => {
     dispatch(fetchUserBehaviorPatterns());
@@ -90,7 +88,7 @@ const UserBehaviorAnalysis: React.FC = () => {
   }
 
   const formatTimeData = (pattern: UserBehaviorPattern) => {
-    return pattern.responsePatterns.timeOfDay.map((time) => ({
+    return pattern.responsePatterns.timeOfDay.map(time => ({
       hour: `${time.hour}:00`,
       responseRate: time.responseRate,
       averageResponseTime: time.averageResponseTime,
@@ -98,14 +96,14 @@ const UserBehaviorAnalysis: React.FC = () => {
   };
 
   const formatChannelData = (pattern: UserBehaviorPattern) => {
-    return pattern.responsePatterns.channelPreferences.map((channel) => ({
+    return pattern.responsePatterns.channelPreferences.map(channel => ({
       name: channel.channel,
       value: channel.successRate,
     }));
   };
 
   const formatPriorityData = (pattern: UserBehaviorPattern) => {
-    return pattern.responsePatterns.priorityPatterns.map((priority) => ({
+    return pattern.responsePatterns.priorityPatterns.map(priority => ({
       name: priority.priority,
       value: priority.responseRate,
     }));
@@ -158,15 +156,10 @@ const UserBehaviorAnalysis: React.FC = () => {
                   outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"
-                  label={({ name, percent }) =>
-                    `${name} ${(percent * 100).toFixed(0)}%`
-                  }
+                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                 >
                   {formatChannelData(pattern).map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -186,15 +179,10 @@ const UserBehaviorAnalysis: React.FC = () => {
                   outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"
-                  label={({ name, percent }) =>
-                    `${name} ${(percent * 100).toFixed(0)}%`
-                  }
+                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                 >
                   {formatPriorityData(pattern).map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -229,4 +217,4 @@ const UserBehaviorAnalysis: React.FC = () => {
   );
 };
 
-export default UserBehaviorAnalysis; 
+export default UserBehaviorAnalysis;

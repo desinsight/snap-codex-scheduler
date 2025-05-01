@@ -14,7 +14,7 @@ export default {
   title: 'Components/Schedule/ScheduleShare',
   component: ScheduleShare,
   decorators: [
-    (Story) => (
+    Story => (
       <Provider store={mockStore({})}>
         <I18nextProvider i18n={i18n}>
           <MemoryRouter initialEntries={['/schedules/1/share']}>
@@ -88,4 +88,4 @@ export const Success = () => {
       <ScheduleShare />
     </Provider>
   );
-}; 
+};

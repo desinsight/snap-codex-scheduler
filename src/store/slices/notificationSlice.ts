@@ -58,10 +58,10 @@ const notificationSlice = createSlice({
   name: 'notifications',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
       // Fetch Settings
-      .addCase(fetchNotificationSettings.pending, (state) => {
+      .addCase(fetchNotificationSettings.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -74,7 +74,7 @@ const notificationSlice = createSlice({
         state.error = action.error.message || 'Failed to fetch notification settings';
       })
       // Update Settings
-      .addCase(updateNotificationSettings.pending, (state) => {
+      .addCase(updateNotificationSettings.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -90,7 +90,7 @@ const notificationSlice = createSlice({
         state.error = action.error.message || 'Failed to update notification settings';
       })
       // Fetch History
-      .addCase(fetchNotificationHistory.pending, (state) => {
+      .addCase(fetchNotificationHistory.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -105,4 +105,4 @@ const notificationSlice = createSlice({
   },
 });
 
-export default notificationSlice.reducer; 
+export default notificationSlice.reducer;

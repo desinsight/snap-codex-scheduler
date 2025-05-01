@@ -134,9 +134,7 @@ const ScheduleItem: React.FC<ScheduleItemProps> = ({ schedule }) => {
         </ScheduleCategoryBadge>
       </ScheduleHeader>
 
-      {schedule.description && (
-        <ScheduleDescription>{schedule.description}</ScheduleDescription>
-      )}
+      {schedule.description && <ScheduleDescription>{schedule.description}</ScheduleDescription>}
 
       <ScheduleTime>
         {schedule.isAllDay
@@ -150,12 +148,10 @@ const ScheduleItem: React.FC<ScheduleItemProps> = ({ schedule }) => {
           <ActionButton>{t('schedule.actions.delete')}</ActionButton>
         </ScheduleActions>
 
-        {schedule.isShared && (
-          <SharedBadge>{t('schedule.shared')}</SharedBadge>
-        )}
+        {schedule.isShared && <SharedBadge>{t('schedule.shared')}</SharedBadge>}
       </ScheduleFooter>
     </ScheduleCard>
   );
 };
 
-export default ScheduleItem; 
+export default ScheduleItem;

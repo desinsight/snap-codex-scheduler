@@ -43,11 +43,12 @@ const StyledButton = styled(motion.button)<ButtonProps>`
   font-weight: ${({ theme }) => theme.typography.button.fontWeight};
   font-size: ${({ theme }) => theme.typography.button.fontSize};
   line-height: ${({ theme }) => theme.typography.button.lineHeight};
-  transition: all ${({ theme }) => theme.transitions.duration.short}ms ${({ theme }) => theme.transitions.easing.easeInOut};
+  transition: all ${({ theme }) => theme.transitions.duration.short}ms
+    ${({ theme }) => theme.transitions.easing.easeInOut};
   overflow: hidden;
   cursor: pointer;
   user-select: none;
-  width: ${({ fullWidth }) => fullWidth ? '100%' : 'auto'};
+  width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
 
   ${({ size, theme }) => {
     switch (size) {
@@ -210,7 +211,7 @@ const Button: React.FC<ButtonProps> = ({
       {loading && (
         <LoadingSpinner
           animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
         />
       )}
       {!loading && startIcon}
@@ -223,4 +224,4 @@ const Button: React.FC<ButtonProps> = ({
   );
 };
 
-export default Button; 
+export default Button;

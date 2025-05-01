@@ -19,7 +19,7 @@ const PriorityBadge = styled.span<{ priority: ScheduleProps['priority'] }>`
   border-radius: ${({ theme }) => theme.radii.full};
   font-size: ${({ theme }) => theme.fontSizes.sm};
   font-weight: 600;
-  
+
   ${({ priority, theme }) => {
     const variants = {
       high: css`
@@ -44,13 +44,13 @@ const StatusIndicator = styled.div<{ status: ScheduleProps['status'] }>`
   align-items: center;
   gap: ${({ theme }) => theme.space.xs};
   font-size: ${({ theme }) => theme.fontSizes.sm};
-  
+
   &::before {
     content: '';
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    
+
     ${({ status, theme }) => {
       const colors = {
         pending: theme.colors.warning,
@@ -135,22 +135,20 @@ const ScheduleCard: React.FC<ScheduleProps> = ({
   );
 
   return (
-    <Card
-      variant="default"
-      interactive
-      header={header}
-      footer={footer}
-    >
+    <Card variant="default" interactive header={header} footer={footer}>
       <Description>{description}</Description>
       <DateInfo>
         <span>From: {formatDate(startDate)}</span>
         <span>To: {formatDate(endDate)}</span>
       </DateInfo>
       <StatusIndicator status={status}>
-        {status.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+        {status
+          .split('-')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ')}
       </StatusIndicator>
     </Card>
   );
 };
 
-export default ScheduleCard; 
+export default ScheduleCard;

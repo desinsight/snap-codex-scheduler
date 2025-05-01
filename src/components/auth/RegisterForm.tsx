@@ -95,10 +95,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ className = '' }) => {
   return (
     <Form onSubmit={handleSubmit} className={className} data-testid="register-form">
       <Title>{t('auth.register.title')}</Title>
-      
-      {errors.general && (
-        <ErrorMessage>{errors.general}</ErrorMessage>
-      )}
+
+      {errors.general && <ErrorMessage>{errors.general}</ErrorMessage>}
 
       <FormGroup>
         <Label htmlFor="name">{t('auth.register.name')}</Label>
@@ -157,4 +155,4 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ className = '' }) => {
   );
 };
 
-export default RegisterForm; 
+export default RegisterForm;

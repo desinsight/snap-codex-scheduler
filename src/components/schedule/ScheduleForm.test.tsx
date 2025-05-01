@@ -174,4 +174,4 @@ describe('ScheduleForm', () => {
     fireEvent.click(screen.getByText('Cancel'));
     // Add navigation test if needed
   });
-}); 
+});

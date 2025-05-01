@@ -23,7 +23,9 @@ export const scheduleService = {
     }
   },
 
-  async createSchedule(schedule: Omit<Schedule, 'id' | 'createdAt' | 'updatedAt'>): Promise<Schedule> {
+  async createSchedule(
+    schedule: Omit<Schedule, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<Schedule> {
     try {
       const response = await axios.post(`${API_BASE_URL}/schedules`, schedule);
       return response.data;
@@ -71,7 +73,7 @@ export const scheduleService = {
     try {
       const response = await axios.get(`${API_BASE_URL}/schedules/export`, {
         params: { format },
-        responseType: 'blob'
+        responseType: 'blob',
       });
       return response.data;
     } catch (error) {
@@ -85,12 +87,12 @@ export const scheduleService = {
       formData.append('file', file);
       const response = await axios.post(`${API_BASE_URL}/schedules/import`, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+          'Content-Type': 'multipart/form-data',
+        },
       });
       return response.data;
     } catch (error) {
       throw handleApiError(error);
     }
-  }
-}; 
+  },
+};

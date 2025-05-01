@@ -26,7 +26,7 @@ const NavContent = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
+
   @media (max-width: ${MOBILE_BREAKPOINT}) {
     position: relative;
   }
@@ -37,7 +37,7 @@ const Logo = styled.h1`
   font-size: ${({ theme }) => theme.fontSizes.xl};
   font-weight: 700;
   margin: 0;
-  
+
   span {
     background: ${({ theme }) => theme.colors.gradient.primary};
     -webkit-background-clip: text;
@@ -81,8 +81,7 @@ const NavLinks = styled.div`
 `;
 
 const NavLink = styled.a<{ active?: boolean }>`
-  color: ${({ active, theme }) =>
-    active ? theme.colors.primary : theme.colors.text.secondary};
+  color: ${({ active, theme }) => (active ? theme.colors.primary : theme.colors.text.secondary)};
   font-size: ${({ theme }) => theme.fontSizes.md};
   font-weight: ${({ active }) => (active ? 600 : 400)};
   text-decoration: none;
@@ -151,7 +150,7 @@ const MenuIcon = styled.div<{ isOpen?: boolean }>`
   background: ${({ theme }) => theme.colors.text.primary};
   position: relative;
   transition: all ${({ theme }) => theme.transitions.fast};
-  
+
   ${({ isOpen }) =>
     isOpen &&
     css`
@@ -181,7 +180,7 @@ const MenuIcon = styled.div<{ isOpen?: boolean }>`
 
 const MobileOverlay = styled.div<{ isOpen?: boolean }>`
   display: none;
-  
+
   @media (max-width: ${MOBILE_BREAKPOINT}) {
     display: block;
     position: fixed;
@@ -196,10 +195,7 @@ const MobileOverlay = styled.div<{ isOpen?: boolean }>`
   }
 `;
 
-export const Navbar: React.FC<NavbarProps> = ({ 
-  onCreateSchedule,
-  currentPath = '/dashboard'
-}) => {
+export const Navbar: React.FC<NavbarProps> = ({ onCreateSchedule, currentPath = '/dashboard' }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -217,7 +213,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <Logo>
             Snap<span>Codex</span>
           </Logo>
-          
+
           <MenuButton onClick={toggleMenu}>
             <MenuIcon isOpen={isMenuOpen} />
           </MenuButton>
@@ -237,7 +233,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 Settings
               </NavLink>
             </NavLinks>
-            
+
             <Button
               variant="primary"
               onClick={() => {
@@ -251,8 +247,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           </NavActions>
         </NavContent>
       </NavContainer>
-      
+
       <MobileOverlay isOpen={isMenuOpen} onClick={closeMenu} />
     </>
   );
-}; 
+};

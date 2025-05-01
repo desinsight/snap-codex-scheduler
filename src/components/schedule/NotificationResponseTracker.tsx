@@ -131,7 +131,7 @@ const StatusIndicator = styled.span<{ status: string }>`
   height: 10px;
   border-radius: 50%;
   margin-right: 5px;
-  background-color: ${(props) => {
+  background-color: ${props => {
     switch (props.status) {
       case 'active':
         return '#52c41a';
@@ -188,7 +188,7 @@ const NotificationResponseTracker: React.FC = () => {
 
   const handleTemplateChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setNewTemplate((prev) => ({
+    setNewTemplate(prev => ({
       ...prev,
       [name]: value,
     }));
@@ -198,7 +198,7 @@ const NotificationResponseTracker: React.FC = () => {
     const { name, value } = e.target;
     if (name.startsWith('conditions.')) {
       const conditionName = name.split('.')[1];
-      setNewRule((prev) => ({
+      setNewRule(prev => ({
         ...prev,
         conditions: {
           ...prev.conditions,
@@ -206,7 +206,7 @@ const NotificationResponseTracker: React.FC = () => {
         },
       }));
     } else {
-      setNewRule((prev) => ({
+      setNewRule(prev => ({
         ...prev,
         [name]: value,
       }));
@@ -254,7 +254,7 @@ const NotificationResponseTracker: React.FC = () => {
       <Section>
         <SectionTitle>{t('notifications.response.channelStatus')}</SectionTitle>
         <Grid>
-          {channelStatuses.map((status) => (
+          {channelStatuses.map(status => (
             <Card key={status.channel}>
               <CardTitle>{status.channel}</CardTitle>
               <Stat>
@@ -283,7 +283,7 @@ const NotificationResponseTracker: React.FC = () => {
         <FormGroup>
           <Label>{t('notifications.response.channel')}</Label>
           <Select name="channel" value={newTemplate.channel} onChange={handleTemplateChange}>
-            {Object.values(NotificationChannel).map((channel) => (
+            {Object.values(NotificationChannel).map(channel => (
               <option key={channel} value={channel}>
                 {channel}
               </option>
@@ -292,12 +292,7 @@ const NotificationResponseTracker: React.FC = () => {
         </FormGroup>
         <FormGroup>
           <Label>{t('notifications.response.templateName')}</Label>
-          <Input
-            type="text"
-            name="name"
-            value={newTemplate.name}
-            onChange={handleTemplateChange}
-          />
+          <Input type="text" name="name" value={newTemplate.name} onChange={handleTemplateChange} />
         </FormGroup>
         <FormGroup>
           <Label>{t('notifications.response.templateContent')}</Label>
@@ -318,7 +313,7 @@ const NotificationResponseTracker: React.FC = () => {
         <FormGroup>
           <Label>{t('notifications.response.sourceChannel')}</Label>
           <Select name="sourceChannel" value={newRule.sourceChannel} onChange={handleRuleChange}>
-            {Object.values(NotificationChannel).map((channel) => (
+            {Object.values(NotificationChannel).map(channel => (
               <option key={channel} value={channel}>
                 {channel}
               </option>
@@ -328,7 +323,7 @@ const NotificationResponseTracker: React.FC = () => {
         <FormGroup>
           <Label>{t('notifications.response.targetChannel')}</Label>
           <Select name="targetChannel" value={newRule.targetChannel} onChange={handleRuleChange}>
-            {Object.values(NotificationChannel).map((channel) => (
+            {Object.values(NotificationChannel).map(channel => (
               <option key={channel} value={channel}>
                 {channel}
               </option>
@@ -363,4 +358,4 @@ const NotificationResponseTracker: React.FC = () => {
   );
 };
 
-export default NotificationResponseTracker; 
+export default NotificationResponseTracker;

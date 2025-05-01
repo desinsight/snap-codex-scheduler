@@ -61,7 +61,7 @@ const ScheduleFilter: React.FC<ScheduleFilterProps> = ({ onFilterChange }) => {
       <FilterLabel>{t('schedule.filter.category')}</FilterLabel>
       <FilterSelect onChange={handleCategoryChange}>
         <option value="">{t('schedule.filter.allCategories')}</option>
-        {Object.values(ScheduleCategory).map((category) => (
+        {Object.values(ScheduleCategory).map(category => (
           <option key={category} value={category}>
             {t(`schedule.category.${category.toLowerCase()}`)}
           </option>
@@ -78,4 +78,4 @@ const ScheduleFilter: React.FC<ScheduleFilterProps> = ({ onFilterChange }) => {
   );
 };
 
-export default ScheduleFilter; 
+export default ScheduleFilter;

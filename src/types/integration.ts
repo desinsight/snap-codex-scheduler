@@ -41,4 +41,4 @@ export interface WebhookEvent {
   attempts: number;
   lastAttempt?: Date;
   error?: string;
-} 
+}

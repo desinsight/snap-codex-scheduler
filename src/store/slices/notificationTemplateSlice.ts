@@ -1,5 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { NotificationTemplate, NotificationTemplateState, TemplateImportExport } from '../../types/notification';
+import {
+  NotificationTemplate,
+  NotificationTemplateState,
+  TemplateImportExport,
+} from '../../types/notification';
 
 const initialState: NotificationTemplateState = {
   templates: [],
@@ -7,20 +11,19 @@ const initialState: NotificationTemplateState = {
   error: null,
 };
 
-export const fetchTemplates = createAsyncThunk(
-  'notificationTemplates/fetchTemplates',
-  async () => {
-    const response = await fetch('/api/notification-templates');
-    if (!response.ok) {
-      throw new Error('Failed to fetch templates');
-    }
-    return response.json();
+export const fetchTemplates = createAsyncThunk('notificationTemplates/fetchTemplates', async () => {
+  const response = await fetch('/api/notification-templates');
+  if (!response.ok) {
+    throw new Error('Failed to fetch templates');
   }
-);
+  return response.json();
+});
 
 export const createTemplate = createAsyncThunk(
   'notificationTemplates/createTemplate',
-  async (template: Omit<NotificationTemplate, 'id' | 'createdAt' | 'updatedAt' | 'versions' | 'usage'>) => {
+  async (
+    template: Omit<NotificationTemplate, 'id' | 'createdAt' | 'updatedAt' | 'versions' | 'usage'>
+  ) => {
     const response = await fetch('/api/notification-templates', {
       method: 'POST',
       headers: {
@@ -119,9 +122,12 @@ export const exportTemplates = createAsyncThunk(
 export const rollbackTemplate = createAsyncThunk(
   'notificationTemplates/rollbackTemplate',
   async ({ templateId, versionId }: { templateId: string; versionId: string }) => {
-    const response = await fetch(`/api/notification-templates/${templateId}/rollback/${versionId}`, {
-      method: 'POST',
-    });
+    const response = await fetch(
+      `/api/notification-templates/${templateId}/rollback/${versionId}`,
+      {
+        method: 'POST',
+      }
+    );
     if (!response.ok) {
       throw new Error('Failed to rollback template');
     }
@@ -133,9 +139,9 @@ const notificationTemplateSlice = createSlice({
   name: 'notificationTemplates',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchTemplates.pending, (state) => {
+      .addCase(fetchTemplates.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -147,7 +153,7 @@ const notificationTemplateSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch templates';
       })
-      .addCase(createTemplate.pending, (state) => {
+      .addCase(createTemplate.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -159,13 +165,13 @@ const notificationTemplateSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to create template';
       })
-      .addCase(updateTemplate.pending, (state) => {
+      .addCase(updateTemplate.pending, state => {
         state.loading = true;
         state.error = null;
       })
       .addCase(updateTemplate.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.templates.findIndex((t) => t.id === action.payload.id);
+        const index = state.templates.findIndex(t => t.id === action.payload.id);
         if (index !== -1) {
           state.templates[index] = action.payload;
         }
@@ -174,19 +180,19 @@ const notificationTemplateSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to update template';
       })
-      .addCase(deleteTemplate.pending, (state) => {
+      .addCase(deleteTemplate.pending, state => {
         state.loading = true;
         state.error = null;
       })
       .addCase(deleteTemplate.fulfilled, (state, action) => {
         state.loading = false;
-        state.templates = state.templates.filter((t) => t.id !== action.payload);
+        state.templates = state.templates.filter(t => t.id !== action.payload);
       })
       .addCase(deleteTemplate.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to delete template';
       })
-      .addCase(cloneTemplate.pending, (state) => {
+      .addCase(cloneTemplate.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -198,7 +204,7 @@ const notificationTemplateSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to clone template';
       })
-      .addCase(importTemplates.pending, (state) => {
+      .addCase(importTemplates.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -210,24 +216,24 @@ const notificationTemplateSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to import templates';
       })
-      .addCase(exportTemplates.pending, (state) => {
+      .addCase(exportTemplates.pending, state => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(exportTemplates.fulfilled, (state) => {
+      .addCase(exportTemplates.fulfilled, state => {
         state.loading = false;
       })
       .addCase(exportTemplates.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to export templates';
       })
-      .addCase(rollbackTemplate.pending, (state) => {
+      .addCase(rollbackTemplate.pending, state => {
         state.loading = true;
         state.error = null;
       })
       .addCase(rollbackTemplate.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.templates.findIndex((t) => t.id === action.payload.id);
+        const index = state.templates.findIndex(t => t.id === action.payload.id);
         if (index !== -1) {
           state.templates[index] = action.payload;
         }
@@ -239,4 +245,4 @@ const notificationTemplateSlice = createSlice({
   },
 });
 
-export default notificationTemplateSlice.reducer; 
+export default notificationTemplateSlice.reducer;

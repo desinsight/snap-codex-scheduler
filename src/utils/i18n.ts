@@ -1,115 +1,157 @@
-<<<<<<< HEAD
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
 const resources = {
-  ko: {
-    translation: {
-      auth: {
-        login: {
-          title: '로그인',
-          email: '이메일',
-          password: '비밀번호',
-          rememberMe: '자동 로그인',
-          submit: '로그인',
-          forgotPassword: '비밀번호를 잊으셨나요?',
-          noAccount: '계정이 없으신가요?',
-          signUp: '회원가입',
-          errors: {
-            required: '{{field}}을(를) 입력해주세요',
-            invalidEmail: '유효하지 않은 이메일 형식입니다',
-            invalidPassword: '비밀번호는 최소 12자 이상이며, 대문자, 소문자, 숫자, 특수문자를 포함해야 합니다',
-            accountLocked: '계정이 잠겼습니다. 잠시 후 다시 시도해주세요',
-            invalidCredentials: '이메일 또는 비밀번호가 올바르지 않습니다',
-            tooManyAttempts: '로그인 시도가 너무 많습니다. 잠시 후 다시 시도해주세요',
-          },
-        },
-        register: {
-          title: '회원가입',
-          name: '이름',
-          email: '이메일',
-          password: '비밀번호',
-          confirmPassword: '비밀번호 확인',
-          submit: '회원가입',
-          haveAccount: '이미 계정이 있으신가요?',
-          signIn: '로그인',
-          errors: {
-            passwordMismatch: '비밀번호가 일치하지 않습니다',
-            emailExists: '이미 존재하는 이메일입니다',
-            weakPassword: '비밀번호가 너무 약합니다',
-          },
-        },
-        loading: {
-          loggingIn: '로그인 중...',
-          registering: '계정 생성 중...',
-          refreshing: '세션 갱신 중...',
-        },
-      },
-    },
-  },
-=======
-import i18next from 'i18next';
-import { initReactI18next } from 'react-i18next';
-
-const resources = {
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
   en: {
     translation: {
+      common: {
+        loading: 'Loading...',
+        error: 'Error',
+        success: 'Success',
+        save: 'Save',
+        cancel: 'Cancel',
+        delete: 'Delete',
+        edit: 'Edit',
+        create: 'Create',
+        submit: 'Submit',
+        back: 'Back',
+        next: 'Next',
+        previous: 'Previous',
+        search: 'Search',
+        filter: 'Filter',
+        sort: 'Sort',
+        clear: 'Clear',
+        close: 'Close',
+        confirm: 'Confirm',
+        yes: 'Yes',
+        no: 'No',
+      },
       auth: {
-        login: {
-          title: 'Login',
-          email: 'Email',
-          password: 'Password',
-          rememberMe: 'Remember me',
-          submit: 'Sign in',
-          forgotPassword: 'Forgot password?',
-          noAccount: "Don't have an account?",
-          signUp: 'Sign up',
-          errors: {
-            required: '{{field}} is required',
-            invalidEmail: 'Invalid email format',
-            invalidPassword: 'Password must be at least 12 characters long and include uppercase, lowercase, number, and special character',
-            accountLocked: 'Account is locked. Please try again later',
-            invalidCredentials: 'Invalid email or password',
-<<<<<<< HEAD
-            tooManyAttempts: 'Too many login attempts. Please try again later',
-=======
-            tooManyAttempts: 'Too many failed attempts. Please try again later',
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
-          },
-        },
-        register: {
-          title: 'Register',
-          name: 'Name',
-          email: 'Email',
-          password: 'Password',
-          confirmPassword: 'Confirm Password',
-          submit: 'Sign up',
-          haveAccount: 'Already have an account?',
-          signIn: 'Sign in',
-          errors: {
-            nameRequired: 'Name is required',
-            emailRequired: 'Email is required',
-            invalidEmail: 'Invalid email format',
-            passwordRequired: 'Password is required',
-            passwordLength: 'Password must be at least 12 characters long',
-            passwordUppercase: 'Password must include an uppercase letter',
-            passwordLowercase: 'Password must include a lowercase letter',
-            passwordNumber: 'Password must include a number',
-            passwordSpecial: 'Password must include a special character',
-            passwordMismatch: 'Passwords do not match',
-            emailExists: 'Email is already in use',
-          },
-        },
-        loading: {
-          loggingIn: 'Logging in...',
-          registering: 'Creating account...',
-          refreshing: 'Refreshing session...',
-        },
+        login: 'Login',
+        logout: 'Logout',
+        register: 'Register',
+        forgotPassword: 'Forgot Password',
+        resetPassword: 'Reset Password',
+        email: 'Email',
+        password: 'Password',
+        confirmPassword: 'Confirm Password',
+        rememberMe: 'Remember Me',
+        loginSuccess: 'Login successful',
+        loginError: 'Login failed',
+        registerSuccess: 'Registration successful',
+        registerError: 'Registration failed',
+        logoutSuccess: 'Logout successful',
+        logoutError: 'Logout failed',
+        passwordResetSuccess: 'Password reset successful',
+        passwordResetError: 'Password reset failed',
+        invalidEmail: 'Invalid email address',
+        invalidPassword: 'Invalid password',
+        passwordMismatch: 'Passwords do not match',
+        required: 'This field is required',
+      },
+      schedule: {
+        title: 'Schedule',
+        description: 'Description',
+        startDate: 'Start Date',
+        endDate: 'End Date',
+        location: 'Location',
+        participants: 'Participants',
+        category: 'Category',
+        priority: 'Priority',
+        status: 'Status',
+        createSuccess: 'Schedule created successfully',
+        createError: 'Failed to create schedule',
+        updateSuccess: 'Schedule updated successfully',
+        updateError: 'Failed to update schedule',
+        deleteSuccess: 'Schedule deleted successfully',
+        deleteError: 'Failed to delete schedule',
+      },
+      errors: {
+        networkError: 'Network error occurred',
+        serverError: 'Server error occurred',
+        unauthorized: 'Unauthorized access',
+        forbidden: 'Access forbidden',
+        notFound: 'Resource not found',
+        validation: 'Validation error',
+        unknown: 'Unknown error occurred',
       },
     },
   },
-<<<<<<< HEAD
+  ko: {
+    translation: {
+      common: {
+        loading: '로딩 중...',
+        error: '오류',
+        success: '성공',
+        save: '저장',
+        cancel: '취소',
+        delete: '삭제',
+        edit: '수정',
+        create: '생성',
+        submit: '제출',
+        back: '뒤로',
+        next: '다음',
+        previous: '이전',
+        search: '검색',
+        filter: '필터',
+        sort: '정렬',
+        clear: '초기화',
+        close: '닫기',
+        confirm: '확인',
+        yes: '예',
+        no: '아니오',
+      },
+      auth: {
+        login: '로그인',
+        logout: '로그아웃',
+        register: '회원가입',
+        forgotPassword: '비밀번호 찾기',
+        resetPassword: '비밀번호 재설정',
+        email: '이메일',
+        password: '비밀번호',
+        confirmPassword: '비밀번호 확인',
+        rememberMe: '로그인 상태 유지',
+        loginSuccess: '로그인 성공',
+        loginError: '로그인 실패',
+        registerSuccess: '회원가입 성공',
+        registerError: '회원가입 실패',
+        logoutSuccess: '로그아웃 성공',
+        logoutError: '로그아웃 실패',
+        passwordResetSuccess: '비밀번호 재설정 성공',
+        passwordResetError: '비밀번호 재설정 실패',
+        invalidEmail: '유효하지 않은 이메일 주소',
+        invalidPassword: '유효하지 않은 비밀번호',
+        passwordMismatch: '비밀번호가 일치하지 않습니다',
+        required: '필수 입력 항목입니다',
+      },
+      schedule: {
+        title: '일정',
+        description: '설명',
+        startDate: '시작일',
+        endDate: '종료일',
+        location: '위치',
+        participants: '참가자',
+        category: '카테고리',
+        priority: '우선순위',
+        status: '상태',
+        createSuccess: '일정이 생성되었습니다',
+        createError: '일정 생성에 실패했습니다',
+        updateSuccess: '일정이 수정되었습니다',
+        updateError: '일정 수정에 실패했습니다',
+        deleteSuccess: '일정이 삭제되었습니다',
+        deleteError: '일정 삭제에 실패했습니다',
+      },
+      errors: {
+        networkError: '네트워크 오류가 발생했습니다',
+        serverError: '서버 오류가 발생했습니다',
+        unauthorized: '인증되지 않은 접근',
+        forbidden: '접근이 거부되었습니다',
+        notFound: '리소스를 찾을 수 없습니다',
+        validation: '유효성 검사 오류',
+        unknown: '알 수 없는 오류가 발생했습니다',
+      },
+    },
+  },
 };
 
 i18n
@@ -117,69 +159,10 @@ i18n
   .init({
     resources,
     lng: 'ko',
-=======
-  ko: {
-    translation: {
-      auth: {
-        login: {
-          title: '로그인',
-          email: '이메일',
-          password: '비밀번호',
-          rememberMe: '자동 로그인',
-          submit: '로그인',
-          forgotPassword: '비밀번호를 잊으셨나요?',
-          noAccount: '계정이 없으신가요?',
-          signUp: '회원가입',
-          errors: {
-            required: '{{field}}을(를) 입력해주세요',
-            invalidEmail: '유효하지 않은 이메일 형식입니다',
-            invalidPassword: '비밀번호는 최소 12자 이상이며, 대문자, 소문자, 숫자, 특수문자를 포함해야 합니다',
-            accountLocked: '계정이 잠겼습니다. 잠시 후 다시 시도해주세요',
-            invalidCredentials: '잘못된 이메일 또는 비밀번호입니다',
-            accountLocked: '계정이 일시적으로 잠겼습니다. {{time}}분 후에 다시 시도해주세요',
-            invalidCredentials: '이메일 또는 비밀번호가 올바르지 않습니다',
-            tooManyAttempts: '로그인 시도 횟수가 너무 많습니다. 잠시 후 다시 시도해주세요',
-          },
-        },
-        register: {
-          title: '회원가입',
-          name: '이름',
-          email: '이메일',
-          password: '비밀번호',
-          confirmPassword: '비밀번호 확인',
-          submit: '회원가입',
-          haveAccount: '이미 계정이 있으신가요?',
-          signIn: '로그인',
-          errors: {
-            passwordMismatch: '비밀번호가 일치하지 않습니다',
-            emailExists: '이미 존재하는 이메일입니다',
-            weakPassword: '비밀번호가 너무 약합니다',
-          },
-        },
-        loading: {
-          loggingIn: '로그인 중...',
-          registering: '계정 생성 중...',
-          refreshing: '세션 갱신 중...',
-        },
-      },
-    },
-  },
-};
-
-i18next
-  .use(initReactI18next)
-  .init({
-    resources,
-    lng: 'ko', // 기본 언어
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
     fallbackLng: 'en',
     interpolation: {
       escapeValue: false,
     },
   });
 
-<<<<<<< HEAD
-export default i18n; 
-=======
-export default i18next; 
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
+export default i18n;

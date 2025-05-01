@@ -1,10 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer, { login, register, refreshToken } from './authSlice';
 import { AuthService } from '../../services/api/auth.service';
-<<<<<<< HEAD
-=======
 import { saveTokens, updateToken, clearTokens } from '../../utils/token';
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
 
 // AuthService 모의 객체 생성
 jest.mock('../../services/api/auth.service');

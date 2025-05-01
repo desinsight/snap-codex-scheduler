@@ -53,4 +53,4 @@ describe('validateName', () => {
     // 빈 문자열
     expect(validateName('')).toBe(false);
   });
-}); 
+});

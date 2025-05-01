@@ -2,7 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell } from 'recharts';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  PieChart,
+  Pie,
+  Cell,
+} from 'recharts';
 import {
   fetchReports,
   fetchReportById,
@@ -134,17 +145,19 @@ const ResponseAnalysisReport: React.FC = () => {
 
   const handlePeriodChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setPeriod((prev) => ({
+    setPeriod(prev => ({
       ...prev,
       [name]: value,
     }));
   };
 
   const handleGenerateReport = () => {
-    dispatch(generateReport({
-      start: new Date(period.start),
-      end: new Date(period.end),
-    }));
+    dispatch(
+      generateReport({
+        start: new Date(period.start),
+        end: new Date(period.end),
+      })
+    );
   };
 
   const handleExportReport = (reportId: string) => {
@@ -167,21 +180,11 @@ const ResponseAnalysisReport: React.FC = () => {
         <SectionTitle>{t('notifications.analysis.generateReport')}</SectionTitle>
         <FormGroup>
           <Label>{t('notifications.analysis.startDate')}</Label>
-          <Input
-            type="date"
-            name="start"
-            value={period.start}
-            onChange={handlePeriodChange}
-          />
+          <Input type="date" name="start" value={period.start} onChange={handlePeriodChange} />
         </FormGroup>
         <FormGroup>
           <Label>{t('notifications.analysis.endDate')}</Label>
-          <Input
-            type="date"
-            name="end"
-            value={period.end}
-            onChange={handlePeriodChange}
-          />
+          <Input type="date" name="end" value={period.end} onChange={handlePeriodChange} />
         </FormGroup>
         <Button onClick={handleGenerateReport} disabled={loading}>
           {t('notifications.analysis.generate')}
@@ -294,4 +297,4 @@ const ResponseAnalysisReport: React.FC = () => {
   );
 };
 
-export default ResponseAnalysisReport; 
+export default ResponseAnalysisReport;

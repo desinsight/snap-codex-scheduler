@@ -9,7 +9,7 @@ export default {
   title: 'Components/Schedule/ScheduleItem',
   component: ScheduleItem,
   decorators: [
-    (Story) => (
+    Story => (
       <I18nextProvider i18n={i18n}>
         <Story />
       </I18nextProvider>
@@ -17,7 +17,7 @@ export default {
   ],
 } as Meta;
 
-const Template: Story<{ schedule: Schedule }> = (args) => <ScheduleItem {...args} />;
+const Template: Story<{ schedule: Schedule }> = args => <ScheduleItem {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
@@ -102,4 +102,4 @@ NoDescription.args = {
     createdAt: new Date(),
     updatedAt: new Date(),
   },
-}; 
+};

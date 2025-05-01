@@ -32,9 +32,10 @@ const DayCell = styled.div<{
     isOver
       ? `${theme.colors.primary.main}05`
       : isSelected
-      ? `${theme.colors.primary.main}10`
-      : 'transparent'};
-  transition: all ${({ theme }) => theme.transitions.duration.short}ms ${({ theme }) => theme.transitions.easing.easeInOut};
+        ? `${theme.colors.primary.main}10`
+        : 'transparent'};
+  transition: all ${({ theme }) => theme.transitions.duration.short}ms
+    ${({ theme }) => theme.transitions.easing.easeInOut};
   cursor: pointer;
 
   &:last-child {
@@ -64,8 +65,8 @@ const DayNumber = styled.div<{
     isOtherMonth
       ? theme.colors.text.tertiary
       : isWeekend
-      ? theme.colors.error
-      : theme.colors.text.primary};
+        ? theme.colors.error
+        : theme.colors.text.primary};
   margin-bottom: ${({ theme }) => theme.spacing.xs};
 `;
 
@@ -80,7 +81,7 @@ const MoreEventsIndicator = styled.div<{ theme: Theme }>`
   color: ${({ theme }) => theme.colors.text.secondary};
   padding: ${({ theme }) => theme.spacing.xs};
   cursor: pointer;
-  
+
   &:hover {
     color: ${({ theme }) => theme.colors.primary.main};
   }
@@ -104,7 +105,7 @@ const DroppableDay: React.FC<DroppableDayProps> = ({
     drop: (item: { event: CalendarEvent }) => {
       onEventDrop(item.event, date);
     },
-    collect: (monitor) => ({
+    collect: monitor => ({
       isOver: monitor.isOver(),
     }),
   }));
@@ -120,11 +121,7 @@ const DroppableDay: React.FC<DroppableDayProps> = ({
       isOver={isOver}
       onClick={onDayClick}
     >
-      <DayNumber
-        isToday={isToday}
-        isWeekend={isWeekend}
-        isOtherMonth={isOtherMonth}
-      >
+      <DayNumber isToday={isToday} isWeekend={isWeekend} isOtherMonth={isOtherMonth}>
         {date.getDate()}
       </DayNumber>
       <EventList>
@@ -132,19 +129,15 @@ const DroppableDay: React.FC<DroppableDayProps> = ({
           <DraggableEvent
             key={event.id}
             event={event}
-            onClick={(e) => onEventClick(event, e)}
+            onClick={e => onEventClick(event, e)}
             isStart={isSameDay(event.startDate, date)}
             isEnd={isSameDay(event.endDate, date)}
           />
         ))}
-        {remainingEvents > 0 && (
-          <MoreEventsIndicator>
-            +{remainingEvents} more
-          </MoreEventsIndicator>
-        )}
+        {remainingEvents > 0 && <MoreEventsIndicator>+{remainingEvents} more</MoreEventsIndicator>}
       </EventList>
     </DayCell>
   );
 };
 
-export default DroppableDay; 
+export default DroppableDay;

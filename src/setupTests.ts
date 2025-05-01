@@ -105,13 +105,15 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 // 테스트 환경에서 사용할 전역 변수 설정
-global.matchMedia = global.matchMedia || function() {
-  return {
-    matches: false,
-    addListener: jest.fn(),
-    removeListener: jest.fn(),
+global.matchMedia =
+  global.matchMedia ||
+  function () {
+    return {
+      matches: false,
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+    };
   };
-};
 
 // Mock localStorage
 const localStorageMock = (() => {

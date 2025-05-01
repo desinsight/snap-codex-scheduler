@@ -13,7 +13,7 @@ export default {
   title: 'Components/Schedule/ScheduleImportExport',
   component: ScheduleImportExport,
   decorators: [
-    (Story) => (
+    Story => (
       <Provider store={mockStore({})}>
         <I18nextProvider i18n={i18n}>
           <Story />
@@ -98,4 +98,4 @@ export const ImportSuccess = () => {
       <ScheduleImportExport />
     </Provider>
   );
-}; 
+};

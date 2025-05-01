@@ -50,7 +50,7 @@ const MonthNavigation: React.FC<MonthNavigationProps> = ({
           오늘
         </Button>
       </MonthYearDisplay>
-      
+
       <NavigationButtons>
         <Button variant="ghost" onClick={onPrevMonth}>
           ←
@@ -63,4 +63,4 @@ const MonthNavigation: React.FC<MonthNavigationProps> = ({
   );
 };
 
-export default MonthNavigation; 
+export default MonthNavigation;

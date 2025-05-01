@@ -14,12 +14,12 @@ const handlers = [
             port: 3000,
             healthCheck: {
               path: '/health',
-              interval: 30
+              interval: 30,
             },
             dependencies: [],
-            environment: {}
-          }
-        }
+            environment: {},
+          },
+        },
       })
     );
   }),
@@ -34,7 +34,7 @@ const handlers = [
         memoryUsage: 45,
         cpuUsage: 30,
         lastCheck: new Date().toISOString(),
-        errors: []
+        errors: [],
       })
     );
   }),
@@ -51,8 +51,8 @@ const handlers = [
         resourceUsage: {
           memory: 45,
           cpu: 30,
-          disk: 25
-        }
+          disk: 25,
+        },
       })
     );
   }),
@@ -67,11 +67,11 @@ const handlers = [
           failureThreshold: 5,
           successThreshold: 2,
           timeout: 5000,
-          resetTimeout: 30000
-        }
+          resetTimeout: 30000,
+        },
       })
     );
-  })
+  }),
 ];
 
-export const server = setupServer(...handlers); 
+export const server = setupServer(...handlers);

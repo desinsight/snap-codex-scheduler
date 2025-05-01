@@ -65,7 +65,7 @@ describe('ScheduleImportExport', () => {
 
     const file = new File(['test'], 'test.json', { type: 'application/json' });
     const input = screen.getByTestId('file-input');
-    
+
     fireEvent.change(input, { target: { files: [file] } });
 
     await waitFor(() => {
@@ -127,11 +127,11 @@ describe('ScheduleImportExport', () => {
 
     const file = new File(['test'], 'test.json', { type: 'application/json' });
     const input = screen.getByTestId('file-input');
-    
+
     fireEvent.change(input, { target: { files: [file] } });
 
     await waitFor(() => {
       expect(screen.getByText('Schedules imported successfully')).toBeInTheDocument();
     });
   });
-}); 
+});

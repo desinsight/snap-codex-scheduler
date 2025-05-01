@@ -121,12 +121,7 @@ const ScheduleImportExport: React.FC = () => {
             {loading ? t('common.importing') : t('actions.import')}
           </ImportButton>
         </ButtonGroup>
-        <FileInput
-          type="file"
-          ref={fileInputRef}
-          onChange={handleImport}
-          accept=".json"
-        />
+        <FileInput type="file" ref={fileInputRef} onChange={handleImport} accept=".json" />
         {success === 'import' && <SuccessMessage>{t('import.success')}</SuccessMessage>}
       </Section>
 
@@ -135,4 +130,4 @@ const ScheduleImportExport: React.FC = () => {
   );
 };
 
-export default ScheduleImportExport; 
+export default ScheduleImportExport;

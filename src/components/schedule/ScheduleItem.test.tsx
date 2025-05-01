@@ -76,4 +76,4 @@ describe('ScheduleItem', () => {
     renderComponent(privateSchedule);
     expect(screen.queryByText('Shared')).not.toBeInTheDocument();
   });
-}); 
+});

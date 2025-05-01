@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { taskSlice, TaskState } from './taskSlice';
-=======
 import { taskSlice, TaskState, addTask, updateTask, deleteTask, setTasks, setLoading, setError } from './taskSlice';
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
 import { mockTask } from '../../utils/testUtils';
 
 describe('Task Slice', () => {

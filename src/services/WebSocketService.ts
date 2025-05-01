@@ -43,7 +43,7 @@ class WebSocketService {
       this.reconnectAttempts = 0;
     };
 
-    this.ws.onmessage = (event) => {
+    this.ws.onmessage = event => {
       try {
         const data = JSON.parse(event.data);
         this.notifyListeners(data.type, data.payload);
@@ -57,7 +57,7 @@ class WebSocketService {
       this.handleReconnect();
     };
 
-    this.ws.onerror = (error) => {
+    this.ws.onerror = error => {
       console.error('WebSocket 에러:', error);
     };
   }
@@ -94,10 +94,12 @@ class WebSocketService {
 
   public sendNotification(notification: NotificationHistory) {
     if (this.ws?.readyState === WebSocket.OPEN) {
-      this.ws.send(JSON.stringify({
-        type: 'notification',
-        payload: notification,
-      }));
+      this.ws.send(
+        JSON.stringify({
+          type: 'notification',
+          payload: notification,
+        })
+      );
     } else {
       console.warn('WebSocket이 연결되지 않았습니다.');
     }
@@ -111,4 +113,4 @@ class WebSocketService {
   }
 }
 
-export default WebSocketService; 
+export default WebSocketService;

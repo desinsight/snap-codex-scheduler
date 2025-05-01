@@ -7,16 +7,13 @@ const initialState: FollowUpAutomationState = {
   error: null,
 };
 
-export const fetchFollowUpRules = createAsyncThunk(
-  'followUpAutomation/fetchRules',
-  async () => {
-    const response = await fetch('/api/follow-up-rules');
-    if (!response.ok) {
-      throw new Error('Failed to fetch follow-up rules');
-    }
-    return response.json();
+export const fetchFollowUpRules = createAsyncThunk('followUpAutomation/fetchRules', async () => {
+  const response = await fetch('/api/follow-up-rules');
+  if (!response.ok) {
+    throw new Error('Failed to fetch follow-up rules');
   }
-);
+  return response.json();
+});
 
 export const createFollowUpRule = createAsyncThunk(
   'followUpAutomation/createRule',
@@ -82,9 +79,9 @@ const followUpAutomationSlice = createSlice({
   name: 'followUpAutomation',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchFollowUpRules.pending, (state) => {
+      .addCase(fetchFollowUpRules.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -96,7 +93,7 @@ const followUpAutomationSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch follow-up rules';
       })
-      .addCase(createFollowUpRule.pending, (state) => {
+      .addCase(createFollowUpRule.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -108,13 +105,13 @@ const followUpAutomationSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to create follow-up rule';
       })
-      .addCase(updateFollowUpRule.pending, (state) => {
+      .addCase(updateFollowUpRule.pending, state => {
         state.loading = true;
         state.error = null;
       })
       .addCase(updateFollowUpRule.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.rules.findIndex((rule) => rule.id === action.payload.id);
+        const index = state.rules.findIndex(rule => rule.id === action.payload.id);
         if (index !== -1) {
           state.rules[index] = action.payload;
         }
@@ -123,25 +120,25 @@ const followUpAutomationSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to update follow-up rule';
       })
-      .addCase(deleteFollowUpRule.pending, (state) => {
+      .addCase(deleteFollowUpRule.pending, state => {
         state.loading = true;
         state.error = null;
       })
       .addCase(deleteFollowUpRule.fulfilled, (state, action) => {
         state.loading = false;
-        state.rules = state.rules.filter((rule) => rule.id !== action.payload);
+        state.rules = state.rules.filter(rule => rule.id !== action.payload);
       })
       .addCase(deleteFollowUpRule.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to delete follow-up rule';
       })
-      .addCase(toggleFollowUpRule.pending, (state) => {
+      .addCase(toggleFollowUpRule.pending, state => {
         state.loading = true;
         state.error = null;
       })
       .addCase(toggleFollowUpRule.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.rules.findIndex((rule) => rule.id === action.payload.id);
+        const index = state.rules.findIndex(rule => rule.id === action.payload.id);
         if (index !== -1) {
           state.rules[index] = action.payload;
         }
@@ -153,4 +150,4 @@ const followUpAutomationSlice = createSlice({
   },
 });
 
-export default followUpAutomationSlice.reducer; 
+export default followUpAutomationSlice.reducer;

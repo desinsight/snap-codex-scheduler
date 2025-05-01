@@ -7,7 +7,7 @@ import {
   CircuitBreakerConfig,
   LoadBalancerConfig,
   ServiceCommunication,
-  ServiceMonitoring
+  ServiceMonitoring,
 } from '../../types/microservice';
 
 interface MicroserviceState {
@@ -44,24 +44,24 @@ const initialState: MicroserviceState = {
     protocol: 'http',
     timeout: 5000,
     retryAttempts: 3,
-    retryDelay: 1000
+    retryDelay: 1000,
   },
   monitoring: {
     metrics: {
       collectionInterval: 5000,
-      retentionPeriod: 86400000
+      retentionPeriod: 86400000,
     },
     logging: {
       level: 'info',
-      format: 'json'
+      format: 'json',
     },
     tracing: {
       enabled: true,
-      samplingRate: 0.1
-    }
+      samplingRate: 0.1,
+    },
   },
   loading: false,
-  error: null
+  error: null,
 };
 
 export const fetchServiceConfigs = createAsyncThunk(
@@ -81,9 +81,9 @@ export const updateServiceConfig = createAsyncThunk(
     const response = await fetch(`/api/microservices/configs/${name}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(config)
+      body: JSON.stringify(config),
     });
     if (!response.ok) {
       throw new Error('Failed to update service config');
@@ -120,9 +120,9 @@ export const updateCircuitBreaker = createAsyncThunk(
     const response = await fetch(`/api/microservices/circuit-breakers/${name}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(config)
+      body: JSON.stringify(config),
     });
     if (!response.ok) {
       throw new Error('Failed to update circuit breaker');
@@ -140,11 +140,11 @@ const microserviceSlice = createSlice({
     },
     setMonitoringConfig: (state, action) => {
       state.monitoring = action.payload;
-    }
+    },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchServiceConfigs.pending, (state) => {
+      .addCase(fetchServiceConfigs.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -172,8 +172,8 @@ const microserviceSlice = createSlice({
         const { name, config } = action.payload;
         state.circuitBreakers[name] = config;
       });
-  }
+  },
 });
 
 export const { setCommunicationConfig, setMonitoringConfig } = microserviceSlice.actions;
-export default microserviceSlice.reducer; 
+export default microserviceSlice.reducer;

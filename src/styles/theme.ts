@@ -184,4 +184,4 @@ const theme: DefaultTheme = {
   },
 };
 
-export default theme; 
+export default theme;

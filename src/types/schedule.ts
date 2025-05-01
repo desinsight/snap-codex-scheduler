@@ -20,7 +20,7 @@ export enum ScheduleCategory {
   PERSONAL = 'PERSONAL',
   EDUCATION = 'EDUCATION',
   HEALTH = 'HEALTH',
-  OTHER = 'OTHER'
+  OTHER = 'OTHER',
 }
 
 export interface ScheduleRepeat {
@@ -50,4 +50,4 @@ export interface ScheduleStats {
   upcoming: number;
   completed: number;
   shared: number;
-} 
+}

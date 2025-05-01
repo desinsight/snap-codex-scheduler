@@ -1,22 +1,20 @@
 import { User } from '../types/auth';
 import { Task } from '../types/task';
-<<<<<<< HEAD
-=======
 import { AxiosResponse } from 'axios';
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
+import { render } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { I18nextProvider } from 'react-i18next';
+import store from '../store';
+import i18n from '../i18n';
+import { ReactNode } from 'react';
 
 export const mockUser: User = {
   id: '1',
   email: 'test@example.com',
   name: 'Test User',
   role: 'user',
-<<<<<<< HEAD
   createdAt: new Date('2024-01-01T00:00:00Z'),
   updatedAt: new Date('2024-01-01T00:00:00Z'),
-=======
-  createdAt: '2024-01-01T00:00:00Z',
-  updatedAt: '2024-01-01T00:00:00Z',
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
 };
 
 export const mockTask: Task = {
@@ -26,13 +24,8 @@ export const mockTask: Task = {
   status: 'pending',
   priority: 'medium',
   dueDate: '2024-12-31',
-<<<<<<< HEAD
   createdAt: new Date('2024-01-01T00:00:00Z'),
   updatedAt: new Date('2024-01-01T00:00:00Z'),
-=======
-  createdAt: '2024-01-01T00:00:00Z',
-  updatedAt: '2024-01-01T00:00:00Z',
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
   userId: '1',
 };
 
@@ -77,19 +70,12 @@ export const mockCsrfToken = 'mock-csrf-token';
 
 export const setupTestEnvironment = () => {
   global.localStorage = mockLocalStorage as unknown as Storage;
-<<<<<<< HEAD
   global.sessionStorage = mockSessionStorage as unknown as Storage;
-
-  jest.mock('./csrf', () => ({
-    getCsrfToken: () => mockCsrfToken,
-=======
-  global.sessionStorage = mockSessionStorage as any;
 
   jest.mock('./csrf', () => ({
     getCsrfToken: () => mockCsrfToken,
     setCsrfToken: jest.fn(),
     clearCsrfToken: jest.fn(),
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
   }));
 
   const localStorageMock = {
@@ -113,4 +99,14 @@ export const cleanupTestEnvironment = () => {
   jest.resetModules();
   jest.clearAllMocks();
   jest.resetAllMocks();
+};
+
+export const renderWithProviders = (children: ReactNode) => {
+  return render(
+    <Provider store={store}>
+      <I18nextProvider i18n={i18n}>
+        {children}
+      </I18nextProvider>
+    </Provider>
+  );
 }; 

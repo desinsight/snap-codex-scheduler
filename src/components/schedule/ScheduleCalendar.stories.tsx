@@ -69,7 +69,7 @@ export default {
   title: 'Components/Schedule/ScheduleCalendar',
   component: ScheduleCalendar,
   decorators: [
-    (Story) => (
+    Story => (
       <Provider store={mockStore({})}>
         <I18nextProvider i18n={i18n}>
           <Story />
@@ -175,4 +175,4 @@ export const Error = () => {
       <ScheduleCalendar />
     </Provider>
   );
-}; 
+};

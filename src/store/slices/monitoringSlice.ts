@@ -7,23 +7,20 @@ const initialState: MonitoringState = {
   error: null,
 };
 
-export const fetchMonitoringDashboard = createAsyncThunk(
-  'monitoring/fetchDashboard',
-  async () => {
-    const response = await fetch('/api/monitoring/dashboard');
-    if (!response.ok) {
-      throw new Error('Failed to fetch monitoring dashboard');
-    }
-    return response.json();
+export const fetchMonitoringDashboard = createAsyncThunk('monitoring/fetchDashboard', async () => {
+  const response = await fetch('/api/monitoring/dashboard');
+  if (!response.ok) {
+    throw new Error('Failed to fetch monitoring dashboard');
   }
-);
+  return response.json();
+});
 
 export const subscribeToRealtimeUpdates = createAsyncThunk(
   'monitoring/subscribe',
   async (_, { dispatch }) => {
     const eventSource = new EventSource('/api/monitoring/updates');
-    
-    eventSource.onmessage = (event) => {
+
+    eventSource.onmessage = event => {
       const data = JSON.parse(event.data);
       dispatch(updateDashboard(data));
     };
@@ -49,9 +46,9 @@ const monitoringSlice = createSlice({
       }
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchMonitoringDashboard.pending, (state) => {
+      .addCase(fetchMonitoringDashboard.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -67,4 +64,4 @@ const monitoringSlice = createSlice({
 });
 
 export const { updateDashboard } = monitoringSlice.actions;
-export default monitoringSlice.reducer; 
+export default monitoringSlice.reducer;

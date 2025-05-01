@@ -87,11 +87,13 @@ const NotificationList = styled.div`
 `;
 
 const NotificationItem = styled(motion.div)<{ read: boolean }>`
-  background-color: ${({ theme, read }) => read ? theme.colors.background.paper : theme.colors.primary.main}10;
+  background-color: ${({ theme, read }) =>
+    read ? theme.colors.background.paper : theme.colors.primary.main}10;
   border-radius: ${({ theme }) => theme.spacing.sm};
   padding: ${({ theme }) => theme.spacing.md};
   cursor: pointer;
-  transition: all ${({ theme }) => theme.transitions.duration.short}ms ${({ theme }) => theme.transitions.easing.easeInOut};
+  transition: all ${({ theme }) => theme.transitions.duration.short}ms
+    ${({ theme }) => theme.transitions.easing.easeInOut};
 
   &:hover {
     transform: translateX(4px);
@@ -108,7 +110,7 @@ const NotificationItemHeader = styled.div`
 
 const NotificationTitleText = styled.h3<{ read: boolean }>`
   font-size: ${({ theme }) => theme.typography.h6.fontSize};
-  font-weight: ${({ theme, read }) => read ? 400 : 600};
+  font-weight: ${({ theme, read }) => (read ? 400 : 600)};
   color: ${({ theme }) => theme.colors.text.primary};
 `;
 
@@ -210,9 +212,7 @@ const Notification: React.FC = () => {
   };
 
   const handleMarkAsRead = (id: string) => {
-    setNotifications(prev =>
-      prev.map(n => (n.id === id ? { ...n, read: true } : n))
-    );
+    setNotifications(prev => prev.map(n => (n.id === id ? { ...n, read: true } : n)));
   };
 
   const handleDelete = (id: string) => {
@@ -250,11 +250,7 @@ const Notification: React.FC = () => {
             <FiSearch />
             <input type="text" placeholder="Search notifications..." />
           </SearchBar>
-          <Button
-            variant="outlined"
-            color="primary"
-            startIcon={<FiFilter />}
-          >
+          <Button variant="outlined" color="primary" startIcon={<FiFilter />}>
             Filter
           </Button>
         </NotificationActions>
@@ -290,7 +286,7 @@ const Notification: React.FC = () => {
                   color="primary"
                   size="small"
                   startIcon={<FiCheck />}
-                  onClick={(e) => {
+                  onClick={e => {
                     e.stopPropagation();
                     handleMarkAsRead(notification.id);
                   }}
@@ -303,7 +299,7 @@ const Notification: React.FC = () => {
                 color="error"
                 size="small"
                 startIcon={<FiTrash2 />}
-                onClick={(e) => {
+                onClick={e => {
                   e.stopPropagation();
                   handleDelete(notification.id);
                 }}
@@ -366,4 +362,4 @@ const Notification: React.FC = () => {
   );
 };
 
-export default Notification; 
+export default Notification;

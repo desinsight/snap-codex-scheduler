@@ -39,12 +39,10 @@ export const ThemeToggle: React.FC = () => {
       onClick={toggleTheme}
       aria-label={`Switch to ${themeMode === 'light' ? 'dark' : 'light'} mode`}
     >
-      <Icon>
-        {themeMode === 'light' ? '🌙' : '☀️'}
-      </Icon>
+      <Icon>{themeMode === 'light' ? '🌙' : '☀️'}</Icon>
       <span className="sr-only">
         {themeMode === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
       </span>
     </ToggleButton>
   );
-}; 
+};

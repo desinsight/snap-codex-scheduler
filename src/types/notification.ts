@@ -591,4 +591,4 @@ export interface NotificationState {
   preferences: NotificationPreference;
   history: NotificationHistory[];
   unreadCount: number;
-} 
+}

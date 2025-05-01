@@ -58,7 +58,7 @@ const RuleActions = styled.div`
 `;
 
 const ToggleButton = styled.button<{ active: boolean }>`
-  background: ${(props) => (props.active ? '#4CAF50' : '#f44336')};
+  background: ${props => (props.active ? '#4CAF50' : '#f44336')};
   color: white;
   border: none;
   padding: 5px 10px;
@@ -98,7 +98,7 @@ const Select = styled.select`
 `;
 
 const Button = styled.button`
-  background: #2196F3;
+  background: #2196f3;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -124,12 +124,14 @@ const AutomationRules: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setNewRule((prev) => ({ ...prev, [name]: value }));
+    setNewRule(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(createAutomationRule(newRule as Omit<AutomationRule, 'id' | 'createdAt' | 'updatedAt'>));
+    dispatch(
+      createAutomationRule(newRule as Omit<AutomationRule, 'id' | 'createdAt' | 'updatedAt'>)
+    );
     setNewRule({
       name: '',
       type: 'channelSwitch',
@@ -165,11 +167,10 @@ const AutomationRules: React.FC = () => {
           <RuleCard key={rule.id}>
             <RuleHeader>
               <RuleName>{rule.name}</RuleName>
-              <ToggleButton
-                active={rule.isActive}
-                onClick={() => handleToggle(rule.id)}
-              >
-                {rule.isActive ? t('notifications.automation.deactivate') : t('notifications.automation.activate')}
+              <ToggleButton active={rule.isActive} onClick={() => handleToggle(rule.id)}>
+                {rule.isActive
+                  ? t('notifications.automation.deactivate')
+                  : t('notifications.automation.activate')}
               </ToggleButton>
             </RuleHeader>
             <RuleType>{t(`notifications.automation.types.${rule.type}`)}</RuleType>
@@ -209,16 +210,19 @@ const AutomationRules: React.FC = () => {
         </FormGroup>
         <FormGroup>
           <Label>{t('notifications.automation.type')}</Label>
-          <Select
-            name="type"
-            value={newRule.type}
-            onChange={handleInputChange}
-            required
-          >
-            <option value="channelSwitch">{t('notifications.automation.types.channelSwitch')}</option>
-            <option value="priorityAdjustment">{t('notifications.automation.types.priorityAdjustment')}</option>
-            <option value="retryStrategy">{t('notifications.automation.types.retryStrategy')}</option>
-            <option value="fatigueManagement">{t('notifications.automation.types.fatigueManagement')}</option>
+          <Select name="type" value={newRule.type} onChange={handleInputChange} required>
+            <option value="channelSwitch">
+              {t('notifications.automation.types.channelSwitch')}
+            </option>
+            <option value="priorityAdjustment">
+              {t('notifications.automation.types.priorityAdjustment')}
+            </option>
+            <option value="retryStrategy">
+              {t('notifications.automation.types.retryStrategy')}
+            </option>
+            <option value="fatigueManagement">
+              {t('notifications.automation.types.fatigueManagement')}
+            </option>
           </Select>
         </FormGroup>
         <Button type="submit">{t('notifications.automation.create')}</Button>
@@ -227,4 +231,4 @@ const AutomationRules: React.FC = () => {
   );
 };
 
-export default AutomationRules; 
+export default AutomationRules;

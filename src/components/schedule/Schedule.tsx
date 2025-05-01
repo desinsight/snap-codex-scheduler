@@ -48,7 +48,8 @@ const ScheduleCard = styled(motion.div)`
   border-radius: ${({ theme }) => theme.spacing.sm};
   padding: ${({ theme }) => theme.spacing.md};
   cursor: pointer;
-  transition: all ${({ theme }) => theme.transitions.duration.short}ms ${({ theme }) => theme.transitions.easing.easeInOut};
+  transition: all ${({ theme }) => theme.transitions.duration.short}ms
+    ${({ theme }) => theme.transitions.easing.easeInOut};
 
   &:hover {
     transform: translateY(-4px);
@@ -76,7 +77,7 @@ const PriorityBadge = styled.span<{ priority: Schedule['priority'] }>`
   font-size: ${({ theme }) => theme.typography.caption.fontSize};
   font-weight: 500;
   text-transform: capitalize;
-  
+
   ${({ theme, priority }) => {
     const colors = {
       high: theme.colors.error.main,
@@ -98,7 +99,7 @@ const StatusBadge = styled.span<{ status: Schedule['status'] }>`
   font-weight: 500;
   text-transform: capitalize;
   margin-left: ${({ theme }) => theme.spacing.sm};
-  
+
   ${({ theme, status }) => {
     const colors = {
       upcoming: theme.colors.info.main,
@@ -215,11 +216,7 @@ const Schedule: React.FC = () => {
     if (selectedSchedule) {
       // Edit existing schedule
       setSchedules(prev =>
-        prev.map(s =>
-          s.id === selectedSchedule.id
-            ? { ...formData, id: selectedSchedule.id }
-            : s
-        )
+        prev.map(s => (s.id === selectedSchedule.id ? { ...formData, id: selectedSchedule.id } : s))
       );
     } else {
       // Create new schedule
@@ -249,7 +246,11 @@ const Schedule: React.FC = () => {
   };
 
   const getInitials = (name: string) => {
-    return name.split(' ').map(n => n[0]).join('').toUpperCase();
+    return name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase();
   };
 
   if (isFormOpen) {
@@ -266,11 +267,7 @@ const Schedule: React.FC = () => {
     <ScheduleContainer>
       <ScheduleHeader>
         <ScheduleTitle>Schedules</ScheduleTitle>
-        <Button
-          color="primary"
-          startIcon={<FiPlus />}
-          onClick={handleCreateSchedule}
-        >
+        <Button color="primary" startIcon={<FiPlus />} onClick={handleCreateSchedule}>
           New Schedule
         </Button>
       </ScheduleHeader>
@@ -287,15 +284,13 @@ const Schedule: React.FC = () => {
           >
             <Card>
               <Card.Header>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div
+                  style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                >
                   <h3>{schedule.title}</h3>
                   <div style={{ display: 'flex', gap: '8px' }}>
-                    <PriorityBadge priority={schedule.priority}>
-                      {schedule.priority}
-                    </PriorityBadge>
-                    <StatusBadge status={schedule.status}>
-                      {schedule.status}
-                    </StatusBadge>
+                    <PriorityBadge priority={schedule.priority}>{schedule.priority}</PriorityBadge>
+                    <StatusBadge status={schedule.status}>{schedule.status}</StatusBadge>
                   </div>
                 </div>
               </Card.Header>
@@ -315,9 +310,7 @@ const Schedule: React.FC = () => {
                   <ParticipantsList>
                     <FiUsers />
                     {schedule.participants.map((participant, index) => (
-                      <ParticipantAvatar key={index}>
-                        {getInitials(participant)}
-                      </ParticipantAvatar>
+                      <ParticipantAvatar key={index}>{getInitials(participant)}</ParticipantAvatar>
                     ))}
                   </ParticipantsList>
                 )}
@@ -329,7 +322,7 @@ const Schedule: React.FC = () => {
                     color="primary"
                     size="small"
                     startIcon={<FiEdit2 />}
-                    onClick={(e) => {
+                    onClick={e => {
                       e.stopPropagation();
                       handleEditSchedule(schedule);
                     }}
@@ -341,7 +334,7 @@ const Schedule: React.FC = () => {
                     color="error"
                     size="small"
                     startIcon={<FiTrash2 />}
-                    onClick={(e) => {
+                    onClick={e => {
                       e.stopPropagation();
                       setSchedules(prev => prev.filter(s => s.id !== schedule.id));
                     }}
@@ -371,7 +364,13 @@ const Schedule: React.FC = () => {
             >
               <Card>
                 <Card.Header>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}
+                  >
                     <h2>{selectedSchedule.title}</h2>
                     <div style={{ display: 'flex', gap: '8px' }}>
                       <PriorityBadge priority={selectedSchedule.priority}>
@@ -387,7 +386,8 @@ const Schedule: React.FC = () => {
                   <p>{selectedSchedule.description}</p>
                   <ScheduleInfo>
                     <FiCalendar />
-                    {formatDate(selectedSchedule.startDate)} - {formatDate(selectedSchedule.endDate)}
+                    {formatDate(selectedSchedule.startDate)} -{' '}
+                    {formatDate(selectedSchedule.endDate)}
                   </ScheduleInfo>
                   {selectedSchedule.location && (
                     <ScheduleInfo>
@@ -436,4 +436,4 @@ const Schedule: React.FC = () => {
   );
 };
 
-export default Schedule; 
+export default Schedule;

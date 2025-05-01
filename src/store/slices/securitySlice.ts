@@ -1,5 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { SecurityState, SecuritySettings, BackupSettings, ErrorHandling } from '../types/notification';
+import {
+  SecurityState,
+  SecuritySettings,
+  BackupSettings,
+  ErrorHandling,
+} from '../types/notification';
 
 const initialState: SecurityState = {
   settings: {
@@ -65,16 +70,13 @@ const initialState: SecurityState = {
   error: null,
 };
 
-export const fetchSecuritySettings = createAsyncThunk(
-  'security/fetchSettings',
-  async () => {
-    const response = await fetch('/api/security/settings');
-    if (!response.ok) {
-      throw new Error('Failed to fetch security settings');
-    }
-    return response.json();
+export const fetchSecuritySettings = createAsyncThunk('security/fetchSettings', async () => {
+  const response = await fetch('/api/security/settings');
+  if (!response.ok) {
+    throw new Error('Failed to fetch security settings');
   }
-);
+  return response.json();
+});
 
 export const updateSecuritySettings = createAsyncThunk(
   'security/updateSettings',
@@ -127,26 +129,23 @@ export const updateErrorHandling = createAsyncThunk(
   }
 );
 
-export const performBackup = createAsyncThunk(
-  'security/performBackup',
-  async () => {
-    const response = await fetch('/api/security/backup/perform', {
-      method: 'POST',
-    });
-    if (!response.ok) {
-      throw new Error('Failed to perform backup');
-    }
-    return response.json();
+export const performBackup = createAsyncThunk('security/performBackup', async () => {
+  const response = await fetch('/api/security/backup/perform', {
+    method: 'POST',
+  });
+  if (!response.ok) {
+    throw new Error('Failed to perform backup');
   }
-);
+  return response.json();
+});
 
 const securitySlice = createSlice({
   name: 'security',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchSecuritySettings.pending, (state) => {
+      .addCase(fetchSecuritySettings.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -175,4 +174,4 @@ const securitySlice = createSlice({
   },
 });
 
-export default securitySlice.reducer; 
+export default securitySlice.reducer;

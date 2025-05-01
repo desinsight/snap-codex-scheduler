@@ -59,7 +59,7 @@ const Checkbox = styled.input`
 `;
 
 const Button = styled.button`
-  background: #2196F3;
+  background: #2196f3;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -71,7 +71,9 @@ const Button = styled.button`
 const SecuritySettings: React.FC = () => {
   const { t } = useTranslation('schedule');
   const dispatch = useDispatch();
-  const { settings, backup, errorHandling, loading, error } = useSelector((state: any) => state.security);
+  const { settings, backup, errorHandling, loading, error } = useSelector(
+    (state: any) => state.security
+  );
   const [currentSettings, setCurrentSettings] = useState<SecuritySettings>(settings);
   const [currentBackup, setCurrentBackup] = useState<BackupSettings>(backup);
   const [currentErrorHandling, setCurrentErrorHandling] = useState<ErrorHandling>(errorHandling);
@@ -88,7 +90,7 @@ const SecuritySettings: React.FC = () => {
 
   const handleSettingsChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
-    setCurrentSettings((prev) => {
+    setCurrentSettings(prev => {
       if (!prev) return prev;
       if (name.includes('.')) {
         const [parent, child] = name.split('.');
@@ -109,7 +111,7 @@ const SecuritySettings: React.FC = () => {
 
   const handleBackupChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
-    setCurrentBackup((prev) => {
+    setCurrentBackup(prev => {
       if (!prev) return prev;
       if (name.includes('.')) {
         const [parent, child] = name.split('.');
@@ -128,9 +130,11 @@ const SecuritySettings: React.FC = () => {
     });
   };
 
-  const handleErrorHandlingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleErrorHandlingChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value, type } = e.target;
-    setCurrentErrorHandling((prev) => {
+    setCurrentErrorHandling(prev => {
       if (!prev) return prev;
       if (name.includes('.')) {
         const [parent, child] = name.split('.');
@@ -246,9 +250,7 @@ const SecuritySettings: React.FC = () => {
             min="1"
           />
         </FormGroup>
-        <Button onClick={handlePerformBackup}>
-          {t('notifications.security.performBackup')}
-        </Button>
+        <Button onClick={handlePerformBackup}>{t('notifications.security.performBackup')}</Button>
       </Section>
 
       <Section>
@@ -291,4 +293,4 @@ const SecuritySettings: React.FC = () => {
   );
 };
 
-export default SecuritySettings; 
+export default SecuritySettings;

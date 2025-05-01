@@ -107,4 +107,4 @@ export const GlobalStyle = createGlobalStyle`
     transform: translateX(-100%);
     transition: transform ${({ theme }) => theme.transitions.medium};
   }
-`; 
+`;

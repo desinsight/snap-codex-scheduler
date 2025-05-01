@@ -7,11 +7,7 @@ import { AuthService } from '../services/api/auth.service';
 
 export const useAuth = () => {
   const dispatch = useDispatch();
-<<<<<<< HEAD
-  const { user, token, isAuthenticated, isLoading } = useSelector(
-=======
   const { user, token, isAuthenticated, isLoading, error } = useSelector(
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
     (state: RootState) => state.auth
   );
 
@@ -24,11 +20,7 @@ export const useAuth = () => {
           const userData = await AuthService.getCurrentUser();
           dispatch(authSlice.actions.setUser(userData));
           dispatch(authSlice.actions.setToken(storedToken));
-<<<<<<< HEAD
-        } catch {
-=======
         } catch (error) {
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
           clearTokens();
           dispatch(authSlice.actions.logout());
         }
@@ -39,15 +31,6 @@ export const useAuth = () => {
   }, [dispatch]);
 
   const handleLogin = async (credentials: { email: string; password: string }) => {
-<<<<<<< HEAD
-    const response = await dispatch(login(credentials)).unwrap();
-    return response;
-  };
-
-  const handleRegister = async (credentials: { email: string; password: string; name: string }) => {
-    const response = await dispatch(register(credentials)).unwrap();
-    return response;
-=======
     try {
       const response = await dispatch(login(credentials)).unwrap();
       return response;
@@ -63,7 +46,6 @@ export const useAuth = () => {
     } catch (error) {
       throw error;
     }
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
   };
 
   const handleLogout = () => {
@@ -72,17 +54,12 @@ export const useAuth = () => {
   };
 
   const handleRefreshToken = async () => {
-<<<<<<< HEAD
-    const response = await dispatch(refreshToken()).unwrap();
-    return response;
-=======
     try {
       const response = await dispatch(refreshToken()).unwrap();
       return response;
     } catch (error) {
       throw error;
     }
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
   };
 
   const handleClearError = () => {
@@ -94,11 +71,7 @@ export const useAuth = () => {
     token,
     isAuthenticated,
     isLoading,
-<<<<<<< HEAD
-    error: null,
-=======
     error,
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
     login: handleLogin,
     register: handleRegister,
     logout: handleLogout,

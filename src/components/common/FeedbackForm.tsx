@@ -67,12 +67,11 @@ const RatingButton = styled.button<{ selected: boolean }>`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1px solid ${({ theme, selected }) => 
-    selected ? theme.colors.primary : theme.colors.border};
-  background-color: ${({ theme, selected }) => 
+  border: 1px solid
+    ${({ theme, selected }) => (selected ? theme.colors.primary : theme.colors.border)};
+  background-color: ${({ theme, selected }) =>
     selected ? theme.colors.primary : theme.colors.background};
-  color: ${({ theme, selected }) => 
-    selected ? 'white' : theme.colors.text};
+  color: ${({ theme, selected }) => (selected ? 'white' : theme.colors.text)};
   cursor: pointer;
   transition: all 0.3s ease;
 
@@ -126,11 +125,7 @@ const SuccessMessage = styled.div`
 `;
 
 interface FeedbackFormProps {
-  onSubmit: (feedback: {
-    rating: number;
-    comment: string;
-    email?: string;
-  }) => Promise<void>;
+  onSubmit: (feedback: { rating: number; comment: string; email?: string }) => Promise<void>;
 }
 
 export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit }) => {
@@ -168,7 +163,7 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit }) => {
       <FormGroup>
         <Label htmlFor="rating">{t('feedback.rating')}</Label>
         <RatingContainer role="radiogroup" aria-label={t('feedback.rating')}>
-          {[1, 2, 3, 4, 5].map((value) => (
+          {[1, 2, 3, 4, 5].map(value => (
             <RatingButton
               key={value}
               type="button"
@@ -189,7 +184,7 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit }) => {
         <TextArea
           id="comment"
           value={comment}
-          onChange={(e) => setComment(e.target.value)}
+          onChange={e => setComment(e.target.value)}
           required
           aria-required="true"
           aria-label={t('feedback.comment')}
@@ -202,7 +197,7 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit }) => {
           type="email"
           id="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={e => setEmail(e.target.value)}
           aria-label={t('feedback.email')}
         />
       </FormGroup>
@@ -219,4 +214,4 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit }) => {
       </SubmitButton>
     </Form>
   );
-}; 
+};

@@ -73,12 +73,12 @@ const ScheduleList: React.FC = () => {
         <ScheduleListTitle>{t('schedule.list.title')}</ScheduleListTitle>
         <ScheduleFilter onFilterChange={handleFilterChange} />
       </ScheduleListHeader>
-      
+
       {schedules.length === 0 ? (
         <EmptyMessage>{t('schedule.list.empty')}</EmptyMessage>
       ) : (
         <ScheduleListContent>
-          {schedules.map((schedule) => (
+          {schedules.map(schedule => (
             <ScheduleItem key={schedule.id} schedule={schedule} />
           ))}
         </ScheduleListContent>
@@ -87,4 +87,4 @@ const ScheduleList: React.FC = () => {
   );
 };
 
-export default ScheduleList; 
+export default ScheduleList;

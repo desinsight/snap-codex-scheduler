@@ -51,7 +51,7 @@ class CacheService {
     this.cache.set(key, {
       data,
       timestamp: Date.now(),
-      ttl
+      ttl,
     });
   }
 
@@ -80,4 +80,4 @@ class CacheService {
   }
 }
 
-export const cacheService = CacheService.getInstance(); 
+export const cacheService = CacheService.getInstance();

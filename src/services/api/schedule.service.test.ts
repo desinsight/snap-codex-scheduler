@@ -9,7 +9,7 @@ const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 // Mock handleApiError
 jest.mock('../../utils/errorHandling', () => ({
-  handleApiError: jest.fn()
+  handleApiError: jest.fn(),
 }));
 
 const mockSchedule: Schedule = {
@@ -23,7 +23,7 @@ const mockSchedule: Schedule = {
   isShared: false,
   createdBy: 'user1',
   createdAt: new Date(),
-  updatedAt: new Date()
+  updatedAt: new Date(),
 };
 
 describe('scheduleService', () => {
@@ -38,7 +38,9 @@ describe('scheduleService', () => {
 
       const result = await scheduleService.getSchedules();
 
-      expect(mockedAxios.get).toHaveBeenCalledWith('http://localhost:3000/api/schedules', { params: undefined });
+      expect(mockedAxios.get).toHaveBeenCalledWith('http://localhost:3000/api/schedules', {
+        params: undefined,
+      });
       expect(result).toEqual(mockSchedules);
     });
 
@@ -84,13 +86,16 @@ describe('scheduleService', () => {
         isAllDay: false,
         category: ScheduleCategory.WORK,
         isShared: false,
-        createdBy: 'user1'
+        createdBy: 'user1',
       };
       mockedAxios.post.mockResolvedValue({ data: mockSchedule });
 
       const result = await scheduleService.createSchedule(newSchedule);
 
-      expect(mockedAxios.post).toHaveBeenCalledWith('http://localhost:3000/api/schedules', newSchedule);
+      expect(mockedAxios.post).toHaveBeenCalledWith(
+        'http://localhost:3000/api/schedules',
+        newSchedule
+      );
       expect(result).toEqual(mockSchedule);
     });
 
@@ -112,7 +117,9 @@ describe('scheduleService', () => {
 
       const result = await scheduleService.updateSchedule('1', { title: 'Updated Title' });
 
-      expect(mockedAxios.put).toHaveBeenCalledWith('http://localhost:3000/api/schedules/1', { title: 'Updated Title' });
+      expect(mockedAxios.put).toHaveBeenCalledWith('http://localhost:3000/api/schedules/1', {
+        title: 'Updated Title',
+      });
       expect(result).toEqual(updatedSchedule);
     });
 
@@ -123,7 +130,9 @@ describe('scheduleService', () => {
         throw new Error('API Error');
       });
 
-      await expect(scheduleService.updateSchedule('1', { title: 'Updated Title' })).rejects.toThrow('API Error');
+      await expect(scheduleService.updateSchedule('1', { title: 'Updated Title' })).rejects.toThrow(
+        'API Error'
+      );
     });
   });
 
@@ -154,7 +163,9 @@ describe('scheduleService', () => {
 
       const result = await scheduleService.shareSchedule('1', ['user2']);
 
-      expect(mockedAxios.post).toHaveBeenCalledWith('http://localhost:3000/api/schedules/1/share', { userIds: ['user2'] });
+      expect(mockedAxios.post).toHaveBeenCalledWith('http://localhost:3000/api/schedules/1/share', {
+        userIds: ['user2'],
+      });
       expect(result).toEqual(sharedSchedule);
     });
 
@@ -178,11 +189,11 @@ describe('scheduleService', () => {
           [ScheduleCategory.PERSONAL]: 0,
           [ScheduleCategory.EDUCATION]: 0,
           [ScheduleCategory.HEALTH]: 0,
-          [ScheduleCategory.OTHER]: 0
+          [ScheduleCategory.OTHER]: 0,
         },
         upcoming: 1,
         completed: 0,
-        shared: 0
+        shared: 0,
       };
       mockedAxios.get.mockResolvedValue({ data: mockStats });
 
@@ -212,7 +223,7 @@ describe('scheduleService', () => {
 
       expect(mockedAxios.get).toHaveBeenCalledWith('http://localhost:3000/api/schedules/export', {
         params: { format: 'JSON' },
-        responseType: 'blob'
+        responseType: 'blob',
       });
       expect(result).toEqual(mockBlob);
     });
@@ -241,8 +252,8 @@ describe('scheduleService', () => {
         expect.any(FormData),
         {
           headers: {
-            'Content-Type': 'multipart/form-data'
-          }
+            'Content-Type': 'multipart/form-data',
+          },
         }
       );
       expect(result).toEqual(mockSchedules);
@@ -259,4 +270,4 @@ describe('scheduleService', () => {
       await expect(scheduleService.importSchedules(mockFile)).rejects.toThrow('API Error');
     });
   });
-}); 
+});

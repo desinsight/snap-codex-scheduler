@@ -81,4 +81,4 @@ describe('NotificationHistory', () => {
     renderComponent();
     expect(screen.getByText('notifications.empty')).toBeInTheDocument();
   });
-}); 
+});

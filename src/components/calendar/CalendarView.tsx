@@ -55,7 +55,8 @@ const StyledCalendar = styled(FullCalendar)<{ theme: Theme }>`
     font-weight: ${({ theme }) => theme.typography.button.fontWeight} !important;
     text-transform: none !important;
     padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.sm}`} !important;
-    transition: all ${({ theme }) => theme.transitions.duration.short}ms ${({ theme }) => theme.transitions.easing.easeInOut} !important;
+    transition: all ${({ theme }) => theme.transitions.duration.short}ms
+      ${({ theme }) => theme.transitions.easing.easeInOut} !important;
 
     &:hover {
       background-color: ${({ theme }) => theme.colors.primary.dark} !important;
@@ -80,7 +81,8 @@ const StyledCalendar = styled(FullCalendar)<{ theme: Theme }>`
     margin: ${({ theme }) => theme.spacing.xs} 0;
     border-radius: ${({ theme }) => theme.shape.borderRadius};
     cursor: pointer;
-    transition: all ${({ theme }) => theme.transitions.duration.short}ms ${({ theme }) => theme.transitions.easing.easeInOut};
+    transition: all ${({ theme }) => theme.transitions.duration.short}ms
+      ${({ theme }) => theme.transitions.easing.easeInOut};
 
     &:hover {
       transform: translateY(-1px);
@@ -145,4 +147,4 @@ const CalendarView: React.FC<CalendarViewProps> = ({
   );
 };
 
-export default CalendarView; 
+export default CalendarView;

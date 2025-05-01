@@ -28,13 +28,13 @@ const decrypt = (text: string): string => {
 // 토큰 저장
 export const saveTokens = (authResponse: AuthResponse): void => {
   const { token, refreshToken, expiresIn } = authResponse;
-  
+
   const encryptedToken = encrypt(token);
   const encryptedRefreshToken = encrypt(refreshToken);
-  
+
   // 토큰 만료 시간 계산 (현재 시간 + expiresIn(초))
   const expiryTime = Date.now() + expiresIn * 1000;
-  
+
   localStorage.setItem(TOKEN_KEY, encryptedToken);
   localStorage.setItem(REFRESH_TOKEN_KEY, encryptedRefreshToken);
   localStorage.setItem(TOKEN_EXPIRY_KEY, expiryTime.toString());
@@ -97,4 +97,4 @@ export const getTimeUntilExpiry = (): number | null => {
   if (!expiry) return null;
   const timeUntilExpiry = expiry - Date.now();
   return timeUntilExpiry > 0 ? timeUntilExpiry : 0;
-}; 
+};

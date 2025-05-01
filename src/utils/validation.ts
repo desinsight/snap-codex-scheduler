@@ -44,4 +44,4 @@ export const validateName = (name: string): boolean => {
   // 한글, 영문, 숫자만 허용
   const nameRegex = /^[가-힣a-zA-Z0-9\s]+$/;
   return nameRegex.test(name);
-}; 
+};

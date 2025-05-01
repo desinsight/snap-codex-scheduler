@@ -36,4 +36,4 @@ export const clearCsrfToken = (): void => {
 export const validateCsrfToken = (token: string): boolean => {
   const storedToken = getCsrfToken();
   return storedToken === token;
-}; 
+};

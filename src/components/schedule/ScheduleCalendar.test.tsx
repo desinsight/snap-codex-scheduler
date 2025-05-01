@@ -135,4 +135,4 @@ describe('ScheduleCalendar', () => {
     fireEvent.click(calendar);
     expect(screen.getByText('Create Schedule')).toBeInTheDocument();
   });
-}); 
+});

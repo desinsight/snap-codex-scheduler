@@ -2,7 +2,16 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
-import { FiCalendar, FiBell, FiPieChart, FiSettings, FiUser, FiMenu, FiX, FiClock } from 'react-icons/fi';
+import {
+  FiCalendar,
+  FiBell,
+  FiPieChart,
+  FiSettings,
+  FiUser,
+  FiMenu,
+  FiX,
+  FiClock,
+} from 'react-icons/fi';
 
 interface NavItem {
   icon: React.ReactNode;
@@ -57,17 +66,20 @@ const NavLink = styled(Link)<{ active?: boolean }>`
   align-items: center;
   gap: ${({ theme }) => theme.spacing.xs};
   padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.md}`};
-  color: ${({ theme, active }) => active ? theme.colors.primary.main : theme.colors.text.primary};
+  color: ${({ theme, active }) => (active ? theme.colors.primary.main : theme.colors.text.primary)};
   text-decoration: none;
   border-radius: ${({ theme }) => theme.spacing.xs};
-  transition: all ${({ theme }) => theme.transitions.duration.short}ms ${({ theme }) => theme.transitions.easing.easeInOut};
+  transition: all ${({ theme }) => theme.transitions.duration.short}ms
+    ${({ theme }) => theme.transitions.easing.easeInOut};
   position: relative;
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.grey[100]};
   }
 
-  ${({ active, theme }) => active && `
+  ${({ active, theme }) =>
+    active &&
+    `
     background-color: ${theme.colors.primary.main}10;
     font-weight: 500;
 
@@ -141,12 +153,8 @@ const Navigation: React.FC = () => {
         </Logo>
 
         <DesktopNav>
-          {navigationItems.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              active={location.pathname === item.path}
-            >
+          {navigationItems.map(item => (
+            <NavLink key={item.path} to={item.path} active={location.pathname === item.path}>
               <item.icon size={20} />
               <span>{item.label}</span>
             </NavLink>
@@ -166,7 +174,7 @@ const Navigation: React.FC = () => {
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.2 }}
           >
-            {navigationItems.map((item) => (
+            {navigationItems.map(item => (
               <NavLink
                 key={item.path}
                 to={item.path}
@@ -184,4 +192,4 @@ const Navigation: React.FC = () => {
   );
 };
 
-export default Navigation; 
+export default Navigation;

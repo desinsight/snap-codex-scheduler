@@ -1,5 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { ExternalServiceConfig, WebhookConfig, IntegrationState, IntegrationResponse } from '../../types/integration';
+import {
+  ExternalServiceConfig,
+  WebhookConfig,
+  IntegrationState,
+  IntegrationResponse,
+} from '../../types/integration';
 
 const initialState: IntegrationState = {
   services: [],
@@ -8,16 +13,13 @@ const initialState: IntegrationState = {
   error: null,
 };
 
-export const fetchIntegrations = createAsyncThunk(
-  'integration/fetchIntegrations',
-  async () => {
-    const response = await fetch('/api/integrations');
-    if (!response.ok) {
-      throw new Error('Failed to fetch integrations');
-    }
-    return response.json();
+export const fetchIntegrations = createAsyncThunk('integration/fetchIntegrations', async () => {
+  const response = await fetch('/api/integrations');
+  if (!response.ok) {
+    throw new Error('Failed to fetch integrations');
   }
-);
+  return response.json();
+});
 
 export const addService = createAsyncThunk(
   'integration/addService',
@@ -74,10 +76,10 @@ const integrationSlice = createSlice({
   name: 'integration',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
       // Fetch Integrations
-      .addCase(fetchIntegrations.pending, (state) => {
+      .addCase(fetchIntegrations.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -108,4 +110,4 @@ const integrationSlice = createSlice({
   },
 });
 
-export default integrationSlice.reducer; 
+export default integrationSlice.reducer;

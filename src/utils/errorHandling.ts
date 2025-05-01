@@ -1,4 +1,5 @@
 import { AxiosError } from 'axios';
+import i18n from '../i18n';
 
 export enum ErrorCode {
   NETWORK_ERROR = 'NETWORK_ERROR',
@@ -9,14 +10,13 @@ export enum ErrorCode {
   CONFLICT_ERROR = 'CONFLICT_ERROR',
   RATE_LIMIT_ERROR = 'RATE_LIMIT_ERROR',
   SERVER_ERROR = 'SERVER_ERROR',
-  UNKNOWN_ERROR = 'UNKNOWN_ERROR'
+  UNKNOWN_ERROR = 'UNKNOWN_ERROR',
 }
 
 export interface ApiError {
   message: string;
-  code: ErrorCode;
-  details?: Record<string, string[]>;
-  timestamp?: string;
+  code: string;
+  details?: Record<string, any>;
 }
 
 export interface ErrorResponse {
@@ -31,6 +31,17 @@ export interface ErrorResponse {
 interface ApiErrorResponse {
   message: string;
   details?: Record<string, string[]>;
+}
+
+export class AppError extends Error {
+  constructor(
+    message: string,
+    public code: string = 'UNKNOWN_ERROR',
+    public details?: Record<string, any>
+  ) {
+    super(message);
+    this.name = 'AppError';
+  }
 }
 
 const getErrorDetails = (error: AxiosError<ApiErrorResponse>): Record<string, string[]> => {
@@ -93,83 +104,73 @@ const getAction = (error: AxiosError): string | undefined => {
   }
 };
 
-export const handleApiError = (error: unknown): ErrorResponse => {
+export function handleApiError(error: unknown): never {
   if (error instanceof AxiosError) {
-    if (error.response) {
-      const { status, data } = error.response;
-      const details = getErrorDetails(error);
-
-      return {
-        message: data.message || '알 수 없는 오류가 발생했습니다',
-        code: getErrorCode(status),
-        details,
-        timestamp: new Date().toISOString(),
-        userFriendlyMessage: getUserFriendlyMessage(error),
-        action: getAction(error)
-      };
-    } else if (error.request) {
-      return {
-        message: 'Network Error',
-        code: ErrorCode.NETWORK_ERROR,
-        timestamp: new Date().toISOString(),
-        userFriendlyMessage: '서버에 연결할 수 없습니다. 인터넷 연결을 확인해주세요.',
-        action: '연결 확인'
-      };
+    const response = error.response;
+    if (response) {
+      const data = response.data as ApiError;
+      throw new AppError(
+        data.message || i18n.t('errors.unknown'),
+        data.code || `HTTP_${response.status}`,
+        data.details
+      );
     }
-  } else if (error instanceof Error) {
-    return {
-      message: error.message,
-      code: ErrorCode.UNKNOWN_ERROR,
-      timestamp: new Date().toISOString(),
-      userFriendlyMessage: error.message
-    };
+    if (error.request) {
+      throw new AppError(
+        i18n.t('errors.networkError'),
+        'NETWORK_ERROR'
+      );
+    }
+  }
+  
+  if (error instanceof Error) {
+    throw new AppError(
+      error.message,
+      'UNKNOWN_ERROR'
+    );
   }
 
-  return {
-    message: '알 수 없는 오류가 발생했습니다',
-    code: ErrorCode.UNKNOWN_ERROR,
-    timestamp: new Date().toISOString(),
-    userFriendlyMessage: '알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해주세요.'
-  };
-};
+  throw new AppError(
+    i18n.t('errors.unknown'),
+    'UNKNOWN_ERROR'
+  );
+}
 
-const getErrorCode = (status: number): ErrorCode => {
-  switch (status) {
-    case 400:
-      return ErrorCode.VALIDATION_ERROR;
-    case 401:
-      return ErrorCode.AUTHENTICATION_ERROR;
-    case 403:
-      return ErrorCode.AUTHORIZATION_ERROR;
-    case 404:
-      return ErrorCode.RESOURCE_NOT_FOUND;
-    case 409:
-      return ErrorCode.CONFLICT_ERROR;
-    case 429:
-      return ErrorCode.RATE_LIMIT_ERROR;
-    case 500:
-      return ErrorCode.SERVER_ERROR;
-    default:
-      return ErrorCode.UNKNOWN_ERROR;
+export function isAppError(error: unknown): error is AppError {
+  return error instanceof AppError;
+}
+
+export function getErrorMessage(error: unknown): string {
+  if (isAppError(error)) {
+    return error.message;
   }
-};
-
-export const formatErrorMessage = (error: unknown): string => {
-  if (!error) {
-    return '알 수 없는 오류가 발생했습니다.';
-  }
-
-  if (typeof error === 'string') {
-    return error;
-  }
-
   if (error instanceof Error) {
     return error.message;
   }
+  return i18n.t('errors.unknown');
+}
 
-  if (error instanceof AxiosError) {
-    return handleApiError(error).userFriendlyMessage;
+export function getErrorCode(error: unknown): string {
+  if (isAppError(error)) {
+    return error.code;
   }
+  return 'UNKNOWN_ERROR';
+}
 
-  return '알 수 없는 오류가 발생했습니다.';
-}; 
+export function getErrorDetails(error: unknown): Record<string, any> | undefined {
+  if (isAppError(error)) {
+    return error.details;
+  }
+  return undefined;
+}
+
+export function formatErrorMessage(error: unknown): string {
+  const message = getErrorMessage(error);
+  const code = getErrorCode(error);
+  const details = getErrorDetails(error);
+
+  if (details) {
+    return `${message} (${code}): ${JSON.stringify(details)}`;
+  }
+  return `${message} (${code})`;
+}

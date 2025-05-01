@@ -63,4 +63,4 @@ export interface GatewayError {
   message: string;
   status: number;
   details?: any;
-} 
+}

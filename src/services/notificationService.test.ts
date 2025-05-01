@@ -121,4 +121,4 @@ describe('NotificationService', () => {
     expect(global.window.focus).toHaveBeenCalled();
     expect(mockNotification.close).toHaveBeenCalled();
   });
-}); 
+});

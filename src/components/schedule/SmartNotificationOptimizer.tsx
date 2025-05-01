@@ -138,8 +138,8 @@ const SmartNotificationOptimizer: React.FC = () => {
 
   useEffect(() => {
     if (selectedUser) {
-      const userSettings = smartSettings.find((s) => s.userId === selectedUser);
-      const userFatigue = fatigueLevels.find((f) => f.userId === selectedUser);
+      const userSettings = smartSettings.find(s => s.userId === selectedUser);
+      const userFatigue = fatigueLevels.find(f => f.userId === selectedUser);
       if (userSettings) setSettings(userSettings);
       if (userFatigue) setFatigue(userFatigue);
     }
@@ -147,7 +147,7 @@ const SmartNotificationOptimizer: React.FC = () => {
 
   const handleSettingsChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setSettings((prev) => ({
+    setSettings(prev => ({
       ...prev,
       [name]: value,
     }));
@@ -155,7 +155,7 @@ const SmartNotificationOptimizer: React.FC = () => {
 
   const handleFatigueChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFatigue((prev) => ({
+    setFatigue(prev => ({
       ...prev,
       [name]: value,
     }));
@@ -193,9 +193,9 @@ const SmartNotificationOptimizer: React.FC = () => {
 
       <Section>
         <SectionTitle>{t('notifications.optimizer.userSelection')}</SectionTitle>
-        <Select value={selectedUser} onChange={(e) => setSelectedUser(e.target.value)}>
+        <Select value={selectedUser} onChange={e => setSelectedUser(e.target.value)}>
           <option value="">{t('notifications.optimizer.selectUser')}</option>
-          {userPatterns.map((user) => (
+          {userPatterns.map(user => (
             <option key={user.userId} value={user.userId}>
               {user.userName}
             </option>
@@ -295,4 +295,4 @@ const SmartNotificationOptimizer: React.FC = () => {
   );
 };
 
-export default SmartNotificationOptimizer; 
+export default SmartNotificationOptimizer;

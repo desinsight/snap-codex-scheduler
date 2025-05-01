@@ -1,4 +1,8 @@
-import { NotificationType, NotificationPreference, NotificationHistory } from '../types/notification';
+import {
+  NotificationType,
+  NotificationPreference,
+  NotificationHistory,
+} from '../types/notification';
 import EmailService from './EmailService';
 import WebSocketService from './WebSocketService';
 import DatabaseService from './DatabaseService';
@@ -82,7 +86,11 @@ class NotificationService {
     return new Notification(title, options);
   }
 
-  public async sendEmailNotification(to: string, template: NotificationTemplate, variables: Record<string, string>) {
+  public async sendEmailNotification(
+    to: string,
+    template: NotificationTemplate,
+    variables: Record<string, string>
+  ) {
     return this.emailService.sendEmail(to, template, variables);
   }
 
@@ -140,7 +148,10 @@ class NotificationService {
     }, timeUntilNotification);
   }
 
-  public async getNotificationHistory(limit: number = 50, offset: number = 0): Promise<NotificationHistory[]> {
+  public async getNotificationHistory(
+    limit: number = 50,
+    offset: number = 0
+  ): Promise<NotificationHistory[]> {
     return this.databaseService.getNotifications(limit, offset);
   }
 
@@ -170,4 +181,4 @@ class NotificationService {
   }
 }
 
-export default NotificationService; 
+export default NotificationService;

@@ -134,4 +134,4 @@ describe('LoadingSpinner', () => {
 
     expect(screen.getByRole('progressbar')).toHaveStyle({ width: '70%' });
   });
-}); 
+});

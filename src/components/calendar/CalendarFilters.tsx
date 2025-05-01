@@ -3,7 +3,13 @@ import styled from 'styled-components';
 import Button from '../common/Button';
 import { Theme } from '../../types/theme';
 
-type SortOption = 'date-asc' | 'date-desc' | 'title-asc' | 'title-desc' | 'priority-asc' | 'priority-desc';
+type SortOption =
+  | 'date-asc'
+  | 'date-desc'
+  | 'title-asc'
+  | 'title-desc'
+  | 'priority-asc'
+  | 'priority-desc';
 
 interface CalendarFiltersProps {
   onSearch: (query: string) => void;
@@ -99,7 +105,8 @@ const FilterChip = styled.div<{ active?: boolean; theme: Theme }>`
   background: ${({ active, theme }) =>
     active ? theme.colors.primary.main : `${theme.colors.text.tertiary}20`};
   cursor: pointer;
-  transition: all ${({ theme }) => theme.transitions.duration.short}ms ${({ theme }) => theme.transitions.easing.easeInOut};
+  transition: all ${({ theme }) => theme.transitions.duration.short}ms
+    ${({ theme }) => theme.transitions.easing.easeInOut};
 
   &:hover {
     background: ${({ active, theme }) =>
@@ -133,13 +140,13 @@ const CalendarFilters: React.FC<CalendarFiltersProps> = ({
   const handleFilterChange = (type: keyof CalendarFilters, value: string) => {
     const newFilters = { ...filters };
     const array = newFilters[type] as string[];
-    
+
     if (array.includes(value)) {
       array.splice(array.indexOf(value), 1);
     } else {
       array.push(value);
     }
-    
+
     setFilters(newFilters);
     onFilterChange(newFilters);
   };
@@ -218,4 +225,4 @@ const CalendarFilters: React.FC<CalendarFiltersProps> = ({
   );
 };
 
-export default CalendarFilters; 
+export default CalendarFilters;

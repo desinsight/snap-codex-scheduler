@@ -4,7 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { format } from 'date-fns';
-import { createSchedule, updateSchedule, fetchScheduleById } from '../../store/slices/scheduleSlice';
+import {
+  createSchedule,
+  updateSchedule,
+  fetchScheduleById,
+} from '../../store/slices/scheduleSlice';
 import { Schedule, ScheduleCategory } from '../../types/schedule';
 import { RootState } from '../../store';
 import { motion } from 'framer-motion';
@@ -103,6 +107,12 @@ const ParticipantChip = styled.div`
   }
 `;
 
+const ErrorMessage = styled.div`
+  color: ${({ theme }) => theme.colors.error.main};
+  font-size: ${({ theme }) => theme.typography.sizes.sm};
+  margin-top: ${({ theme }) => theme.spacing.xs};
+`;
+
 const ScheduleForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -138,7 +148,9 @@ const ScheduleForm: React.FC = () => {
     }
   }, [selectedSchedule]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -174,7 +186,7 @@ const ScheduleForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const scheduleData = {
       ...formData,
       startDate: new Date(formData.startDate!),
@@ -298,7 +310,7 @@ const ScheduleForm: React.FC = () => {
               type="text"
               id="participants"
               value={newParticipant}
-              onChange={(e) => setNewParticipant(e.target.value)}
+              onChange={e => setNewParticipant(e.target.value)}
               onKeyDown={handleAddParticipant}
               placeholder="Type name and press Enter"
             />
@@ -306,7 +318,9 @@ const ScheduleForm: React.FC = () => {
               {formData.participants?.map((participant, index) => (
                 <ParticipantChip key={index}>
                   {participant}
-                  <button type="button" onClick={() => handleRemoveParticipant(index)}>×</button>
+                  <button type="button" onClick={() => handleRemoveParticipant(index)}>
+                    ×
+                  </button>
                 </ParticipantChip>
               ))}
             </ParticipantChips>
@@ -320,7 +334,7 @@ const ScheduleForm: React.FC = () => {
                 {t('common.cancel')}
               </Button>
               <Button type="submit" color="primary" disabled={loading}>
-                {loading ? t('common.saving') : (id ? t('actions.update') : t('actions.create'))}
+                {loading ? t('common.saving') : id ? t('actions.update') : t('actions.create')}
               </Button>
             </div>
           </Card.Footer>
@@ -330,4 +344,4 @@ const ScheduleForm: React.FC = () => {
   );
 };
 
-export default ScheduleForm; 
+export default ScheduleForm;

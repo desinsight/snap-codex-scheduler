@@ -1,13 +1,11 @@
 import { renderHook, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
-import { useAuth } from './useAuth';
 import authReducer from '../store/slices/authSlice';
+import { useAuth } from './useAuth';
 import { AuthService } from '../services/api/auth.service';
-<<<<<<< HEAD
-=======
 import { isTokenValid, getToken, clearTokens } from '../utils/token';
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
 
 // AuthService 모의 객체 생성
 jest.mock('../services/api/auth.service');
@@ -34,112 +32,150 @@ Object.defineProperty(window, 'localStorage', {
   value: mockLocalStorage,
 });
 
-describe('useAuth', () => {
-  let store: ReturnType<typeof configureStore>;
+const createTestStore = () => {
+  return configureStore({
+    reducer: {
+      auth: authReducer,
+    },
+  });
+};
 
+const wrapper = ({ children }: { children: React.ReactNode }) => {
+  const store = createTestStore();
+  return (
+    <Provider store={store}>
+      <BrowserRouter>{children}</BrowserRouter>
+    </Provider>
+  );
+};
+
+describe('useAuth', () => {
   beforeEach(() => {
-    store = configureStore({
-      reducer: {
-        auth: authReducer,
-      },
-    });
     jest.clearAllMocks();
-    mockLocalStorage.clear();
   });
 
-  const wrapper = ({ children }: { children: React.ReactNode }) => (
-    <Provider store={store}>{children}</Provider>
-  );
-
   it('should handle successful login', async () => {
-    const { result } = renderHook(() => useAuth(), { wrapper });
-
-    const mockCredentials = {
-      email: 'test@example.com',
-      password: 'password123',
-    };
-
-    const mockResponse = {
+    const mockLogin = jest.spyOn(AuthService, 'login').mockResolvedValueOnce({
       token: 'test-token',
-      refreshToken: 'test-refresh-token',
-      expiresIn: 3600,
       user: {
         id: '1',
-        name: 'Test User',
         email: 'test@example.com',
-        role: 'user',
+        name: 'Test User',
       },
-    };
-
-    (AuthService.login as jest.Mock).mockResolvedValue(mockResponse);
-
-    await act(async () => {
-      await result.current.login(mockCredentials);
     });
 
+    const { result } = renderHook(() => useAuth(), { wrapper });
+
+    await act(async () => {
+      await result.current.login({
+        email: 'test@example.com',
+        password: 'password123',
+      });
+    });
+
+    expect(mockLogin).toHaveBeenCalledWith({
+      email: 'test@example.com',
+      password: 'password123',
+    });
     expect(result.current.isAuthenticated).toBe(true);
-    expect(result.current.user).toEqual(mockResponse.user);
-    expect(result.current.token).toBe(mockResponse.token);
-<<<<<<< HEAD
-=======
-    expect(result.current.error).toBeNull();
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
+    expect(result.current.user).toEqual({
+      id: '1',
+      email: 'test@example.com',
+      name: 'Test User',
+    });
+  });
+
+  it('should handle login failure', async () => {
+    const mockLogin = jest.spyOn(AuthService, 'login').mockRejectedValueOnce(
+      new Error('Invalid credentials')
+    );
+
+    const { result } = renderHook(() => useAuth(), { wrapper });
+
+    await act(async () => {
+      await result.current.login({
+        email: 'test@example.com',
+        password: 'wrongpassword',
+      });
+    });
+
+    expect(mockLogin).toHaveBeenCalledWith({
+      email: 'test@example.com',
+      password: 'wrongpassword',
+    });
+    expect(result.current.isAuthenticated).toBe(false);
+    expect(result.current.error).toBeTruthy();
   });
 
   it('should handle successful registration', async () => {
+    const mockRegister = jest.spyOn(AuthService, 'register').mockResolvedValueOnce({
+      token: 'test-token',
+      user: {
+        id: '1',
+        email: 'test@example.com',
+        name: 'Test User',
+      },
+    });
+
     const { result } = renderHook(() => useAuth(), { wrapper });
 
-    const mockCredentials = {
+    await act(async () => {
+      await result.current.register({
+        name: 'Test User',
+        email: 'test@example.com',
+        password: 'password123',
+      });
+    });
+
+    expect(mockRegister).toHaveBeenCalledWith({
       name: 'Test User',
       email: 'test@example.com',
       password: 'password123',
-    };
+    });
+    expect(result.current.isAuthenticated).toBe(true);
+    expect(result.current.user).toEqual({
+      id: '1',
+      email: 'test@example.com',
+      name: 'Test User',
+    });
+  });
 
-    const mockResponse = {
-      token: 'test-token',
-      refreshToken: 'test-refresh-token',
-      expiresIn: 3600,
-      user: {
-        id: '1',
-        name: 'Test User',
-        email: 'test@example.com',
-        role: 'user',
-      },
-    };
+  it('should handle registration failure', async () => {
+    const mockRegister = jest.spyOn(AuthService, 'register').mockRejectedValueOnce(
+      new Error('Email already exists')
+    );
 
-    (AuthService.register as jest.Mock).mockResolvedValue(mockResponse);
+    const { result } = renderHook(() => useAuth(), { wrapper });
 
     await act(async () => {
-      await result.current.register(mockCredentials);
+      await result.current.register({
+        name: 'Test User',
+        email: 'test@example.com',
+        password: 'password123',
+      });
     });
 
-    expect(result.current.isAuthenticated).toBe(true);
-    expect(result.current.user).toEqual(mockResponse.user);
-    expect(result.current.token).toBe(mockResponse.token);
-    expect(result.current.error).toBeNull();
+    expect(mockRegister).toHaveBeenCalledWith({
+      name: 'Test User',
+      email: 'test@example.com',
+      password: 'password123',
+    });
+    expect(result.current.isAuthenticated).toBe(false);
+    expect(result.current.error).toBeTruthy();
   });
 
   it('should handle logout', async () => {
+    const mockLogout = jest.spyOn(AuthService, 'logout').mockResolvedValueOnce(undefined);
+
     const { result } = renderHook(() => useAuth(), { wrapper });
 
-    // 먼저 로그인 상태 설정
-    const mockUser = {
-      id: '1',
-      name: 'Test User',
-      email: 'test@example.com',
-      role: 'user',
-    };
-
-    store.dispatch({ type: 'auth/setUser', payload: mockUser });
-    store.dispatch({ type: 'auth/setToken', payload: 'test-token' });
-
     await act(async () => {
-      result.current.logout();
+      await result.current.logout();
     });
 
+    expect(mockLogout).toHaveBeenCalled();
     expect(result.current.isAuthenticated).toBe(false);
     expect(result.current.user).toBeNull();
-    expect(result.current.token).toBeNull();
   });
 
   it('should handle auto login with valid token', async () => {
@@ -191,11 +227,7 @@ describe('useAuth', () => {
     await act(async () => {
       try {
         await result.current.refreshToken();
-<<<<<<< HEAD
       } catch {
-=======
-      } catch (error) {
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
         expect(result.current.isAuthenticated).toBe(false);
         expect(result.current.user).toBeNull();
         expect(result.current.token).toBeNull();
@@ -213,13 +245,8 @@ describe('useAuth', () => {
     };
 
     // Create a promise that we can resolve later
-<<<<<<< HEAD
-    let resolveRefresh: (value: typeof mockResponse) => void;
-    const refreshPromise = new Promise<typeof mockResponse>((resolve) => {
-=======
     let resolveRefresh: (value: any) => void;
     const refreshPromise = new Promise((resolve) => {
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
       resolveRefresh = resolve;
     });
 

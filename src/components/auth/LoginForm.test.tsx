@@ -8,6 +8,7 @@ import loadingReducer from '../../store/slices/loadingSlice';
 import LoginForm from './LoginForm';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../../utils/i18n';
+import { AuthService } from '../../services/api/auth.service';
 
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
@@ -22,56 +23,122 @@ const mockStore = configureStore({
   },
 });
 
-<<<<<<< HEAD
-=======
 const mockUser = {
   id: '1',
   name: 'Test User',
   email: 'test@example.com',
 };
 
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
-const renderLoginForm = () => {
-  return render(
-    <Provider store={mockStore}>
-      <I18nextProvider i18n={i18n}>
-        <BrowserRouter>
-          <LoginForm />
-        </BrowserRouter>
-      </I18nextProvider>
-    </Provider>
-  );
+const createTestStore = () => {
+  return configureStore({
+    reducer: {
+      auth: authReducer,
+    },
+  });
 };
 
 describe('LoginForm', () => {
+  let store: ReturnType<typeof configureStore>;
+
   beforeEach(() => {
+    store = createTestStore();
     mockNavigate.mockClear();
+    jest.clearAllMocks();
   });
 
-  it('이메일 유효성 검사를 수행한다', async () => {
+  const renderLoginForm = () => {
+    return render(
+      <Provider store={store}>
+        <I18nextProvider i18n={i18n}>
+          <BrowserRouter>
+            <LoginForm />
+          </BrowserRouter>
+        </I18nextProvider>
+      </Provider>
+    );
+  };
+
+  it('should render login form', () => {
     renderLoginForm();
-    
-    const emailInput = screen.getByTestId('login-email');
-    fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
-    
-    const submitButton = screen.getByTestId('login-submit');
-    fireEvent.click(submitButton);
-    
+
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
+  });
+
+  it('should handle successful login', async () => {
+    const mockLogin = jest.spyOn(AuthService, 'login').mockResolvedValueOnce({
+      token: 'test-token',
+      user: {
+        id: '1',
+        email: 'test@example.com',
+        name: 'Test User',
+      },
+    });
+
+    renderLoginForm();
+
+    fireEvent.change(screen.getByLabelText(/email/i), {
+      target: { value: 'test@example.com' },
+    });
+    fireEvent.change(screen.getByLabelText(/password/i), {
+      target: { value: 'password123' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /login/i }));
+
     await waitFor(() => {
-      const errorMessage = screen.getByText('올바른 이메일 형식이 아닙니다');
-      expect(errorMessage).toBeInTheDocument();
+      expect(mockLogin).toHaveBeenCalledWith({
+        email: 'test@example.com',
+        password: 'password123',
+      });
     });
   });
 
-  it('빈 필드에 대한 유효성 검사를 수행한다', async () => {
+  it('should handle login failure', async () => {
+    const mockLogin = jest.spyOn(AuthService, 'login').mockRejectedValueOnce(
+      new Error('Invalid credentials')
+    );
+
     renderLoginForm();
-    
-    const submitButton = screen.getByTestId('login-submit');
-    fireEvent.click(submitButton);
-    
+
+    fireEvent.change(screen.getByLabelText(/email/i), {
+      target: { value: 'test@example.com' },
+    });
+    fireEvent.change(screen.getByLabelText(/password/i), {
+      target: { value: 'wrongpassword' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /login/i }));
+
     await waitFor(() => {
-      expect(screen.getByText('이메일을 입력해주세요')).toBeInTheDocument();
-      expect(screen.getByText('비밀번호를 입력해주세요')).toBeInTheDocument();
+      expect(mockLogin).toHaveBeenCalledWith({
+        email: 'test@example.com',
+        password: 'wrongpassword',
+      });
+      expect(screen.getByText(/invalid credentials/i)).toBeInTheDocument();
+    });
+  });
+
+  it('should validate required fields', async () => {
+    renderLoginForm();
+
+    fireEvent.click(screen.getByRole('button', { name: /login/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/email is required/i)).toBeInTheDocument();
+      expect(screen.getByText(/password is required/i)).toBeInTheDocument();
+    });
+  });
+
+  it('should validate email format', async () => {
+    renderLoginForm();
+
+    fireEvent.change(screen.getByLabelText(/email/i), {
+      target: { value: 'invalid-email' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /login/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/invalid email format/i)).toBeInTheDocument();
     });
   });
 

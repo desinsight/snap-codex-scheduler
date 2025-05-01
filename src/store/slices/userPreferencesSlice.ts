@@ -7,16 +7,13 @@ const initialState: UserPreferencesState = {
   error: null,
 };
 
-export const fetchUserPreferences = createAsyncThunk(
-  'preferences/fetchPreferences',
-  async () => {
-    const response = await fetch('/api/user-preferences');
-    if (!response.ok) {
-      throw new Error('Failed to fetch user preferences');
-    }
-    return response.json();
+export const fetchUserPreferences = createAsyncThunk('preferences/fetchPreferences', async () => {
+  const response = await fetch('/api/user-preferences');
+  if (!response.ok) {
+    throw new Error('Failed to fetch user preferences');
   }
-);
+  return response.json();
+});
 
 export const updateUserPreferences = createAsyncThunk(
   'preferences/updatePreferences',
@@ -37,7 +34,15 @@ export const updateUserPreferences = createAsyncThunk(
 
 export const submitFeedback = createAsyncThunk(
   'preferences/submitFeedback',
-  async ({ userId, satisfactionScore, feedbackText }: { userId: string; satisfactionScore: number; feedbackText?: string }) => {
+  async ({
+    userId,
+    satisfactionScore,
+    feedbackText,
+  }: {
+    userId: string;
+    satisfactionScore: number;
+    feedbackText?: string;
+  }) => {
     const response = await fetch(`/api/user-preferences/${userId}/feedback`, {
       method: 'POST',
       headers: {
@@ -56,9 +61,9 @@ const userPreferencesSlice = createSlice({
   name: 'userPreferences',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchUserPreferences.pending, (state) => {
+      .addCase(fetchUserPreferences.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -71,7 +76,7 @@ const userPreferencesSlice = createSlice({
         state.error = action.error.message || 'Failed to fetch user preferences';
       })
       .addCase(updateUserPreferences.fulfilled, (state, action) => {
-        const index = state.preferences.findIndex((p) => p.userId === action.payload.userId);
+        const index = state.preferences.findIndex(p => p.userId === action.payload.userId);
         if (index !== -1) {
           state.preferences[index] = action.payload;
         } else {
@@ -79,7 +84,7 @@ const userPreferencesSlice = createSlice({
         }
       })
       .addCase(submitFeedback.fulfilled, (state, action) => {
-        const index = state.preferences.findIndex((p) => p.userId === action.payload.userId);
+        const index = state.preferences.findIndex(p => p.userId === action.payload.userId);
         if (index !== -1) {
           state.preferences[index].feedback = action.payload.feedback;
         }
@@ -87,4 +92,4 @@ const userPreferencesSlice = createSlice({
   },
 });
 
-export default userPreferencesSlice.reducer; 
+export default userPreferencesSlice.reducer;

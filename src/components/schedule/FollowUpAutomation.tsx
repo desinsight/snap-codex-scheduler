@@ -226,10 +226,7 @@ const FollowUpAutomation: React.FC = () => {
           <RuleCard key={rule.id} active={rule.isActive}>
             <RuleHeader>
               <RuleName>{rule.name}</RuleName>
-              <ToggleButton
-                active={rule.isActive}
-                onClick={() => handleToggle(rule.id)}
-              >
+              <ToggleButton active={rule.isActive} onClick={() => handleToggle(rule.id)}>
                 {rule.isActive ? t('common.active') : t('common.inactive')}
               </ToggleButton>
             </RuleHeader>
@@ -239,7 +236,8 @@ const FollowUpAutomation: React.FC = () => {
               <RuleValue>
                 {t('notifications.followUp.responseType')}: {rule.conditions.responseType}
                 <br />
-                {t('notifications.followUp.timeSinceNotification')}: {rule.conditions.timeSinceNotification}h
+                {t('notifications.followUp.timeSinceNotification')}:{' '}
+                {rule.conditions.timeSinceNotification}h
                 <br />
                 {t('notifications.followUp.priority')}: {rule.conditions.priority}
               </RuleValue>
@@ -324,7 +322,7 @@ const FollowUpAutomation: React.FC = () => {
             value={newRule.actions.channel}
             onChange={handleInputChange}
           >
-            {Object.values(NotificationChannel).map((channel) => (
+            {Object.values(NotificationChannel).map(channel => (
               <option key={channel} value={channel}>
                 {channel}
               </option>
@@ -362,4 +360,4 @@ const FollowUpAutomation: React.FC = () => {
   );
 };
 
-export default FollowUpAutomation; 
+export default FollowUpAutomation;

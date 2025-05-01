@@ -7,7 +7,7 @@ import scheduleReducer, {
   deleteSchedule,
   fetchScheduleStats,
   setFilter,
-  clearError
+  clearError,
 } from './scheduleSlice';
 import { Schedule, ScheduleCategory } from '../../types/schedule';
 import { scheduleService } from '../../services/api/schedule.service';
@@ -26,7 +26,7 @@ const mockSchedule: Schedule = {
   isShared: false,
   createdBy: 'user1',
   createdAt: new Date(),
-  updatedAt: new Date()
+  updatedAt: new Date(),
 };
 
 describe('scheduleSlice', () => {
@@ -35,8 +35,8 @@ describe('scheduleSlice', () => {
   beforeEach(() => {
     store = configureStore({
       reducer: {
-        schedules: scheduleReducer
-      }
+        schedules: scheduleReducer,
+      },
     });
   });
 
@@ -93,16 +93,18 @@ describe('scheduleSlice', () => {
     it('should handle createSchedule success', async () => {
       (scheduleService.createSchedule as jest.Mock).mockResolvedValue(mockSchedule);
 
-      await store.dispatch(createSchedule({
-        title: 'Test Schedule',
-        description: 'Test Description',
-        startDate: new Date('2024-01-01'),
-        endDate: new Date('2024-01-02'),
-        isAllDay: false,
-        category: ScheduleCategory.WORK,
-        isShared: false,
-        createdBy: 'user1'
-      }));
+      await store.dispatch(
+        createSchedule({
+          title: 'Test Schedule',
+          description: 'Test Description',
+          startDate: new Date('2024-01-01'),
+          endDate: new Date('2024-01-02'),
+          isAllDay: false,
+          category: ScheduleCategory.WORK,
+          isShared: false,
+          createdBy: 'user1',
+        })
+      );
       const state = store.getState().schedules;
 
       expect(state.loading).toBe(false);
@@ -114,16 +116,18 @@ describe('scheduleSlice', () => {
       const error = new Error('Failed to create schedule');
       (scheduleService.createSchedule as jest.Mock).mockRejectedValue(error);
 
-      await store.dispatch(createSchedule({
-        title: 'Test Schedule',
-        description: 'Test Description',
-        startDate: new Date('2024-01-01'),
-        endDate: new Date('2024-01-02'),
-        isAllDay: false,
-        category: ScheduleCategory.WORK,
-        isShared: false,
-        createdBy: 'user1'
-      }));
+      await store.dispatch(
+        createSchedule({
+          title: 'Test Schedule',
+          description: 'Test Description',
+          startDate: new Date('2024-01-01'),
+          endDate: new Date('2024-01-02'),
+          isAllDay: false,
+          category: ScheduleCategory.WORK,
+          isShared: false,
+          createdBy: 'user1',
+        })
+      );
       const state = store.getState().schedules;
 
       expect(state.loading).toBe(false);
@@ -138,7 +142,7 @@ describe('scheduleSlice', () => {
 
       // First, create a schedule
       await store.dispatch(createSchedule(mockSchedule));
-      
+
       // Then, update it
       await store.dispatch(updateSchedule({ id: '1', schedule: { title: 'Updated Title' } }));
       const state = store.getState().schedules;
@@ -166,7 +170,7 @@ describe('scheduleSlice', () => {
 
       // First, create a schedule
       await store.dispatch(createSchedule(mockSchedule));
-      
+
       // Then, delete it
       await store.dispatch(deleteSchedule('1'));
       const state = store.getState().schedules;
@@ -197,11 +201,11 @@ describe('scheduleSlice', () => {
           [ScheduleCategory.PERSONAL]: 0,
           [ScheduleCategory.EDUCATION]: 0,
           [ScheduleCategory.HEALTH]: 0,
-          [ScheduleCategory.OTHER]: 0
+          [ScheduleCategory.OTHER]: 0,
         },
         upcoming: 1,
         completed: 0,
-        shared: 0
+        shared: 0,
       };
       (scheduleService.getScheduleStats as jest.Mock).mockResolvedValue(mockStats);
 
@@ -239,7 +243,7 @@ describe('scheduleSlice', () => {
     it('should clear error state', () => {
       // First, set an error
       store.dispatch({ type: 'schedules/fetchAll/rejected', error: { message: 'Test error' } });
-      
+
       // Then, clear it
       store.dispatch(clearError());
       const state = store.getState().schedules;
@@ -247,4 +251,4 @@ describe('scheduleSlice', () => {
       expect(state.error).toBeNull();
     });
   });
-}); 
+});

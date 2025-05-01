@@ -85,10 +85,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ className = '' }) => {
   return (
     <Form onSubmit={handleSubmit} className={className} data-testid="login-form">
       <Title data-testid="login-title">{t('auth.login.title')}</Title>
-      
-      {errors.general && (
-        <ErrorMessage>{errors.general}</ErrorMessage>
-      )}
+
+      {errors.general && <ErrorMessage>{errors.general}</ErrorMessage>}
 
       <FormGroup>
         <Label htmlFor="email">{t('auth.login.email')}</Label>
@@ -120,11 +118,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ className = '' }) => {
 
       <FormGroup>
         <Label>
-          <input
-            type="checkbox"
-            name="remember"
-            data-testid="login-remember"
-          />
+          <input type="checkbox" name="remember" data-testid="login-remember" />
           {t('auth.login.rememberMe')}
         </Label>
       </FormGroup>
@@ -144,4 +138,4 @@ const LoginForm: React.FC<LoginFormProps> = ({ className = '' }) => {
   );
 };
 
-export default LoginForm; 
+export default LoginForm;

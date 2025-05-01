@@ -167,7 +167,9 @@ const ChannelOptimization: React.FC = () => {
   const dispatch = useDispatch();
   const { metrics, rules, loading, error } = useSelector((state: any) => state.channelOptimization);
 
-  const [newRule, setNewRule] = useState<Omit<ChannelOptimizationRule, 'id' | 'createdAt' | 'updatedAt'>>({
+  const [newRule, setNewRule] = useState<
+    Omit<ChannelOptimizationRule, 'id' | 'createdAt' | 'updatedAt'>
+  >({
     channel: 'email',
     conditions: {
       minSuccessRate: 90,
@@ -275,7 +277,7 @@ const ChannelOptimization: React.FC = () => {
       <Title>{t('notifications.optimization.title')}</Title>
 
       <MetricsGrid>
-        {metrics.map((metric) => (
+        {metrics.map(metric => (
           <MetricCard key={metric.channel}>
             <MetricHeader>
               <MetricTitle>{metric.channel}</MetricTitle>
@@ -297,10 +299,7 @@ const ChannelOptimization: React.FC = () => {
           <RuleCard key={rule.id} active={rule.isActive}>
             <RuleHeader>
               <RuleName>{rule.channel}</RuleName>
-              <ToggleButton
-                active={rule.isActive}
-                onClick={() => handleToggle(rule.id)}
-              >
+              <ToggleButton active={rule.isActive} onClick={() => handleToggle(rule.id)}>
                 {rule.isActive ? t('common.active') : t('common.inactive')}
               </ToggleButton>
             </RuleHeader>
@@ -310,17 +309,22 @@ const ChannelOptimization: React.FC = () => {
               <RuleValue>
                 {t('notifications.optimization.minSuccessRate')}: {rule.conditions.minSuccessRate}%
                 <br />
-                {t('notifications.optimization.maxDeliveryTime')}: {rule.conditions.maxDeliveryTime}s
+                {t('notifications.optimization.maxDeliveryTime')}: {rule.conditions.maxDeliveryTime}
+                s
                 <br />
-                {t('notifications.optimization.timeRange')}: {rule.conditions.timeRange.start}h - {rule.conditions.timeRange.end}h
+                {t('notifications.optimization.timeRange')}: {rule.conditions.timeRange.start}h -{' '}
+                {rule.conditions.timeRange.end}h
               </RuleValue>
 
               <RuleLabel>{t('notifications.optimization.actions')}</RuleLabel>
               <RuleValue>
-                {t('notifications.optimization.adjustPriority')}: {rule.actions.adjustPriority ? t('common.yes') : t('common.no')}
+                {t('notifications.optimization.adjustPriority')}:{' '}
+                {rule.actions.adjustPriority ? t('common.yes') : t('common.no')}
                 <br />
-                {rule.actions.switchChannel && `${t('notifications.optimization.switchTo')}: ${rule.actions.switchChannel}`}
-                {rule.actions.delayTime && `${t('notifications.optimization.delayTime')}: ${rule.actions.delayTime}s`}
+                {rule.actions.switchChannel &&
+                  `${t('notifications.optimization.switchTo')}: ${rule.actions.switchChannel}`}
+                {rule.actions.delayTime &&
+                  `${t('notifications.optimization.delayTime')}: ${rule.actions.delayTime}s`}
               </RuleValue>
             </RuleContent>
 
@@ -341,12 +345,8 @@ const ChannelOptimization: React.FC = () => {
 
         <FormGroup>
           <Label>{t('notifications.optimization.channel')}</Label>
-          <Select
-            name="channel"
-            value={newRule.channel}
-            onChange={handleInputChange}
-          >
-            {Object.values(NotificationChannel).map((channel) => (
+          <Select name="channel" value={newRule.channel} onChange={handleInputChange}>
+            {Object.values(NotificationChannel).map(channel => (
               <option key={channel} value={channel}>
                 {channel}
               </option>
@@ -423,7 +423,7 @@ const ChannelOptimization: React.FC = () => {
             onChange={handleInputChange}
           >
             <option value="">{t('notifications.optimization.none')}</option>
-            {Object.values(NotificationChannel).map((channel) => (
+            {Object.values(NotificationChannel).map(channel => (
               <option key={channel} value={channel}>
                 {channel}
               </option>
@@ -448,4 +448,4 @@ const ChannelOptimization: React.FC = () => {
   );
 };
 
-export default ChannelOptimization; 
+export default ChannelOptimization;

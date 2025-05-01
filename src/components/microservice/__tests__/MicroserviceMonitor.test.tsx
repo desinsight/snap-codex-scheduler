@@ -11,8 +11,8 @@ import microserviceReducer from '../../../store/slices/microserviceSlice';
 const createTestStore = () => {
   return configureStore({
     reducer: {
-      microservice: microserviceReducer
-    }
+      microservice: microserviceReducer,
+    },
   });
 };
 
@@ -27,11 +27,11 @@ const server = setupServer(
           port: 3000,
           healthCheck: {
             path: '/health',
-            interval: 30
+            interval: 30,
           },
           dependencies: [],
-          environment: {}
-        }
+          environment: {},
+        },
       })
     );
   }),
@@ -43,7 +43,7 @@ const server = setupServer(
         memoryUsage: 45,
         cpuUsage: 30,
         lastCheck: new Date().toISOString(),
-        errors: []
+        errors: [],
       })
     );
   }),
@@ -57,8 +57,8 @@ const server = setupServer(
         resourceUsage: {
           memory: 45,
           cpu: 30,
-          disk: 25
-        }
+          disk: 25,
+        },
       })
     );
   })
@@ -71,7 +71,7 @@ afterAll(() => server.close());
 describe('MicroserviceMonitor', () => {
   it('renders service cards with correct data', async () => {
     const store = createTestStore();
-    
+
     render(
       <Provider store={store}>
         <MicroserviceMonitor />
@@ -98,7 +98,7 @@ describe('MicroserviceMonitor', () => {
 
   it('handles API errors gracefully', async () => {
     const store = createTestStore();
-    
+
     // API 에러 모킹
     server.use(
       rest.get('/api/microservices/configs', (req, res, ctx) => {
@@ -135,8 +135,8 @@ describe('MicroserviceMonitor', () => {
             resourceUsage: {
               memory: 45,
               cpu: 30,
-              disk: 25
-            }
+              disk: 25,
+            },
           })
         );
       })
@@ -154,8 +154,11 @@ describe('MicroserviceMonitor', () => {
     });
 
     // 5초 후 업데이트된 메트릭 값 확인
-    await waitFor(() => {
-      expect(screen.getByText('1100')).toBeInTheDocument();
-    }, { timeout: 6000 });
+    await waitFor(
+      () => {
+        expect(screen.getByText('1100')).toBeInTheDocument();
+      },
+      { timeout: 6000 }
+    );
   });
-}); 
+});

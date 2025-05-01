@@ -27,19 +27,19 @@ const EventContainer = styled.div<{
   margin: 1px 0;
   position: relative;
   opacity: ${({ isDragging }) => (isDragging ? 0.5 : 1)};
-  
+
   ${({ isMultiDay, theme }) =>
     isMultiDay &&
     css`
       margin-left: -${theme.space.xs};
       margin-right: -${theme.space.xs};
       border-radius: 0;
-      
+
       &:first-of-type {
         border-top-left-radius: ${theme.radii.sm};
         border-bottom-left-radius: ${theme.radii.sm};
       }
-      
+
       &:last-of-type {
         border-top-right-radius: ${theme.radii.sm};
         border-bottom-right-radius: ${theme.radii.sm};
@@ -60,16 +60,11 @@ const EventContainer = styled.div<{
   }
 `;
 
-const DraggableEvent: React.FC<DraggableEventProps> = ({
-  event,
-  onClick,
-  isStart,
-  isEnd,
-}) => {
+const DraggableEvent: React.FC<DraggableEventProps> = ({ event, onClick, isStart, isEnd }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'EVENT',
     item: { event },
-    collect: (monitor) => ({
+    collect: monitor => ({
       isDragging: monitor.isDragging(),
     }),
   }));
@@ -90,4 +85,4 @@ const DraggableEvent: React.FC<DraggableEventProps> = ({
   );
 };
 
-export default DraggableEvent; 
+export default DraggableEvent;

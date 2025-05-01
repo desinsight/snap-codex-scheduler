@@ -3,8 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { RootState } from '../../store';
-import { fetchNotificationSettings, updateNotificationSettings } from '../../store/slices/notificationSlice';
-import { NotificationSettings as NotificationSettingsType, NotificationType, NotificationTime } from '../../types/notification';
+import {
+  fetchNotificationSettings,
+  updateNotificationSettings,
+} from '../../store/slices/notificationSlice';
+import {
+  NotificationSettings as NotificationSettingsType,
+  NotificationType,
+  NotificationTime,
+} from '../../types/notification';
 
 const Container = styled.div`
   padding: 20px;
@@ -65,7 +72,7 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({ scheduleId 
   return (
     <Container>
       <Title>{t('notifications.title')}</Title>
-      {notificationTypes.map((type) => {
+      {notificationTypes.map(type => {
         const setting = settings.find(s => s.type === type) || {
           id: '',
           scheduleId,
@@ -82,21 +89,25 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({ scheduleId 
               <Checkbox
                 type="checkbox"
                 checked={setting.enabled}
-                onChange={(e) => handleSettingChange({
-                  ...setting,
-                  enabled: e.target.checked,
-                })}
+                onChange={e =>
+                  handleSettingChange({
+                    ...setting,
+                    enabled: e.target.checked,
+                  })
+                }
               />
               {t(`notifications.types.${type}`)}
               {setting.enabled && (
                 <Select
                   value={setting.time}
-                  onChange={(e) => handleSettingChange({
-                    ...setting,
-                    time: e.target.value as NotificationTime,
-                  })}
+                  onChange={e =>
+                    handleSettingChange({
+                      ...setting,
+                      time: e.target.value as NotificationTime,
+                    })
+                  }
                 >
-                  {notificationTimes.map((time) => (
+                  {notificationTimes.map(time => (
                     <option key={time} value={time}>
                       {t(`notifications.times.${time}`)}
                     </option>
@@ -111,4 +122,4 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({ scheduleId 
   );
 };
 
-export default NotificationSettings; 
+export default NotificationSettings;
