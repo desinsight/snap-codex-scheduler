@@ -75,8 +75,14 @@ jobs:
         # Copy build files to EC2
         scp -i ~/.ssh/ec2.pem -r dist/* ec2-user@${{ env.EC2_HOST }}:/usr/share/nginx/html/
         
-        # Restart nginx
-        ssh -i ~/.ssh/ec2.pem ec2-user@${{ env.EC2_HOST }} 'sudo systemctl restart nginx'
+        # Install Datadog Agent
+        ssh -i ~/.ssh/ec2.pem ec2-user@${{ env.EC2_HOST }} 'DD_API_KEY=${{ secrets.DATADOG_API_KEY }} DD_SITE="datadoghq.com" bash -c "$(curl -L https://s3.amazonaws.com/dd-agent/scripts/install_script.sh)"'
+        
+        # Configure Datadog Agent for nginx monitoring
+        ssh -i ~/.ssh/ec2.pem ec2-user@${{ env.EC2_HOST }} 'sudo -H DD_API_KEY=${{ secrets.DATADOG_API_KEY }} bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"'
+        
+        # Restart nginx and Datadog Agent
+        ssh -i ~/.ssh/ec2.pem ec2-user@${{ env.EC2_HOST }} 'sudo systemctl restart nginx && sudo systemctl restart datadog-agent'
 
     - name: Notify Slack on success
       if: success()
