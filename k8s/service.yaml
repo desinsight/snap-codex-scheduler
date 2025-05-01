@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: snap-codex-scheduler
+spec:
+  selector:
+    app: snap-codex-scheduler
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer 

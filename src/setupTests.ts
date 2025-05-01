@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 /// <reference types="@testing-library/jest-dom" />
 
-=======
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
 // jest-dom adds custom jest matchers for asserting on DOM nodes.
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
@@ -10,18 +7,11 @@
 import '@testing-library/jest-dom';
 import { configure } from '@testing-library/react';
 import { TextEncoder, TextDecoder } from 'util';
-<<<<<<< HEAD
 import 'jest-styled-components';
 import { setupTestEnvironment } from './utils/testUtils';
+import { server } from './mocks/server';
 
 // Add TextEncoder and TextDecoder to global
-=======
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import 'jest-styled-components';
-import { setupTestEnvironment } from './utils/testUtils';
-
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
 
@@ -32,7 +22,6 @@ global.ResizeObserver = jest.fn().mockImplementation(() => ({
   disconnect: jest.fn(),
 }));
 
-<<<<<<< HEAD
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -74,8 +63,6 @@ jest.mock('i18next', () => ({
   }),
 }));
 
-=======
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
 // 테스트 환경에서 console.error와 console.warn을 무시하도록 설정
 const originalError = console.error;
 const originalWarn = console.warn;
@@ -109,62 +96,23 @@ configure({
   testIdAttribute: 'data-testid',
 });
 
-<<<<<<< HEAD
-=======
-// i18next 초기화
-i18n
-  .use(initReactI18next)
-  .init({
-    resources: {
-      ko: {
-        translation: {
-          auth: {
-            login: {
-              title: '로그인',
-              email: '이메일',
-              password: '비밀번호',
-              rememberMe: '자동 로그인',
-              submit: '로그인',
-              forgotPassword: '비밀번호를 잊으셨나요?',
-              signUp: '회원가입',
-            },
-          },
-          loading: {
-            title: '로딩 중',
-            spinner: '로딩 스피너',
-            defaultMessage: '로딩 중...',
-          },
-        },
-      },
-      en: {
-        translation: {
-          auth: {
-            login: {
-              title: 'Login',
-              email: 'Email',
-              password: 'Password',
-              rememberMe: 'Remember me',
-              submit: 'Login',
-              forgotPassword: 'Forgot password?',
-              signUp: 'Sign up',
-            },
-          },
-          loading: {
-            title: 'Loading',
-            spinner: 'Loading spinner',
-            defaultMessage: 'Loading...',
-          },
-        },
-      },
-    },
-    lng: 'ko',
-    fallbackLng: 'en',
-    interpolation: {
-      escapeValue: false,
-    },
-  });
+// 테스트 타임아웃 설정
+jest.setTimeout(10000);
 
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221
+// MSW 서버 설정
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
+// 테스트 환경에서 사용할 전역 변수 설정
+global.matchMedia = global.matchMedia || function() {
+  return {
+    matches: false,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+  };
+};
+
 // Mock localStorage
 const localStorageMock = (() => {
   let store: { [key: string]: string } = {};
@@ -221,8 +169,3 @@ afterEach(() => {
   localStorageMock.clear();
   sessionStorageMock.clear();
 });
-<<<<<<< HEAD
-=======
-
-export default i18n;
->>>>>>> 8f8f5d52f92df668fcbda8e263a9e3632b7cb221

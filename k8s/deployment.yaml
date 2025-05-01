@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: snap-codex-scheduler
+  labels:
+    app: snap-codex-scheduler
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: snap-codex-scheduler
+  template:
+    metadata:
+      labels:
+        app: snap-codex-scheduler
+    spec:
+      containers:
+      - name: snap-codex-scheduler
+        image: snap-codex-scheduler:latest
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 15
+          periodSeconds: 20 
