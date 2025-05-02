@@ -92,55 +92,6 @@ export interface Credentials {
   mfaCode?: string;
 }
 
-// 인증 토큰 타입
-export interface AuthToken {
-  accessToken: string;
-  refreshToken: string;
-  expiresAt: number;
-  tokenType: 'Bearer' | 'JWT';
-  scope: string[];
-}
-
-// 세션 타입
-export interface AuthSession {
-  id: string;
-  userId: string;
-  createdAt: string;
-  expiresAt: string;
-  lastActivity: string;
-  device: {
-    type: string;
-    os: string;
-    browser: string;
-    ip: string;
-  };
-  mfa?: {
-    verified: boolean;
-    method: 'totp' | 'sms' | 'email';
-    lastVerified: string;
-  };
-}
-
-// 암호화 설정 타입
-export interface EncryptionConfig {
-  algorithm: string;
-  keySize: number;
-  saltRounds: number;
-  ivLength: number;
-  tagLength: number;
-}
-
-// 암호화 키 타입
-export interface EncryptionKey {
-  id: string;
-  key: string;
-  algorithm: string;
-  createdAt: Date;
-  expiresAt?: Date;
-  rotationPeriod: number;
-  version: number;
-}
-
 // 보안 설정 타입
 export interface SecurityConfig {
   auth: {
@@ -309,14 +260,6 @@ export interface AuthCredentials {
   mfaCode?: string;
 }
 
-export interface AuthToken {
-  accessToken: string;
-  refreshToken: string;
-  expiresAt: number;
-  tokenType: 'Bearer' | 'JWT';
-  scope: string[];
-}
-
 export interface AuthSession {
   id: string;
   userId: string;
@@ -337,26 +280,6 @@ export interface AuthSession {
 }
 
 // Authorization Types
-export type Permission = 
-  | 'read:schedules'
-  | 'write:schedules'
-  | 'delete:schedules'
-  | 'manage:users'
-  | 'manage:roles'
-  | 'view:analytics'
-  | 'manage:settings'
-  | 'manage:notifications';
-
-export interface Role {
-  id: string;
-  name: string;
-  description: string;
-  permissions: Permission[];
-  scope: string[];
-  createdAt: string;
-  updatedAt: string;
-}
-
 export interface AccessPolicy {
   id: string;
   name: string;
@@ -519,4 +442,25 @@ export interface SecurityProviderProps {
   onAuthStateChange?: (context: SecurityContext) => void;
   onSecurityEvent?: (event: AuditEvent) => void;
   onThreatDetected?: (alert: ThreatAlert) => void;
+}
+
+export interface AuthToken {
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
+  tokenType: string;
+}
+
+export interface AuthService {
+  authenticate: (credentials: Credentials) => Promise<AuthToken>;
+  refreshToken: (refreshToken: string) => Promise<AuthToken>;
+  logout: () => Promise<void>;
+}
+
+export interface AuthState {
+  isAuthenticated: boolean;
+  user: User | null;
+  token?: AuthToken;
+  loading: boolean;
+  error: string | null;
 } 

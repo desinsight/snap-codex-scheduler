@@ -1,23 +1,44 @@
 global:
   scrape_interval: 15s
   evaluation_interval: 15s
+  scrape_timeout: 10s
 
 scrape_configs:
   - job_name: 'snap-codex-scheduler'
-    static_configs:
-      - targets: ['app:3000']
-    metrics_path: '/metrics'
     scheme: 'http'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['${APP_SERVICE_NAME}:${APP_PORT}']
+    basic_auth:
+      username: '${PROMETHEUS_USER}'
+      password: '${PROMETHEUS_PASSWORD}'
+    tls_config:
+      insecure_skip_verify: true
 
   - job_name: 'redis'
-    static_configs:
-      - targets: ['redis:6379']
-    metrics_path: '/metrics'
     scheme: 'http'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['${REDIS_SERVICE_NAME}:${REDIS_PORT}']
+    basic_auth:
+      username: '${PROMETHEUS_USER}'
+      password: '${PROMETHEUS_PASSWORD}'
 
   - job_name: 'prometheus'
+    scheme: 'http'
     static_configs:
       - targets: ['localhost:9090']
+    basic_auth:
+      username: '${PROMETHEUS_USER}'
+      password: '${PROMETHEUS_PASSWORD}'
 
 rule_files:
-  - 'alert.rules.yml' 
+  - '/etc/prometheus/alert.rules.yml'
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['${ALERTMANAGER_SERVICE_NAME}:${ALERTMANAGER_PORT}']
+      basic_auth:
+        username: '${PROMETHEUS_USER}'
+        password: '${PROMETHEUS_PASSWORD}' 

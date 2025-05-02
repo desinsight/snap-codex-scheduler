@@ -4,50 +4,26 @@ import { API_URL } from '../../config';
 import { getCsrfToken } from '../../utils/csrf';
 import { handleApiError } from '../../utils/errorHandling';
 
-export default class AuthService {
-  private baseUrl = `${API_URL}/auth`;
+class AuthService {
+  private baseUrl = '/api/auth';
 
-  async login(credentials: LoginCredentials): Promise<AuthResponse> {
-    try {
-      const response = await axios.post(`${this.baseUrl}/login`, credentials, {
-        headers: {
-          'X-CSRF-Token': getCsrfToken(),
-        },
-      });
-      return response.data;
-    } catch (error) {
-      throw handleApiError(error);
-    }
+  static async login(credentials: LoginCredentials): Promise<AuthResponse> {
+    const response = await axios.post(`${API_URL}/auth/login`, credentials);
+    return response.data;
   }
 
-  async register(credentials: RegisterCredentials): Promise<AuthResponse> {
-    try {
-      const response = await axios.post(`${this.baseUrl}/register`, credentials, {
-        headers: {
-          'X-CSRF-Token': getCsrfToken(),
-        },
-      });
-      return response.data;
-    } catch (error) {
-      throw handleApiError(error);
-    }
+  static async register(credentials: RegisterCredentials): Promise<AuthResponse> {
+    const response = await axios.post(`${API_URL}/auth/register`, credentials);
+    return response.data;
   }
 
-  async refreshToken(): Promise<AuthResponse> {
-    try {
-      const response = await axios.post(`${this.baseUrl}/refresh-token`);
-      return response.data;
-    } catch (error) {
-      throw handleApiError(error);
-    }
+  static async refreshToken(): Promise<AuthResponse> {
+    const response = await axios.post(`${API_URL}/auth/refresh-token`);
+    return response.data;
   }
 
-  async logout(): Promise<void> {
-    try {
-      await axios.post(`${this.baseUrl}/logout`);
-    } catch (error) {
-      throw handleApiError(error);
-    }
+  static async logout(): Promise<void> {
+    await axios.post(`${API_URL}/auth/logout`);
   }
 
   async getCurrentUser(): Promise<User> {
@@ -58,4 +34,6 @@ export default class AuthService {
       throw handleApiError(error);
     }
   }
-} 
+}
+
+export default AuthService; 

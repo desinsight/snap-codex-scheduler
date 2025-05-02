@@ -1,13 +1,64 @@
-export type NotificationType = 'BROWSER' | 'EMAIL' | 'BOTH';
+export enum NotificationType {
+  PUSH = 'PUSH',
+  EMAIL = 'EMAIL',
+  SMS = 'SMS',
+  IN_APP = 'IN_APP',
+}
 
-export type NotificationTime = '5' | '10' | '15' | '30' | '60' | '120' | '1440';
+export enum NotificationPriority {
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+  URGENT = 'URGENT',
+}
 
-export interface NotificationSettings {
+export enum NotificationStatus {
+  PENDING = 'PENDING',
+  SENT = 'SENT',
+  DELIVERED = 'DELIVERED',
+  READ = 'READ',
+  FAILED = 'FAILED',
+}
+
+export interface NotificationTemplate {
   id: string;
-  scheduleId: string;
   type: NotificationType;
-  time: NotificationTime;
-  enabled: boolean;
+  name: string;
+  category: string;
+  subject: string;
+  content: string;
+  variables: string[];
+  isDefault: boolean;
+  versions: NotificationTemplateVersion[];
+  usage: {
+    total: number;
+    success: number;
+    failed: number;
+  };
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface NotificationTemplateVersion {
+  id: string;
+  content: string;
+  version: number;
+  createdAt: Date;
+}
+
+export interface NotificationPreference {
+  userId: string;
+  types: NotificationType[];
+  channels: {
+    [key in NotificationType]: boolean;
+  };
+  schedule: {
+    enabled: boolean;
+    startTime: string;
+    endTime: string;
+    timezone: string;
+  };
+  categories: string[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -15,54 +66,189 @@ export interface NotificationSettings {
 export interface NotificationHistory {
   id: string;
   userId: string;
-  type: string;
+  templateId: string;
+  type: NotificationType;
+  priority: NotificationPriority;
+  status: NotificationStatus;
   content: string;
-  timestamp: Date;
-  status: 'sent' | 'failed' | 'pending';
-  channel: 'email' | 'websocket' | 'push';
-}
-
-export type NotificationTemplateType = 'email' | 'browser';
-
-export type NotificationTemplateCategory = 'work' | 'personal' | 'education' | 'health' | 'system';
-
-export interface TemplateVersion {
-  id: string;
-  version: string;
-  content: string;
-  subject?: string;
+  metadata: Record<string, unknown>;
   createdAt: Date;
-  createdBy: string;
-  changes: string;
+  deliveredAt?: Date;
+  readAt?: Date;
 }
 
-export interface TemplateUsage {
+export interface NotificationStats {
   total: number;
-  success: number;
-  failed: number;
-  lastUsedAt?: Date;
+  byType: {
+    [key in NotificationType]: number;
+  };
+  byStatus: {
+    [key in NotificationStatus]: number;
+  };
+  byPriority: {
+    [key in NotificationPriority]: number;
+  };
+  deliveryRate: number;
+  readRate: number;
+  averageDeliveryTime: number;
 }
 
-export interface NotificationTemplate {
+export interface UserBehaviorPattern {
+  userId: string;
+  patterns: {
+    preferredChannels: NotificationType[];
+    activeHours: {
+      start: string;
+      end: string;
+      days: number[];
+    };
+    responseRates: {
+      [key in NotificationType]: number;
+    };
+    categories: {
+      name: string;
+      engagement: number;
+    }[];
+  };
+  lastUpdated: Date;
+}
+
+export interface SmartNotificationSettings {
+  userId: string;
+  enabled: boolean;
+  rules: {
+    condition: string;
+    action: string;
+    priority: number;
+  }[];
+  learningRate: number;
+  lastOptimized: Date;
+}
+
+export interface NotificationFatigue {
+  userId: string;
+  level: number;
+  threshold: number;
+  cooldown: number;
+  lastNotification: Date;
+}
+
+export interface NotificationAnalyticsState {
+  stats: NotificationStats;
+  userPatterns: UserBehaviorPattern[];
+  smartSettings: SmartNotificationSettings[];
+  fatigueLevels: NotificationFatigue[];
+  loading: boolean;
+  error: string | null;
+}
+
+export interface MonitoringDashboard {
+  metrics: {
+    deliveryRate: number;
+    readRate: number;
+    averageResponseTime: number;
+    failureRate: number;
+  };
+  alerts: {
+    id: string;
+    type: string;
+    message: string;
+    severity: 'low' | 'medium' | 'high';
+    timestamp: Date;
+  }[];
+  performance: {
+    cpu: number;
+    memory: number;
+    latency: number;
+  };
+  status: {
+    service: 'healthy' | 'degraded' | 'down';
+    lastCheck: Date;
+    uptime: number;
+  };
+}
+
+export interface MonitoringState {
+  dashboard: MonitoringDashboard | null;
+  loading: boolean;
+  error: string | null;
+}
+
+export interface AutomationRule {
   id: string;
-  type: string;
-  subject: string;
-  message: string;
-  variables: string[];
-  channels: ('email' | 'websocket' | 'push')[];
-  priority: 'low' | 'medium' | 'high';
+  name: string;
+  conditions: {
+    type: string;
+    value: any;
+  }[];
+  actions: {
+    type: string;
+    params: Record<string, any>;
+  }[];
+  enabled: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface AutomationState {
+  rules: AutomationRule[];
+  loading: boolean;
+  error: string | null;
+}
+
+export interface NotificationOptimizationState {
+  recommendations: {
+    id: string;
+    type: 'channel' | 'timing' | 'content' | 'priority';
+    description: string;
+    impact: 'high' | 'medium' | 'low';
+    implementation: string;
+  }[];
+  loading: boolean;
+  error: string | null;
+}
+
+export interface ResponseAnalysisState {
+  reports: {
+    id: string;
+    period: string;
+    metrics: {
+      responseRate: number;
+      averageTime: number;
+      engagement: number;
+    };
+    insights: string[];
+    recommendations: string[];
+  }[];
+  loading: boolean;
+  error: string | null;
+}
+
+export interface ChannelOptimizationState {
+  channels: {
+    type: NotificationType;
+    performance: {
+      deliveryRate: number;
+      readRate: number;
+      responseTime: number;
+    };
+    cost: number;
+    recommendation: string;
+  }[];
+  loading: boolean;
+  error: string | null;
+}
+
+export interface UserPreferencesState {
+  preferences: NotificationPreference[];
+  loading: boolean;
+  error: string | null;
 }
 
 export interface NotificationTemplateState {
   templates: NotificationTemplate[];
   loading: boolean;
   error: string | null;
-}
-
-export enum NotificationPriority {
-  LOW = 'low',
-  MEDIUM = 'medium',
-  HIGH = 'high',
 }
 
 export interface NotificationGroup {
@@ -103,42 +289,42 @@ export interface TemplateImportExport {
   exportedAt: string;
 }
 
-export interface NotificationStats {
-  total: number;
-  unread: number;
-  byType: Record<NotificationType, number>;
-  byPriority: Record<NotificationPriority, number>;
-  byCategory: Record<NotificationTemplateCategory, number>;
+export type NotificationTime = '5' | '10' | '15' | '30' | '60' | '120' | '1440';
+
+export interface Notification {
+  id: string;
+  title: string;
+  message: string;
+  type: NotificationType;
+  priority: NotificationPriority;
+  status: NotificationStatus;
+  scheduleId?: string;
+  userId: string;
+  createdAt: Date;
+  readAt?: Date;
+  metadata?: Record<string, unknown>;
 }
 
-export interface UserBehaviorPattern {
-  userId: string;
-  responsePatterns: {
-    timeOfDay: {
-      hour: number;
-      responseRate: number;
-      averageResponseTime: number;
-    }[];
-    channelPreferences: {
-      channel: NotificationChannel;
-      successRate: number;
-      averageResponseTime: number;
-      totalResponses: number;
-    }[];
-    priorityPatterns: {
-      priority: NotificationPriority;
-      responseRate: number;
-      averageResponseTime: number;
-      totalResponses: number;
-    }[];
-  };
-  engagementMetrics: {
-    totalNotifications: number;
-    totalResponses: number;
-    averageResponseTime: number;
-    responseRate: number;
-  };
-  lastUpdated: string;
+export interface FollowUpRule {
+  id: string;
+  name: string;
+  conditions: {
+    type: string;
+    value: any;
+  }[];
+  actions: {
+    type: string;
+    params: Record<string, any>;
+  }[];
+  enabled: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface FollowUpAutomationState {
+  rules: FollowUpRule[];
+  loading: boolean;
+  error: string | null;
 }
 
 export interface UserBehaviorState {
@@ -147,41 +333,20 @@ export interface UserBehaviorState {
   error: string | null;
 }
 
-export interface NotificationFatigue {
-  userId: string;
-  dailyNotificationCount: number;
-  fatigueScore: number;
-  lastNotificationTime: Date;
-  cooldownPeriod: number;
-}
-
-export interface SmartNotificationSettings {
-  userId: string;
-  optimalNotificationTime: {
-    start: number;
-    end: number;
+export interface NotificationChannel {
+  id: string;
+  name: string;
+  type: NotificationType;
+  status: 'active' | 'inactive' | 'error';
+  lastChecked: Date;
+  error?: string;
+  metrics: {
+    successRate: number;
+    averageDeliveryTime: number;
+    totalSent: number;
+    totalFailed: number;
   };
-  preferredChannels: NotificationType[];
-  priorityThresholds: {
-    low: number;
-    medium: number;
-    high: number;
-    urgent: number;
-  };
-  feedbackScore: number;
-  autoAdjustmentEnabled: boolean;
 }
-
-export interface NotificationAnalyticsState {
-  stats: NotificationStats;
-  userPatterns: UserBehaviorPattern[];
-  fatigueLevels: NotificationFatigue[];
-  smartSettings: SmartNotificationSettings[];
-  loading: boolean;
-  error: string | null;
-}
-
-export type NotificationChannel = 'email' | 'sms' | 'push' | 'browser';
 
 export interface NotificationResponse {
   id: string;
@@ -250,119 +415,11 @@ export interface NotificationResponseState {
   error: string | null;
 }
 
-export interface ResponseAnalysisReport {
-  id: string;
-  period: {
-    start: Date;
-    end: Date;
-  };
-  summary: {
-    totalResponses: number;
-    averageResponseTime: number;
-    responseRate: number;
-    channelDistribution: {
-      channel: NotificationChannel;
-      count: number;
-      percentage: number;
-    }[];
-  };
-  userEngagement: {
-    userId: string;
-    responseCount: number;
-    averageResponseTime: number;
-    preferredChannel: NotificationChannel;
-    engagementScore: number;
-  }[];
-  channelPerformance: {
-    channel: NotificationChannel;
-    successRate: number;
-    averageDeliveryTime: number;
-    failureReasons: {
-      reason: string;
-      count: number;
-    }[];
-  }[];
-  trends: {
-    date: Date;
-    responseCount: number;
-    averageResponseTime: number;
-  }[];
-  recommendations: {
-    channel: NotificationChannel;
-    suggestion: string;
-    impact: 'high' | 'medium' | 'low';
-  }[];
-  createdAt: Date;
-}
-
-export interface ResponseAnalysisState {
-  reports: ResponseAnalysisReport[];
-  currentReport: ResponseAnalysisReport | null;
+export interface AnalysisState {
+  reports: PerformanceReport[];
+  currentReport: PerformanceReport | null;
   loading: boolean;
   error: string | null;
-}
-
-export interface FollowUpRule {
-  id: string;
-  name: string;
-  conditions: {
-    responseType: 'read' | 'click' | 'dismiss' | 'ignore';
-    timeSinceNotification: number;
-    priority: NotificationPriority;
-  };
-  actions: {
-    channel: NotificationChannel;
-    templateId: string;
-    delay: number;
-    maxRetries: number;
-  }[];
-  isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface FollowUpAutomationState {
-  rules: FollowUpRule[];
-  loading: boolean;
-  error: string | null;
-}
-
-export interface NotificationRecommendation {
-  id: string;
-  userId: string;
-  optimalTime: {
-    start: string;
-    end: string;
-  };
-  preferredChannels: NotificationChannel[];
-  responseRate: number;
-  averageResponseTime: number;
-  lastUpdated: string;
-}
-
-export interface NotificationOptimizationState {
-  recommendations: NotificationRecommendation[];
-  loading: boolean;
-  error: string | null;
-}
-
-export interface AutomationRule {
-  id: string;
-  name: string;
-  type: 'channelSwitch' | 'priorityAdjustment' | 'retryStrategy' | 'fatigueManagement';
-  conditions: {
-    metric: string;
-    operator: '>' | '<' | '>=' | '<=' | '==';
-    value: number;
-    timeWindow?: number;
-  }[];
-  actions: {
-    type: string;
-    value: any;
-  }[];
-  isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export interface PerformanceReport {
@@ -377,7 +434,7 @@ export interface PerformanceReport {
     successRate: number;
     averageResponseTime: number;
     channelPerformance: {
-      channel: NotificationChannel;
+      channel: NotificationType;
       successRate: number;
       averageResponseTime: number;
       totalSent: number;
@@ -387,7 +444,7 @@ export interface PerformanceReport {
       userId: string;
       responseRate: number;
       averageResponseTime: number;
-      preferredChannels: NotificationChannel[];
+      preferredChannels: NotificationType[];
     }[];
   };
   recommendations: {
@@ -399,270 +456,82 @@ export interface PerformanceReport {
   createdAt: Date;
 }
 
-export interface MonitoringDashboard {
-  realtimeMetrics: {
-    notificationsPerMinute: number;
-    successRate: number;
-    averageResponseTime: number;
-    activeChannels: NotificationChannel[];
-  };
-  channelStatus: {
-    channel: NotificationChannel;
-    status: 'active' | 'inactive' | 'error';
-    lastChecked: Date;
-    metrics: {
-      successRate: number;
-      averageDeliveryTime: number;
-      totalSent: number;
-      totalFailed: number;
-    };
-  }[];
-  activeRules: AutomationRule[];
-  recentNotifications: {
-    id: string;
-    userId: string;
-    channel: NotificationChannel;
-    status: 'success' | 'failed';
-    timestamp: Date;
-  }[];
-}
-
-export interface AutomationState {
-  rules: AutomationRule[];
-  loading: boolean;
-  error: string | null;
-}
-
-export interface AnalysisState {
-  reports: PerformanceReport[];
-  currentReport: PerformanceReport | null;
-  loading: boolean;
-  error: string | null;
-}
-
-export interface MonitoringState {
-  dashboard: MonitoringDashboard | null;
-  loading: boolean;
-  error: string | null;
-}
-
-export interface UserNotificationPreferences {
-  userId: string;
-  preferredChannels: NotificationChannel[];
-  notificationTimes: {
-    start: number; // hour (0-23)
-    end: number; // hour (0-23)
-  };
-  priorityThresholds: {
-    low: number;
-    medium: number;
-    high: number;
-    urgent: number;
-  };
-  maxDailyNotifications: number;
-  doNotDisturb: {
-    enabled: boolean;
-    start: number; // hour (0-23)
-    end: number; // hour (0-23)
-  };
-  feedback: {
-    lastFeedback: Date;
-    satisfactionScore: number; // 1-5
-    feedbackText?: string;
-  };
-  learning: {
-    lastUpdated: Date;
-    responseRate: number;
-    averageResponseTime: number;
-    channelPreferences: {
-      channel: NotificationChannel;
-      successRate: number;
-      preferenceScore: number; // 0-1
-    }[];
-  };
-}
-
-export interface UserPreferencesState {
-  preferences: UserNotificationPreferences[];
-  loading: boolean;
-  error: string | null;
-}
-
-export interface SecuritySettings {
-  encryption: {
-    enabled: boolean;
-    algorithm: 'AES-256' | 'RSA-2048';
-    keyRotationInterval: number; // days
-    lastRotation: Date;
-  };
-  accessControl: {
-    roleBased: boolean;
-    roles: {
-      admin: string[];
-      manager: string[];
-      user: string[];
-    };
-    permissions: {
-      read: string[];
-      write: string[];
-      delete: string[];
-    };
-  };
-  auditLog: {
-    enabled: boolean;
-    retentionPeriod: number; // days
-    logLevel: 'info' | 'warning' | 'error';
-  };
-}
-
-export interface BackupSettings {
-  schedule: {
-    frequency: 'daily' | 'weekly' | 'monthly';
-    time: string; // HH:mm
-    lastBackup: Date;
-  };
-  retention: {
-    period: number; // days
-    maxBackups: number;
-  };
-  storage: {
-    type: 'local' | 'cloud' | 'hybrid';
-    location: string;
-    encryption: boolean;
-  };
-}
-
-export interface ErrorHandling {
-  retryPolicy: {
-    maxAttempts: number;
-    backoffInterval: number; // seconds
-    exponential: boolean;
-  };
-  fallbackStrategy: {
-    enabled: boolean;
-    alternativeChannels: NotificationChannel[];
-    timeout: number; // seconds
-  };
-  monitoring: {
-    enabled: boolean;
-    alertThreshold: number; // percentage
-    notificationChannels: NotificationChannel[];
-  };
-}
-
-export interface SecurityState {
-  settings: SecuritySettings;
-  backup: BackupSettings;
-  errorHandling: ErrorHandling;
-  loading: boolean;
-  error: string | null;
-}
-
-export type NotificationTiming = {
-  value: number;
-  unit: 'minutes' | 'hours' | 'days';
-};
-
-export interface NotificationPreference {
-  userId: string;
-  email: boolean;
-  websocket: boolean;
-  push: boolean;
-  types: string[];
-}
-
-export interface NotificationState {
-  notifications: Notification[];
-  unreadCount: number;
-  isLoading: boolean;
-  error: string | null;
-}
-
-export enum NotificationStatus {
-  UNREAD = 'unread',
-  READ = 'read',
-  ARCHIVED = 'archived',
-}
-
-export interface Notification {
-  id: string;
-  title: string;
-  message: string;
-  type: NotificationType;
-  priority: NotificationPriority;
-  status: NotificationStatus;
-  scheduleId?: string;
-  userId: string;
-  createdAt: Date;
-  readAt?: Date;
-}
-
-export interface NotificationPreferences {
-  userId: string;
-  email: boolean;
-  push: boolean;
-  sms: boolean;
-  inApp: boolean;
-  doNotDisturb: {
-    enabled: boolean;
-    startTime?: string; // HH:mm format
-    endTime?: string; // HH:mm format
-  };
-  categories: {
-    [key in NotificationTemplateCategory]: boolean;
-  };
-}
-
-export interface NotificationTemplate {
-  id: string;
-  name: string;
-  subject: string;
-  content: string;
-  variables: string[];
-  type: NotificationType;
-  category: NotificationTemplateCategory;
-}
-
-export interface ScheduleCategory {
-  // Add appropriate properties for ScheduleCategory
+export enum ScheduleCategory {
+  WORK = 'work',
+  PERSONAL = 'personal',
+  EDUCATION = 'education',
+  HEALTH = 'health',
+  SYSTEM = 'system'
 }
 
 // 기본 알림 템플릿
-export const DEFAULT_TEMPLATES: NotificationTemplate[] = [
+export const defaultTemplates: NotificationTemplate[] = [
   {
     id: 'task-assigned',
-    type: 'task',
-    subject: '새로운 작업이 할당되었습니다',
-    message: '{userName}님께서 {taskName} 작업을 할당하셨습니다.',
-    variables: ['userName', 'taskName'],
-    channels: ['email', 'websocket'],
-    priority: 'medium'
+    name: 'Task Assigned',
+    type: NotificationType.EMAIL,
+    subject: 'New Task Assigned',
+    content: 'A new task has been assigned to you',
+    variables: ['taskName', 'assignerName'],
+    isDefault: true,
+    versions: [],
+    usage: {
+      total: 0,
+      success: 0,
+      failed: 0
+    },
+    createdAt: new Date(),
+    updatedAt: new Date()
   },
   {
     id: 'task-completed',
-    type: 'task',
-    subject: '작업이 완료되었습니다',
-    message: '{taskName} 작업이 완료되었습니다.',
-    variables: ['taskName'],
-    channels: ['email', 'websocket'],
-    priority: 'low'
+    name: 'Task Completed',
+    type: NotificationType.EMAIL,
+    subject: 'Task Completed',
+    content: 'A task has been marked as completed',
+    variables: ['taskName', 'completerName'],
+    isDefault: true,
+    versions: [],
+    usage: {
+      total: 0,
+      success: 0,
+      failed: 0
+    },
+    createdAt: new Date(),
+    updatedAt: new Date()
   },
   {
     id: 'schedule-reminder',
-    type: 'schedule',
-    subject: '일정 알림',
-    message: '{scheduleName} 일정이 {time}에 시작됩니다.',
-    variables: ['scheduleName', 'time'],
-    channels: ['email', 'websocket', 'push'],
-    priority: 'high'
+    name: 'Schedule Reminder',
+    type: NotificationType.EMAIL,
+    subject: 'Upcoming Schedule',
+    content: 'A schedule is coming up soon',
+    variables: ['scheduleTitle', 'startTime'],
+    isDefault: true,
+    versions: [],
+    usage: {
+      total: 0,
+      success: 0,
+      failed: 0
+    },
+    createdAt: new Date(),
+    updatedAt: new Date()
   },
   {
     id: 'system-alert',
-    type: 'system',
-    subject: '시스템 알림',
-    message: '{message}',
-    variables: ['message'],
-    channels: ['email', 'websocket'],
-    priority: 'high'
+    name: 'System Alert',
+    type: NotificationType.EMAIL,
+    subject: 'System Alert',
+    content: 'An important system alert has been issued',
+    variables: ['alertType', 'severity'],
+    isDefault: true,
+    versions: [],
+    usage: {
+      total: 0,
+      success: 0,
+      failed: 0
+    },
+    createdAt: new Date(),
+    updatedAt: new Date()
   }
 ];

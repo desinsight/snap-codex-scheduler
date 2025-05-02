@@ -1,6 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import { User } from '../types/user';
 import { CacheConfig } from '../types/cache';
+import { configureStore } from '@reduxjs/toolkit';
+import { render } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { RootState } from '../store';
+import { Task, TaskStatus } from '../types/task';
+import { Schedule, ScheduleCategory } from '../types/schedule';
+import { User as AuthUser } from '../types/auth';
+import * as React from 'react';
 
 export const mockRequest = (options: Partial<Request> = {}): Request => {
   return {
@@ -50,10 +58,10 @@ export const waitFor = (ms: number): Promise<void> => {
 };
 
 export const mockRedisClient = {
-  get: jest.fn(),
-  set: jest.fn(),
-  del: jest.fn(),
-  flushdb: jest.fn(),
+  get: () => Promise.resolve(null),
+  set: () => Promise.resolve('OK'),
+  del: () => Promise.resolve(1),
+  flushdb: () => Promise.resolve('OK'),
   dbsize: jest.fn(),
   expire: jest.fn(),
   ping: jest.fn(),
@@ -91,4 +99,63 @@ export const mockCacheStats = {
   size: 500,
   maxSize: 1000,
   hitRate: 0.8
+};
+
+export const mockTask: Task = {
+  id: '1',
+  title: 'Test Task',
+  status: TaskStatus.PENDING,
+  notes: [],
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
+export const mockSchedule: Schedule = {
+  id: '1',
+  title: 'Test Schedule',
+  description: 'Test Description',
+  startDate: new Date(),
+  endDate: new Date(),
+  category: ScheduleCategory.WORK,
+  createdBy: 'user1',
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  isShared: false,
+  priority: 'medium',
+  status: 'pending',
+  isAllDay: false,
+};
+
+export const mockUser: AuthUser = {
+  id: '1',
+  name: 'Test User',
+  email: 'test@example.com',
+  role: 'user',
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
+export const createMockStore = (preloadedState?: Partial<RootState>) => {
+  return configureStore({
+    reducer: {
+      tasks: (state = { tasks: [], loading: false, error: null }) => state,
+      auth: (state = { user: null, loading: false, error: null }) => state,
+      schedules: (state = { schedules: [], loading: false, error: null }) => state,
+    },
+    preloadedState: preloadedState as any,
+  });
+};
+
+export const renderWithProviders = (
+  ui: React.ReactElement,
+  preloadedState?: Partial<RootState>
+) => {
+  const store = createMockStore(preloadedState);
+  const Wrapper = ({ children }: { children: React.ReactNode }) => (
+    React.createElement(Provider, { store }, children)
+  );
+  return {
+    store,
+    ...render(ui, { wrapper: Wrapper }),
+  };
 }; 

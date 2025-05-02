@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: snap-codex-scheduler
+  namespace: snap-codex
   labels:
     app: snap-codex-scheduler
 spec:
@@ -15,21 +16,23 @@ spec:
         app: snap-codex-scheduler
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "3000"
+        prometheus.io/port: "80"
         prometheus.io/path: "/metrics"
     spec:
+      serviceAccountName: snap-codex-scheduler
       containers:
       - name: snap-codex-scheduler
-        image: snap-codex-scheduler:latest
+        image: snap-codex-scheduler:${VERSION}
+        imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 3000
+        - containerPort: 80
         resources:
           requests:
-            memory: "256Mi"
-            cpu: "100m"
-          limits:
             memory: "512Mi"
-            cpu: "500m"
+            cpu: "200m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
         envFrom:
         - configMapRef:
             name: snap-codex-scheduler-config
@@ -38,19 +41,27 @@ spec:
         readinessProbe:
           httpGet:
             path: /health
-            port: 3000
+            port: 80
           initialDelaySeconds: 5
           periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
         livenessProbe:
           httpGet:
             path: /health
-            port: 3000
+            port: 80
           initialDelaySeconds: 15
           periodSeconds: 20
+          timeoutSeconds: 3
+          failureThreshold: 3
         volumeMounts:
         - name: config-volume
           mountPath: /app/config
+        - name: logs
+          mountPath: /var/log/snap-codex
       volumes:
       - name: config-volume
         configMap:
-          name: snap-codex-scheduler-config 
+          name: snap-codex-scheduler-config
+      - name: logs
+        emptyDir: {} 

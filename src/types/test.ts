@@ -161,7 +161,39 @@ export interface TestAssertions {
 
 // 테스트 유틸리티 함수 타입
 export interface TestUtils {
-  // 렌더링 유틸리티
+  // Setup & Teardown
+  setup: (config?: Partial<TestConfig>) => Promise<TestContext>;
+  cleanup: () => Promise<void>;
+  resetState: () => Promise<void>;
+  
+  // Mock Data
+  mock: MockGenerators;
+  mockApi: MockApi;
+  
+  // Event Simulation
+  events: EventSimulator;
+  
+  // Assertions
+  expect: jest.Expect & CustomMatchers;
+  
+  // Utilities
+  wait: (ms: number) => Promise<void>;
+  act: (callback: () => Promise<void> | void) => Promise<void>;
+  
+  // Snapshot
+  snapshot: {
+    take: (name: string) => void;
+    verify: (name: string) => boolean;
+    update: (name: string) => void;
+  };
+  
+  // Reporting
+  report: {
+    generate: () => Promise<TestReport>;
+    export: (format: 'html' | 'json' | 'junit') => Promise<string>;
+  };
+
+  // Rendering Utilities
   render: (ui: ReactElement, options?: TestRenderOptions) => TestRenderResult;
   renderHook: <Result, Props>(callback: (props: Props) => Result, options?: TestRenderOptions) => {
     result: { current: Result };
@@ -169,29 +201,9 @@ export interface TestUtils {
     unmount: () => void;
   };
 
-  // 이벤트 유틸리티
+  // Event Utilities
   fireEvent: (element: Element | null, event: MockUserEvent) => void;
   waitFor: (callback: () => void | Promise<void>, options?: { timeout?: number; interval?: number }) => Promise<void>;
-  act: (callback: () => void | Promise<void>) => Promise<void>;
-
-  // 모의 유틸리티
-  mockApi: (matcher: MockApiMatcher, response: MockApiResponse) => void;
-  mockDate: (date: Date) => void;
-  mockTimer: () => MockTimer;
-  mockLocation: (location: Partial<MockLocation>) => void;
-  mockNetwork: (config: Partial<MockNetwork>) => void;
-
-  // 데이터 유틸리티
-  createTestData: <T>(factory: TestDataGenerator<T>, count?: number) => T | T[];
-  clearTestData: () => void;
-
-  // 어설션 유틸리티
-  expect: (actual: any) => TestAssertions;
-  
-  // 클린업 유틸리티
-  cleanup: () => void;
-  clearMocks: () => void;
-  resetTestEnvironment: () => void;
 }
 
 // 테스트 설정 타입
@@ -324,41 +336,6 @@ export interface TestReport {
       functions: number;
       lines: number;
     }>;
-  };
-}
-
-// Test Utilities
-export interface TestUtils {
-  // Setup & Teardown
-  setup: (config?: Partial<TestConfig>) => Promise<TestContext>;
-  cleanup: () => Promise<void>;
-  resetState: () => Promise<void>;
-  
-  // Mock Data
-  mock: MockGenerators;
-  mockApi: MockApi;
-  
-  // Event Simulation
-  events: EventSimulator;
-  
-  // Assertions
-  expect: jest.Expect & CustomMatchers;
-  
-  // Utilities
-  wait: (ms: number) => Promise<void>;
-  act: (callback: () => Promise<void> | void) => Promise<void>;
-  
-  // Snapshot
-  snapshot: {
-    take: (name: string) => void;
-    verify: (name: string) => boolean;
-    update: (name: string) => void;
-  };
-  
-  // Reporting
-  report: {
-    generate: () => Promise<TestReport>;
-    export: (format: 'html' | 'json' | 'junit') => Promise<string>;
   };
 }
 

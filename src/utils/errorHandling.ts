@@ -14,9 +14,21 @@ export enum ErrorCode {
 }
 
 export interface ApiError {
-  message: string;
   code: string;
-  details?: Record<string, any>;
+  message: string;
+  details?: Record<string, unknown>;
+  stack?: string;
+  timestamp: Date;
+  path?: string;
+  method?: string;
+  requestId?: string;
+  userId?: string;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  category: 'validation' | 'authentication' | 'authorization' | 'business' | 'system';
+  retryable: boolean;
+  source: 'client' | 'server' | 'network';
+  correlationId?: string;
+  metadata?: Record<string, unknown>;
 }
 
 export interface ErrorResponse {

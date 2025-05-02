@@ -2,16 +2,21 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: snap-codex-scheduler-config
+  namespace: snap-codex
 data:
   NODE_ENV: "production"
-  PORT: "3000"
+  PORT: "80"
   LOG_LEVEL: "info"
-  CORS_ORIGIN: "https://snap-codex.com"
-  JWT_SECRET: "your-jwt-secret-key"
+  CORS_ORIGIN: "https://*.snap-codex.com"
   JWT_EXPIRES_IN: "24h"
-  REDIS_HOST: "redis-master"
+  REDIS_HOST: "${REDIS_SERVICE_NAME}"
   REDIS_PORT: "6379"
-  ELASTICSEARCH_HOST: "elasticsearch-master"
+  ELASTICSEARCH_HOST: "${ELASTICSEARCH_SERVICE_NAME}"
   ELASTICSEARCH_PORT: "9200"
   PROMETHEUS_ENABLED: "true"
-  METRICS_ENABLED: "true" 
+  METRICS_ENABLED: "true"
+  API_BASE_URL: "https://api.snap-codex.com"
+  FRONTEND_URL: "https://snap-codex.com"
+  MAX_REQUEST_SIZE: "10mb"
+  RATE_LIMIT_WINDOW: "15m"
+  RATE_LIMIT_MAX: "100" 

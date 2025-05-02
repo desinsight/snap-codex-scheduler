@@ -2,11 +2,15 @@ import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import taskReducer from './slices/taskSlice';
 import authReducer from './slices/authSlice';
+import scheduleReducer from './slices/scheduleSlice';
+import notificationReducer from './slices/notificationSlice';
 
 const store = configureStore({
   reducer: {
     tasks: taskReducer,
     auth: authReducer,
+    schedules: scheduleReducer,
+    notifications: notificationReducer,
     // 추후 다른 리듀서들 추가 예정
   },
   middleware: getDefaultMiddleware =>

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Task, Note } from '../../types/models';
+import { Task, TaskStatus, Note } from '../../types/task';
 import { Status } from '../../types/common';
 import { ServiceOptimizer } from '../utils/serviceUtils';
 import { PrefetchManager } from '../utils/prefetchUtils';
@@ -87,7 +87,7 @@ cacheManager.setMemoryConfig({
 // 캐시 무효화 패턴 추가
 cacheManager.addInvalidationPattern({
   pattern: 'task-.*',
-  condition: (data) => data.status === Status.COMPLETED,
+  condition: (data) => data.status === TaskStatus.COMPLETED,
   onInvalidate: (key) => {
     console.log(`Task ${key} completed, invalidating cache`);
   }
@@ -212,10 +212,10 @@ export const TaskService = {
       );
 
       response.forEach(task => {
-        if (task.status === 'in_progress') {
+        if (task.status === TaskStatus.IN_PROGRESS) {
           prefetchManager.addToPrefetchQueue(
-            `task-${task.taskId}`,
-            () => TaskService.getTaskById(task.taskId),
+            `task-${task.id}`,
+            () => TaskService.getTaskById(task.id),
             { priority: 'high' }
           );
         }
@@ -230,7 +230,7 @@ export const TaskService = {
     }
   },
 
-  createTasks: async (tasks: Omit<Task, 'taskId' | 'notes'>[]): Promise<void> => {
+  createTasks: async (tasks: Omit<Task, 'id' | 'notes'>[]): Promise<void> => {
     tasks.forEach(task => {
       batchProcessor.addOperation(
         `create-${Date.now()}-${Math.random()}`,
@@ -243,13 +243,13 @@ export const TaskService = {
     });
   },
 
-  updateTasks: async (updates: Array<{ taskId: string; data: Partial<Task> }>): Promise<void> => {
-    updates.forEach(({ taskId, data }) => {
+  updateTasks: async (updates: Array<{ id: string; data: Partial<Task> }>): Promise<void> => {
+    updates.forEach(({ id, data }) => {
       batchProcessor.addOperation(
-        `update-${taskId}`,
+        `update-${id}`,
         {
           type: 'update',
-          id: taskId,
+          id,
           data,
           timestamp: Date.now()
         }
@@ -271,12 +271,12 @@ export const TaskService = {
   },
 
   // 기존 단일 작업 메서드들은 배치 작업으로 변환
-  createTask: async (task: Omit<Task, 'taskId' | 'notes'>): Promise<void> => {
+  createTask: async (task: Omit<Task, 'id' | 'notes'>): Promise<void> => {
     await TaskService.createTasks([task]);
   },
 
   updateTask: async (taskId: string, taskData: Partial<Task>): Promise<void> => {
-    await TaskService.updateTasks([{ taskId, data: taskData }]);
+    await TaskService.updateTasks([{ id: taskId, data: taskData }]);
   },
 
   deleteTask: async (taskId: string): Promise<void> => {
@@ -285,11 +285,11 @@ export const TaskService = {
 
   // 상태 업데이트 배치 처리
   updateTaskStatuses: async (
-    updates: Array<{ taskId: string; status: Status; note?: string }>
+    updates: Array<{ taskId: string; status: TaskStatus; note?: string }>
   ): Promise<void> => {
     await TaskService.updateTasks(
       updates.map(({ taskId, status, note }) => ({
-        taskId,
+        id: taskId,
         data: { status, note }
       }))
     );
@@ -299,5 +299,29 @@ export const TaskService = {
   startNetworkMonitoring(): void {
     batchProcessor.startNetworkMonitoring();
     prefetchManager.startNetworkMonitoring();
+  },
+
+  async getTaskById(taskId: string): Promise<Task> {
+    const response = await axios.get(`${API_URL}/tasks/${taskId}`);
+    return response.data;
+  },
+
+  async addTaskNote(taskId: string, note: string): Promise<{ taskId: string; note: Note }> {
+    const response = await axios.post(`${API_URL}/tasks/${taskId}/notes`, { content: note });
+    return response.data;
+  },
+
+  async getTaskNotes(taskId: string): Promise<Note[]> {
+    const response = await axios.get(`${API_URL}/tasks/${taskId}/notes`);
+    return response.data;
+  },
+
+  static async updateTaskStatuses(updates: Array<{ id: string; status: TaskStatus; note?: string }>) {
+    try {
+      const response = await axios.patch(`${API_URL}/tasks/status`, { updates });
+      return response.data;
+    } catch (error) {
+      throw handleApiError(error);
+    }
   }
 };

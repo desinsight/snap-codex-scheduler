@@ -1,17 +1,37 @@
-export default {
+/** @type {import('jest').Config} */
+const config = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
+      '<rootDir>/src/__mocks__/fileMock.js',
+    '^@components/(.*)$': '<rootDir>/src/components/$1',
+    '^@services/(.*)$': '<rootDir>/src/services/$1',
+    '^@utils/(.*)$': '<rootDir>/src/utils/$1',
+    '^@store/(.*)$': '<rootDir>/src/store/$1',
+    '^@hooks/(.*)$': '<rootDir>/src/hooks/$1',
+    '^@types/(.*)$': '<rootDir>/src/types/$1',
+    '^@middleware/(.*)$': '<rootDir>/src/middleware/$1',
+    '^@tests/(.*)$': '<rootDir>/src/tests/$1',
+    '^@mocks/(.*)$': '<rootDir>/src/mocks/$1',
   },
-  setupFiles: ['<rootDir>/src/setupPolyfill.ts'],
-  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
+  transform: {
+    '^.+\\.(ts|tsx)$': ['ts-jest', {
+      useESM: true,
+    }],
+  },
+  extensionsToTreatAsEsm: ['.ts', '.tsx'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  testMatch: ['<rootDir>/src/**/*.{spec,test}.{ts,tsx}'],
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',
-    '!src/index.tsx',
-    '!src/reportWebVitals.ts',
+    '!src/**/*.stories.{ts,tsx}',
+    '!src/**/index.{ts,tsx}',
+    '!src/**/*.mock.{ts,tsx}',
   ],
   coverageThreshold: {
     global: {
@@ -21,27 +41,16 @@ export default {
       statements: 80,
     },
   },
-  testMatch: [
-    '<rootDir>/src/**/__tests__/**/*.{ts,tsx}',
-    '<rootDir>/src/**/*.{spec,test}.{ts,tsx}',
-  ],
-  transform: {
-    '^.+\\.(ts|tsx)$': ['ts-jest', {
-      useESM: true,
-    }],
-  },
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  extensionsToTreatAsEsm: ['.ts', '.tsx'],
-  testEnvironmentOptions: {
-    customExportConditions: ['node', 'node-addons'],
-  },
-  transformIgnorePatterns: [
-    'node_modules/(?!(@mswjs|msw)/)',
-  ],
+  verbose: true,
+  testTimeout: 30000,
   globals: {
     'ts-jest': {
-      isolatedModules: true,
       useESM: true,
+      tsconfig: {
+        jsx: 'react',
+      },
     },
   },
-}; 
+};
+
+export default config; 

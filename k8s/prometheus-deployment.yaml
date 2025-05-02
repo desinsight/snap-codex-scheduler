@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: snap-codex-prometheus
+  namespace: snap-codex
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: snap-codex-prometheus
+  template:
+    metadata:
+      labels:
+        app: snap-codex-prometheus
+    spec:
+      containers:
+      - name: prometheus
+        image: prom/prometheus:latest
+        ports:
+        - containerPort: 9090
+        volumeMounts:
+        - name: prometheus-config
+          mountPath: /etc/prometheus
+        - name: prometheus-data
+          mountPath: /prometheus
+      volumes:
+      - name: prometheus-config
+        configMap:
+          name: snap-codex-prometheus-config
+      - name: prometheus-data
+        emptyDir: {} 

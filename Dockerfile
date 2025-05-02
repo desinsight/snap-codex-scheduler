@@ -16,27 +16,23 @@ COPY . .
 RUN npm run build
 
 # Production stage
-FROM node:18-alpine
+FROM nginx:alpine
 
-WORKDIR /app
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY package*.json ./
+# Copy built files from builder stage
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Install production dependencies only
-RUN npm ci --only=production
+# Copy public files
+COPY ./public /usr/share/nginx/html
 
 # Add healthcheck
 HEALTHCHECK --interval=30s --timeout=3s \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1
+  CMD wget --no-verbose --tries=1 --spider http://localhost/health || exit 1
 
-# Expose ports
-EXPOSE 3000
-EXPOSE 3001
+# Expose port
+EXPOSE 80
 
-# Set environment variables
-ENV NODE_ENV=production
-
-# Start the application
-CMD ["npm", "start"] 
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"] 

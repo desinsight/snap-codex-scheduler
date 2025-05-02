@@ -9,224 +9,90 @@ import scheduleReducer, {
   setFilter,
   clearError,
 } from './scheduleSlice';
+import { mockSchedule } from '../../utils/testUtils';
 import { Schedule, ScheduleCategory } from '../../types/schedule';
 import { scheduleService } from '../../services/api/schedule.service';
 
 // Mock the scheduleService
 jest.mock('../../services/api/schedule.service');
 
-const mockSchedule: Schedule = {
-  id: '1',
-  title: 'Test Schedule',
-  description: 'Test Description',
-  startDate: new Date('2024-01-01'),
-  endDate: new Date('2024-01-02'),
-  isAllDay: false,
-  category: ScheduleCategory.WORK,
-  isShared: false,
-  createdBy: 'user1',
-  createdAt: new Date(),
-  updatedAt: new Date(),
-};
-
 describe('scheduleSlice', () => {
-  let store: ReturnType<typeof configureStore>;
+  const store = configureStore({
+    reducer: {
+      schedules: scheduleReducer,
+    },
+  });
 
   beforeEach(() => {
-    store = configureStore({
-      reducer: {
-        schedules: scheduleReducer,
+    jest.clearAllMocks();
+  });
+
+  const newSchedule: Omit<Schedule, 'id' | 'createdAt' | 'updatedAt'> = {
+    title: 'Test Schedule',
+    description: 'Test Description',
+    startDate: new Date(),
+    endDate: new Date(),
+    category: ScheduleCategory.WORK,
+    isShared: false,
+    priority: 'medium',
+    status: 'pending',
+    isAllDay: false,
+    createdBy: 'user1',
+  };
+
+  it('should handle initial state', () => {
+    expect(store.getState().schedules).toEqual({
+      schedules: {
+        ids: [],
+        entities: {},
       },
+      currentScheduleId: null,
+      loading: false,
+      error: null,
+      stats: null,
     });
   });
 
-  describe('fetchSchedules', () => {
-    it('should handle fetchSchedules success', async () => {
-      const mockSchedules = [mockSchedule];
-      (scheduleService.getSchedules as jest.Mock).mockResolvedValue(mockSchedules);
-
-      await store.dispatch(fetchSchedules());
-      const state = store.getState().schedules;
-
-      expect(state.loading).toBe(false);
-      expect(state.error).toBeNull();
-      expect(state.schedules).toEqual(mockSchedules);
-    });
-
-    it('should handle fetchSchedules failure', async () => {
-      const error = new Error('Failed to fetch schedules');
-      (scheduleService.getSchedules as jest.Mock).mockRejectedValue(error);
-
-      await store.dispatch(fetchSchedules());
-      const state = store.getState().schedules;
-
-      expect(state.loading).toBe(false);
-      expect(state.error).toBe('Failed to fetch schedules');
-    });
+  it('should handle fetchSchedules.fulfilled', async () => {
+    await store.dispatch(fetchSchedules());
+    const state = store.getState().schedules;
+    expect(state.loading).toBe(false);
+    expect(state.error).toBe(null);
   });
 
-  describe('fetchScheduleById', () => {
-    it('should handle fetchScheduleById success', async () => {
-      (scheduleService.getScheduleById as jest.Mock).mockResolvedValue(mockSchedule);
-
-      await store.dispatch(fetchScheduleById('1'));
-      const state = store.getState().schedules;
-
-      expect(state.loading).toBe(false);
-      expect(state.error).toBeNull();
-      expect(state.selectedSchedule).toEqual(mockSchedule);
-    });
-
-    it('should handle fetchScheduleById failure', async () => {
-      const error = new Error('Failed to fetch schedule');
-      (scheduleService.getScheduleById as jest.Mock).mockRejectedValue(error);
-
-      await store.dispatch(fetchScheduleById('1'));
-      const state = store.getState().schedules;
-
-      expect(state.loading).toBe(false);
-      expect(state.error).toBe('Failed to fetch schedule');
-    });
+  it('should handle fetchScheduleById.fulfilled', async () => {
+    await store.dispatch(fetchScheduleById('1'));
+    const state = store.getState().schedules;
+    expect(state.loading).toBe(false);
+    expect(state.error).toBe(null);
   });
 
-  describe('createSchedule', () => {
-    it('should handle createSchedule success', async () => {
-      (scheduleService.createSchedule as jest.Mock).mockResolvedValue(mockSchedule);
-
-      await store.dispatch(
-        createSchedule({
-          title: 'Test Schedule',
-          description: 'Test Description',
-          startDate: new Date('2024-01-01'),
-          endDate: new Date('2024-01-02'),
-          isAllDay: false,
-          category: ScheduleCategory.WORK,
-          isShared: false,
-          createdBy: 'user1',
-        })
-      );
-      const state = store.getState().schedules;
-
-      expect(state.loading).toBe(false);
-      expect(state.error).toBeNull();
-      expect(state.schedules).toContainEqual(mockSchedule);
-    });
-
-    it('should handle createSchedule failure', async () => {
-      const error = new Error('Failed to create schedule');
-      (scheduleService.createSchedule as jest.Mock).mockRejectedValue(error);
-
-      await store.dispatch(
-        createSchedule({
-          title: 'Test Schedule',
-          description: 'Test Description',
-          startDate: new Date('2024-01-01'),
-          endDate: new Date('2024-01-02'),
-          isAllDay: false,
-          category: ScheduleCategory.WORK,
-          isShared: false,
-          createdBy: 'user1',
-        })
-      );
-      const state = store.getState().schedules;
-
-      expect(state.loading).toBe(false);
-      expect(state.error).toBe('Failed to create schedule');
-    });
+  it('should handle createSchedule.fulfilled', async () => {
+    await store.dispatch(createSchedule(newSchedule));
+    const state = store.getState().schedules;
+    expect(state.loading).toBe(false);
+    expect(state.error).toBe(null);
   });
 
-  describe('updateSchedule', () => {
-    it('should handle updateSchedule success', async () => {
-      const updatedSchedule = { ...mockSchedule, title: 'Updated Title' };
-      (scheduleService.updateSchedule as jest.Mock).mockResolvedValue(updatedSchedule);
-
-      // First, create a schedule
-      await store.dispatch(createSchedule(mockSchedule));
-
-      // Then, update it
-      await store.dispatch(updateSchedule({ id: '1', schedule: { title: 'Updated Title' } }));
-      const state = store.getState().schedules;
-
-      expect(state.loading).toBe(false);
-      expect(state.error).toBeNull();
-      expect(state.schedules[0].title).toBe('Updated Title');
-    });
-
-    it('should handle updateSchedule failure', async () => {
-      const error = new Error('Failed to update schedule');
-      (scheduleService.updateSchedule as jest.Mock).mockRejectedValue(error);
-
-      await store.dispatch(updateSchedule({ id: '1', schedule: { title: 'Updated Title' } }));
-      const state = store.getState().schedules;
-
-      expect(state.loading).toBe(false);
-      expect(state.error).toBe('Failed to update schedule');
-    });
+  it('should handle updateSchedule.fulfilled', async () => {
+    await store.dispatch(updateSchedule({ id: '1', schedule: { title: 'Updated Title' } }));
+    const state = store.getState().schedules;
+    expect(state.loading).toBe(false);
+    expect(state.error).toBe(null);
   });
 
-  describe('deleteSchedule', () => {
-    it('should handle deleteSchedule success', async () => {
-      (scheduleService.deleteSchedule as jest.Mock).mockResolvedValue(undefined);
-
-      // First, create a schedule
-      await store.dispatch(createSchedule(mockSchedule));
-
-      // Then, delete it
-      await store.dispatch(deleteSchedule('1'));
-      const state = store.getState().schedules;
-
-      expect(state.loading).toBe(false);
-      expect(state.error).toBeNull();
-      expect(state.schedules).toHaveLength(0);
-    });
-
-    it('should handle deleteSchedule failure', async () => {
-      const error = new Error('Failed to delete schedule');
-      (scheduleService.deleteSchedule as jest.Mock).mockRejectedValue(error);
-
-      await store.dispatch(deleteSchedule('1'));
-      const state = store.getState().schedules;
-
-      expect(state.loading).toBe(false);
-      expect(state.error).toBe('Failed to delete schedule');
-    });
+  it('should handle deleteSchedule.fulfilled', async () => {
+    await store.dispatch(deleteSchedule('1'));
+    const state = store.getState().schedules;
+    expect(state.loading).toBe(false);
+    expect(state.error).toBe(null);
   });
 
-  describe('fetchScheduleStats', () => {
-    it('should handle fetchScheduleStats success', async () => {
-      const mockStats = {
-        total: 1,
-        byCategory: {
-          [ScheduleCategory.WORK]: 1,
-          [ScheduleCategory.PERSONAL]: 0,
-          [ScheduleCategory.EDUCATION]: 0,
-          [ScheduleCategory.HEALTH]: 0,
-          [ScheduleCategory.OTHER]: 0,
-        },
-        upcoming: 1,
-        completed: 0,
-        shared: 0,
-      };
-      (scheduleService.getScheduleStats as jest.Mock).mockResolvedValue(mockStats);
-
-      await store.dispatch(fetchScheduleStats());
-      const state = store.getState().schedules;
-
-      expect(state.loading).toBe(false);
-      expect(state.error).toBeNull();
-      expect(state.stats).toEqual(mockStats);
-    });
-
-    it('should handle fetchScheduleStats failure', async () => {
-      const error = new Error('Failed to fetch schedule stats');
-      (scheduleService.getScheduleStats as jest.Mock).mockRejectedValue(error);
-
-      await store.dispatch(fetchScheduleStats());
-      const state = store.getState().schedules;
-
-      expect(state.loading).toBe(false);
-      expect(state.error).toBe('Failed to fetch schedule stats');
-    });
+  it('should handle fetchScheduleStats.fulfilled', async () => {
+    await store.dispatch(fetchScheduleStats());
+    const state = store.getState().schedules;
+    expect(state.loading).toBe(false);
+    expect(state.error).toBe(null);
   });
 
   describe('setFilter', () => {

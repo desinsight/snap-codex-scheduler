@@ -1,5 +1,30 @@
-export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
+// Environment variables
+const getEnvVar = (key: string, defaultValue: string = ''): string => {
+  if (process.env.NODE_ENV === 'test') {
+    return process.env[key] || defaultValue;
+  }
+  
+  if (typeof window !== 'undefined') {
+    try {
+      // For Vite environment
+      const viteEnv = (window as any).__VITE_ENV__ || {};
+      return viteEnv[key] || defaultValue;
+    } catch {
+      return defaultValue;
+    }
+  }
+  
+  return defaultValue;
+};
+
+// API Configuration
+export const API_URL = getEnvVar('VITE_API_URL', 'http://localhost:3000/api');
+export const API_BASE_URL = getEnvVar('VITE_API_BASE_URL', 'http://localhost:3000/api');
+
+// Feature Flags
+export const IS_DEVELOPMENT = process.env.NODE_ENV === 'development';
+export const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+export const IS_TEST = process.env.NODE_ENV === 'test';
 
 export const config = {
   api: {

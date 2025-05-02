@@ -1,92 +1,10 @@
-import { http, HttpResponse } from 'msw';
+import { rest } from 'msw';
 import { API_URL } from '../config';
 
 export const handlers = [
   // Auth handlers
-  http.post('/api/auth/login', () => {
-    return HttpResponse.json({
-      token: 'mock-token',
-      user: {
-        id: '1',
-        email: 'test@example.com',
-        name: 'Test User'
-      }
-    });
-  }),
-
-  http.post('/api/auth/register', () => {
-    return HttpResponse.json({
-      token: 'mock-jwt-token',
-      user: {
-        id: '2',
-        email: 'new@example.com',
-        name: 'New User',
-        role: 'user',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    });
-  }),
-
-  // Schedule handlers
-  http.get('/api/schedules', () => {
-    return HttpResponse.json([
-      {
-        id: '1',
-        title: 'Test Schedule',
-        startDate: '2024-03-20T09:00:00.000Z',
-        endDate: '2024-03-20T10:00:00.000Z'
-      }
-    ]);
-  }),
-
-  // Microservice handlers
-  http.get('/api/microservices/configs', () => {
-    return HttpResponse.json({
-      services: {
-        scheduler: {
-          name: 'scheduler',
-          version: '1.0.0',
-          port: 3000,
-          healthCheck: {
-            path: '/health',
-            interval: 30,
-          },
-          dependencies: [],
-          environment: {},
-        },
-      },
-    });
-  }),
-
-  http.get('/api/microservices/health/:name', () => {
-    return HttpResponse.json({
-      status: 'healthy',
-      uptime: 3600,
-      memoryUsage: 45,
-      cpuUsage: 30,
-      lastCheck: new Date().toISOString(),
-      errors: [],
-    });
-  }),
-
-  http.get('/api/microservices/metrics/:name', () => {
-    return HttpResponse.json({
-      requestCount: 1000,
-      errorCount: 5,
-      averageLatency: 150,
-      activeConnections: 50,
-      resourceUsage: {
-        memory: 45,
-        cpu: 30,
-        disk: 25,
-      },
-    });
-  }),
-
   rest.post(`${API_URL}/auth/login`, (req, res, ctx) => {
     return res(
-      ctx.status(200),
       ctx.json({
         token: 'mock-jwt-token',
         user: {
@@ -121,7 +39,6 @@ export const handlers = [
   // Schedule handlers
   rest.get(`${API_URL}/schedules`, (req, res, ctx) => {
     return res(
-      ctx.status(200),
       ctx.json([
         {
           id: '1',
@@ -141,7 +58,6 @@ export const handlers = [
   // Microservice handlers
   rest.get(`${API_URL}/microservices/configs`, (req, res, ctx) => {
     return res(
-      ctx.status(200),
       ctx.json({
         services: {
           scheduler: {
@@ -162,7 +78,6 @@ export const handlers = [
 
   rest.get(`${API_URL}/microservices/health/:name`, (req, res, ctx) => {
     return res(
-      ctx.status(200),
       ctx.json({
         status: 'healthy',
         uptime: 3600,
@@ -176,7 +91,6 @@ export const handlers = [
 
   rest.get(`${API_URL}/microservices/metrics/:name`, (req, res, ctx) => {
     return res(
-      ctx.status(200),
       ctx.json({
         requestCount: 1000,
         errorCount: 5,
@@ -194,7 +108,6 @@ export const handlers = [
   // Notification handlers
   rest.get(`${API_URL}/notifications`, (req, res, ctx) => {
     return res(
-      ctx.status(200),
       ctx.json([
         {
           id: '1',
@@ -208,19 +121,41 @@ export const handlers = [
     );
   }),
 
-  rest.post(`${API_URL}/notifications/read/:id`, (req, res, ctx) => {
+  rest.post(`${API_URL}/notifications`, (req, res, ctx) => {
     return res(
-      ctx.status(200),
+      ctx.status(201),
       ctx.json({
-        success: true,
+        id: '2',
+        title: 'New Notification',
+        message: 'This is a new notification',
+        type: 'info',
+        read: false,
+        createdAt: new Date(),
       })
     );
+  }),
+
+  rest.put(`${API_URL}/notifications/:id`, (req, res, ctx) => {
+    return res(
+      ctx.json({
+        id: '1',
+        title: 'Updated Notification',
+        message: 'This notification has been updated',
+        type: 'info',
+        read: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+    );
+  }),
+
+  rest.delete(`${API_URL}/notifications/:id`, (req, res, ctx) => {
+    return res(ctx.status(204));
   }),
 
   // User preferences handlers
   rest.get(`${API_URL}/user-preferences`, (req, res, ctx) => {
     return res(
-      ctx.status(200),
       ctx.json({
         notifications: {
           email: true,
@@ -234,21 +169,24 @@ export const handlers = [
   }),
 
   // Circuit breaker configuration
-  http.put('/api/microservices/circuit-breakers/:name', ({ params }) => {
-    return HttpResponse.json({
-      name: params.name,
-      config: {
-        failureThreshold: 5,
-        successThreshold: 2,
-        timeout: 5000,
-        resetTimeout: 30000,
-      },
-    });
+  rest.put('/api/microservices/circuit-breakers/:name', (req, res, ctx) => {
+    const { name } = req.params;
+    return res(
+      ctx.json({
+        name,
+        config: {
+          failureThreshold: 5,
+          successThreshold: 2,
+          timeout: 5000,
+          resetTimeout: 30000,
+        },
+      })
+    );
   }),
 
   // Error handler - 항상 마지막에 위치
   rest.all('*', (req, res, ctx) => {
-    console.error(`Unhandled request: ${req.method} ${req.url}`);
+    console.error(`Unhandled request: ${req.method} ${req.url.toString()}`);
     return res(
       ctx.status(500),
       ctx.json({ error: 'Unhandled request' })

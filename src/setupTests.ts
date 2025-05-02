@@ -6,98 +6,38 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
 import { configure } from '@testing-library/react';
-import { TextEncoder, TextDecoder } from 'util';
 import 'jest-styled-components';
-import { setupTestEnvironment } from './utils/testUtils';
+import { TextEncoder, TextDecoder } from 'util';
+import { webcrypto } from 'crypto';
+import { ReadableStream, TransformStream } from 'stream/web';
 import { server } from './mocks/server';
 
-// Add web API globals
-import { Response, Request, Headers, fetch } from 'undici';
-Object.assign(global, { Response, Request, Headers, fetch });
+// Mock Web APIs
+class MessageChannel {
+  port1: any;
+  port2: any;
+  constructor() {
+    this.port1 = {};
+    this.port2 = {};
+  }
+}
 
-// Add TextEncoder and TextDecoder to global
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder;
+class MessagePort {
+  onmessage: any;
+  onmessageerror: any;
+  postMessage(message: any) {}
+  start() {}
+  close() {}
+}
 
-// Mock ResizeObserver
-global.ResizeObserver = jest.fn().mockImplementation(() => ({
-  observe: jest.fn(),
-  unobserve: jest.fn(),
-  disconnect: jest.fn(),
-}));
-
-// Mock window.matchMedia
-Object.defineProperty(window, 'matchMedia', {
-  writable: true,
-  value: jest.fn().mockImplementation(query => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: jest.fn(),
-    removeListener: jest.fn(),
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
-  })),
-});
-
-// Mock i18next
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-    i18n: {
-      changeLanguage: jest.fn(),
-    },
-  }),
-  initReactI18next: {
-    type: '3rdParty',
-    init: jest.fn(),
-  },
-}));
-
-// Mock i18next
-jest.mock('i18next', () => ({
-  createInstance: () => ({
-    use: () => ({
-      init: () => ({}),
-    }),
-  }),
-  use: () => ({
-    init: () => ({}),
-  }),
-}));
-
-// Configure console error and warning handling
-const originalError = console.error;
-const originalWarn = console.warn;
-
-beforeAll(async () => {
-  // Start MSW server
-  await server.listen({ onUnhandledRequest: 'warn' });
-
-  console.error = (...args) => {
-    if (args[0]?.includes('Warning: An update to')) return;
-    if (args[0]?.includes('React does not recognize the')) return;
-    originalError.call(console, ...args);
-  };
-
-  console.warn = (...args) => {
-    if (args[0]?.includes('react-i18next::')) return;
-    originalWarn.call(console, ...args);
-  };
-});
-
-afterEach(async () => {
-  // Reset MSW handlers
-  await server.resetHandlers();
-});
-
-afterAll(async () => {
-  // Stop MSW server
-  await server.close();
-  
-  console.error = originalError;
-  console.warn = originalWarn;
+Object.defineProperties(global, {
+  TextEncoder: { value: TextEncoder },
+  TextDecoder: { value: TextDecoder },
+  crypto: { value: webcrypto },
+  ReadableStream: { value: ReadableStream },
+  TransformStream: { value: TransformStream },
+  MessageChannel: { value: MessageChannel },
+  MessagePort: { value: MessagePort },
 });
 
 // Configure testing library
@@ -105,62 +45,150 @@ configure({
   testIdAttribute: 'data-testid',
 });
 
-// Set test timeout
-jest.setTimeout(10000);
+// Mock Vite environment variables
+Object.defineProperty(window, '__VITE_ENV__', {
+  value: {
+    VITE_API_URL: 'http://localhost:3000',
+    VITE_APP_NAME: 'Snap Codex Scheduler',
+    VITE_APP_VERSION: '1.0.0',
+  },
+});
 
 // Mock localStorage
-const localStorageMock = (() => {
-  let store: { [key: string]: string } = {};
-  return {
-    getItem: jest.fn((key: string) => store[key] || null),
-    setItem: jest.fn((key: string, value: string) => {
-      store[key] = value.toString();
-    }),
-    removeItem: jest.fn((key: string) => {
-      delete store[key];
-    }),
-    clear: jest.fn(() => {
-      store = {};
-    }),
-  };
-})();
+const localStorageMock = {
+  getItem: () => null,
+  setItem: () => null,
+  removeItem: () => null,
+  clear: () => null,
+  length: 0,
+  key: () => null,
+};
+Object.defineProperty(window, 'localStorage', { value: localStorageMock });
 
 // Mock sessionStorage
-const sessionStorageMock = (() => {
-  let store: { [key: string]: string } = {};
-  return {
-    getItem: jest.fn((key: string) => store[key] || null),
-    setItem: jest.fn((key: string, value: string) => {
-      store[key] = value.toString();
-    }),
-    removeItem: jest.fn((key: string) => {
-      delete store[key];
-    }),
-    clear: jest.fn(() => {
-      store = {};
-    }),
-  };
-})();
+const sessionStorageMock = {
+  getItem: () => null,
+  setItem: () => null,
+  removeItem: () => null,
+  clear: () => null,
+  length: 0,
+  key: () => null,
+};
+Object.defineProperty(window, 'sessionStorage', { value: sessionStorageMock });
 
-// Mock window storage
-Object.defineProperty(window, 'localStorage', {
-  value: localStorageMock,
+// Mock matchMedia
+Object.defineProperty(window, 'matchMedia', {
   writable: true,
+  value: () => ({
+    matches: false,
+    media: '',
+    onchange: null,
+    addListener: () => {},
+    removeListener: () => {},
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    dispatchEvent: () => {},
+  }),
 });
 
-Object.defineProperty(window, 'sessionStorage', {
-  value: sessionStorageMock,
-  writable: true,
+// Mock ResizeObserver
+global.ResizeObserver = class {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
+
+// Mock IntersectionObserver
+class MockIntersectionObserver implements IntersectionObserver {
+  root: Element | null = null;
+  rootMargin: string = '0px';
+  thresholds: number[] = [0];
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+  takeRecords(): IntersectionObserverEntry[] {
+    return [];
+  }
+}
+global.IntersectionObserver = MockIntersectionObserver;
+
+// Mock fetch
+global.fetch = () => Promise.resolve(new Response());
+
+// Mock navigator.clipboard
+Object.defineProperty(navigator, 'clipboard', {
+  value: {
+    writeText: () => Promise.resolve(),
+    readText: () => Promise.resolve(''),
+  },
 });
 
-// Setup test environment
-beforeEach(() => {
-  setupTestEnvironment();
+// Mock navigator.geolocation
+Object.defineProperty(navigator, 'geolocation', {
+  value: {
+    getCurrentPosition: () => {},
+    watchPosition: () => {},
+    clearWatch: () => {},
+  },
 });
 
-// Clear mocks after each test
-afterEach(() => {
-  jest.clearAllMocks();
-  localStorageMock.clear();
-  sessionStorageMock.clear();
+// Mock navigator.permissions
+Object.defineProperty(navigator, 'permissions', {
+  value: {
+    query: () => Promise.resolve({ state: 'granted' }),
+  },
 });
+
+// Mock navigator.mediaDevices
+Object.defineProperty(navigator, 'mediaDevices', {
+  value: {
+    getUserMedia: () => Promise.resolve(new MediaStream()),
+    enumerateDevices: () => Promise.resolve([]),
+  },
+});
+
+// Mock Notification API
+Object.defineProperty(window, 'Notification', {
+  value: {
+    requestPermission: () => Promise.resolve('granted'),
+    permission: 'granted',
+  },
+});
+
+// Mock requestAnimationFrame
+global.requestAnimationFrame = (callback) => setTimeout(callback, 0);
+global.cancelAnimationFrame = () => {};
+
+// Mock performance.now
+global.performance.now = () => 0;
+
+// Mock Date
+const mockDate = new Date('2024-01-01T00:00:00.000Z');
+const OriginalDate = global.Date;
+global.Date = class extends OriginalDate {
+  constructor() {
+    super();
+    return mockDate;
+  }
+  static now() {
+    return mockDate.getTime();
+  }
+} as DateConstructor;
+
+// Mock Math.random
+global.Math.random = () => 0.5;
+
+// Mock console methods
+global.console = {
+  ...console,
+  error: () => {},
+  warn: () => {},
+  info: () => {},
+  debug: () => {},
+  log: () => {},
+};
+
+// Setup MSW
+beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());

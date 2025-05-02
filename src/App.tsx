@@ -2,13 +2,13 @@ import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import theme from './styles/theme';
-import GlobalStyles from './styles/GlobalStyles';
+import { GlobalStyle } from './styles/GlobalStyle';
 import AppRoutes from './routes';
 
 const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
-      <GlobalStyles />
+      <GlobalStyle />
       <Router>
         <AppRoutes />
       </Router>

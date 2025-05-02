@@ -10,11 +10,21 @@
                 "s3:ListBucket",
                 "s3:GetBucketLocation",
                 "s3:AbortMultipartUpload",
-                "s3:ListMultipartUploadParts"
+                "s3:ListMultipartUploadParts",
+                "s3:GetBucketVersioning",
+                "s3:PutBucketVersioning",
+                "s3:GetBucketPolicy",
+                "s3:PutBucketPolicy",
+                "s3:GetBucketCORS",
+                "s3:PutBucketCORS",
+                "s3:GetBucketLogging",
+                "s3:PutBucketLogging",
+                "s3:GetBucketTagging",
+                "s3:PutBucketTagging"
             ],
             "Resource": [
-                "arn:aws:s3:::snap-codex-backups/*",
-                "arn:aws:s3:::snap-codex-backups"
+                "arn:aws:s3:::${S3_BUCKET_NAME}/*",
+                "arn:aws:s3:::${S3_BUCKET_NAME}"
             ]
         },
         {
@@ -23,9 +33,28 @@
                 "ec2:DescribeVolumes",
                 "ec2:DescribeSnapshots",
                 "ec2:CreateSnapshot",
-                "ec2:DeleteSnapshot"
+                "ec2:DeleteSnapshot",
+                "ec2:DescribeInstances",
+                "ec2:DescribeRegions",
+                "ec2:DescribeAvailabilityZones",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeVpcs",
+                "ec2:CreateTags",
+                "ec2:DeleteTags"
             ],
             "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "kms:Encrypt",
+                "kms:Decrypt",
+                "kms:DescribeKey",
+                "kms:CreateGrant",
+                "kms:RetireGrant"
+            ],
+            "Resource": "arn:aws:kms:${AWS_REGION}:${AWS_ACCOUNT_ID}:key/${KMS_KEY_ID}"
         }
     ]
 } 

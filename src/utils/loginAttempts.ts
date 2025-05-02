@@ -1,5 +1,5 @@
-const MAX_LOGIN_ATTEMPTS = 5;
-const LOCKOUT_DURATION = 15 * 60 * 1000; // 15 minutes in milliseconds
+export const MAX_LOGIN_ATTEMPTS = 5;
+export const LOCK_DURATION = 15 * 60 * 1000; // 15 minutes in milliseconds
 const ATTEMPT_RESET_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 interface LoginAttempt {
@@ -13,6 +13,31 @@ interface LoginAttemptState {
 }
 
 const STORAGE_KEY = 'loginAttempts';
+
+const loginAttempts = new Map<string, number>();
+const lockTimes = new Map<string, number>();
+
+export const recordLoginAttempt = (email: string): void => {
+  const attempts = loginAttempts.get(email) || 0;
+  loginAttempts.set(email, attempts + 1);
+
+  if (attempts + 1 >= MAX_LOGIN_ATTEMPTS) {
+    lockTimes.set(email, Date.now());
+  }
+};
+
+export const isAccountLocked = (email: string): boolean => {
+  const lockTime = lockTimes.get(email);
+  if (!lockTime) return false;
+
+  const timePassed = Date.now() - lockTime;
+  return timePassed < LOCK_DURATION;
+};
+
+export const clearLoginAttempts = (email: string): void => {
+  loginAttempts.delete(email);
+  lockTimes.delete(email);
+};
 
 export function getLoginAttempts(): LoginAttemptState {
   const storedData = localStorage.getItem(STORAGE_KEY);
@@ -50,28 +75,11 @@ export function saveLoginAttempt(success: boolean): void {
     ).length;
 
     if (recentFailures >= MAX_LOGIN_ATTEMPTS) {
-      state.lockedUntil = now + LOCKOUT_DURATION;
+      state.lockedUntil = now + LOCK_DURATION;
     }
   }
 
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-export function isAccountLocked(): boolean {
-  const state = getLoginAttempts();
-  const now = Date.now();
-
-  if (state.lockedUntil && now < state.lockedUntil) {
-    return true;
-  }
-
-  // Clear lockout if expired
-  if (state.lockedUntil && now >= state.lockedUntil) {
-    delete state.lockedUntil;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  }
-
-  return false;
 }
 
 export function getRemainingLockoutTime(): number {
@@ -83,10 +91,6 @@ export function getRemainingLockoutTime(): number {
   }
 
   return 0;
-}
-
-export function clearLoginAttempts(): void {
-  localStorage.removeItem(STORAGE_KEY);
 }
 
 export function getFailedAttempts(): number {

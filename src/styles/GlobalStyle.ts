@@ -1,4 +1,34 @@
 import { createGlobalStyle } from 'styled-components';
+import { DefaultTheme } from 'styled-components';
+
+declare module 'styled-components' {
+  export interface DefaultTheme {
+    borderRadius: {
+      small: string;
+      medium: string;
+      large: string;
+    };
+    transitions: {
+      duration: {
+        shortest: number;
+        shorter: number;
+        short: number;
+        standard: number;
+        medium: number;
+        long: number;
+        complex: number;
+        enteringScreen: number;
+        leavingScreen: number;
+      };
+      easing: {
+        easeInOut: string;
+        easeOut: string;
+        easeIn: string;
+        sharp: string;
+      };
+    };
+  }
+}
 
 export const GlobalStyle = createGlobalStyle`
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
@@ -72,22 +102,32 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
+  .button {
+    border-radius: ${({ theme }) => theme.borderRadius.small};
+  }
+
+  .card {
+    border-radius: ${({ theme }) => theme.borderRadius.small};
+  }
+
   .fade-enter {
     opacity: 0;
+    transition: opacity ${({ theme }) => theme.transitions.duration.medium}ms;
   }
 
   .fade-enter-active {
     opacity: 1;
-    transition: opacity ${({ theme }) => theme.transitions.medium};
+    transition: opacity ${({ theme }) => theme.transitions.duration.medium}ms;
   }
 
   .fade-exit {
     opacity: 1;
+    transition: transform ${({ theme }) => theme.transitions.duration.medium}ms;
   }
 
   .fade-exit-active {
     opacity: 0;
-    transition: opacity ${({ theme }) => theme.transitions.medium};
+    transition: transform ${({ theme }) => theme.transitions.duration.medium}ms;
   }
 
   .slide-enter {
