@@ -14,12 +14,12 @@ export interface NotificationSettings {
 
 export interface NotificationHistory {
   id: string;
-  eventId: string;
-  eventTitle: string;
-  type: NotificationType;
-  message: string;
+  userId: string;
+  type: string;
+  content: string;
   timestamp: Date;
-  read: boolean;
+  status: 'sent' | 'failed' | 'pending';
+  channel: 'email' | 'websocket' | 'push';
 }
 
 export type NotificationTemplateType = 'email' | 'browser';
@@ -45,17 +45,12 @@ export interface TemplateUsage {
 
 export interface NotificationTemplate {
   id: string;
-  type: NotificationTemplateType;
-  name: string;
-  category: NotificationTemplateCategory;
-  subject?: string;
-  content: string;
+  type: string;
+  subject: string;
+  message: string;
   variables: string[];
-  isDefault: boolean;
-  versions: TemplateVersion[];
-  usage: TemplateUsage;
-  createdAt: Date;
-  updatedAt: Date;
+  channels: ('email' | 'websocket' | 'push')[];
+  priority: 'low' | 'medium' | 'high';
 }
 
 export interface NotificationTemplateState {
@@ -569,9 +564,11 @@ export type NotificationTiming = {
 };
 
 export interface NotificationPreference {
-  enabled: boolean;
-  type: NotificationType;
-  timing: NotificationTiming[];
+  userId: string;
+  email: boolean;
+  websocket: boolean;
+  push: boolean;
+  types: string[];
 }
 
 export interface NotificationState {
@@ -629,3 +626,43 @@ export interface NotificationTemplate {
 export interface ScheduleCategory {
   // Add appropriate properties for ScheduleCategory
 }
+
+// 기본 알림 템플릿
+export const DEFAULT_TEMPLATES: NotificationTemplate[] = [
+  {
+    id: 'task-assigned',
+    type: 'task',
+    subject: '새로운 작업이 할당되었습니다',
+    message: '{userName}님께서 {taskName} 작업을 할당하셨습니다.',
+    variables: ['userName', 'taskName'],
+    channels: ['email', 'websocket'],
+    priority: 'medium'
+  },
+  {
+    id: 'task-completed',
+    type: 'task',
+    subject: '작업이 완료되었습니다',
+    message: '{taskName} 작업이 완료되었습니다.',
+    variables: ['taskName'],
+    channels: ['email', 'websocket'],
+    priority: 'low'
+  },
+  {
+    id: 'schedule-reminder',
+    type: 'schedule',
+    subject: '일정 알림',
+    message: '{scheduleName} 일정이 {time}에 시작됩니다.',
+    variables: ['scheduleName', 'time'],
+    channels: ['email', 'websocket', 'push'],
+    priority: 'high'
+  },
+  {
+    id: 'system-alert',
+    type: 'system',
+    subject: '시스템 알림',
+    message: '{message}',
+    variables: ['message'],
+    channels: ['email', 'websocket'],
+    priority: 'high'
+  }
+];

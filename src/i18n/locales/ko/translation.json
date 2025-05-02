@@ -1,0 +1,81 @@
+{
+  "common": {
+    "loading": "로딩 중...",
+    "error": "오류가 발생했습니다",
+    "success": "성공",
+    "retry": "다시 시도",
+    "cancel": "취소",
+    "save": "저장",
+    "delete": "삭제",
+    "edit": "수정",
+    "view": "보기",
+    "search": "검색",
+    "filter": "필터",
+    "sort": "정렬",
+    "refresh": "새로고침",
+    "close": "닫기"
+  },
+  "auth": {
+    "login": "로그인",
+    "logout": "로그아웃",
+    "username": "사용자 이름",
+    "password": "비밀번호",
+    "rememberMe": "로그인 상태 유지",
+    "forgotPassword": "비밀번호를 잊으셨나요?",
+    "createAccount": "계정 만들기",
+    "invalidCredentials": "잘못된 사용자 이름 또는 비밀번호",
+    "sessionExpired": "세션이 만료되었습니다"
+  },
+  "cache": {
+    "metrics": {
+      "title": "캐시 메트릭",
+      "hitRate": "히트율",
+      "latency": "지연 시간",
+      "memoryUsage": "메모리 사용량",
+      "itemCount": "항목 수",
+      "timeRange": {
+        "24h": "최근 24시간",
+        "7d": "최근 7일",
+        "30d": "최근 30일"
+      }
+    },
+    "configuration": {
+      "title": "캐시 설정",
+      "maxSize": "최대 크기",
+      "maxAge": "최대 유효 기간",
+      "updateAgeOnGet": "조회 시 유효 기간 갱신",
+      "evictionPolicy": "제거 정책",
+      "save": "설정 저장",
+      "clear": "캐시 초기화"
+    }
+  },
+  "performance": {
+    "metrics": {
+      "title": "성능 메트릭",
+      "cpu": "CPU 사용량",
+      "memory": "메모리 사용량",
+      "responseTime": "응답 시간",
+      "errorRate": "오류율",
+      "timeRange": {
+        "24h": "최근 24시간",
+        "7d": "최근 7일",
+        "30d": "최근 30일"
+      }
+    },
+    "alerts": {
+      "title": "성능 알림",
+      "thresholds": "알림 임계값",
+      "notifications": "알림 설정",
+      "save": "알림 저장"
+    }
+  },
+  "errors": {
+    "network": "네트워크 오류가 발생했습니다",
+    "server": "서버 오류가 발생했습니다",
+    "unauthorized": "권한이 없습니다",
+    "forbidden": "접근이 금지되었습니다",
+    "notFound": "리소스를 찾을 수 없습니다",
+    "validation": "유효성 검사 오류",
+    "timeout": "요청 시간이 초과되었습니다"
+  }
+} 

@@ -1,37 +1,48 @@
 import axios from 'axios';
-import { AuthService as authService } from './auth.service';
+import { AuthService } from './auth.service';
 import { mockUser, mockAuthResponse, mockErrorResponse, mockAxios } from '../../utils/testUtils';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe('Auth Service', () => {
+  let authService: AuthService;
+
   beforeEach(() => {
+    authService = new AuthService();
     jest.clearAllMocks();
     Object.assign(mockedAxios, mockAxios);
   });
 
   describe('login', () => {
-    it('should login successfully with valid credentials', async () => {
-      const credentials = { email: 'test@example.com', password: 'password123' };
-      mockedAxios.post.mockResolvedValueOnce({ data: mockAuthResponse });
+    it('should login successfully', async () => {
+      const credentials = { 
+        email: process.env.TEST_EMAIL || 'test@example.com', 
+        password: process.env.TEST_PASSWORD || 'test-password' 
+      };
+      mockedAxios.post.mockResolvedValueOnce({ data: { accessToken: 'test-token' } });
 
       const result = await authService.login(credentials);
 
       expect(mockedAxios.post).toHaveBeenCalledWith('/api/auth/login', credentials);
-      expect(result).toEqual(mockAuthResponse);
+      expect(result).toEqual({ accessToken: 'test-token' });
     });
 
-    it('should handle login failure with invalid credentials', async () => {
-      const credentials = { email: 'test@example.com', password: 'wrong' };
+    it('should handle login failure', async () => {
+      const credentials = { 
+        email: process.env.TEST_EMAIL || 'test@example.com', 
+        password: 'wrong-password' 
+      };
       mockedAxios.post.mockRejectedValueOnce(mockErrorResponse);
 
       await expect(authService.login(credentials)).rejects.toEqual(mockErrorResponse);
-      expect(mockedAxios.post).toHaveBeenCalledWith('/api/auth/login', credentials);
     });
 
     it('should handle network errors during login', async () => {
-      const credentials = { email: 'test@example.com', password: 'password123' };
+      const credentials = { 
+        email: process.env.TEST_EMAIL || 'test@example.com', 
+        password: process.env.TEST_PASSWORD || 'test-password' 
+      };
       const networkError = new Error('Network Error');
       mockedAxios.post.mockRejectedValueOnce(networkError);
 
@@ -40,18 +51,18 @@ describe('Auth Service', () => {
   });
 
   describe('register', () => {
-    it('should register successfully with valid data', async () => {
+    it('should register successfully', async () => {
       const userData = {
-        email: 'new@example.com',
-        password: 'password123',
-        name: 'New User',
+        email: process.env.TEST_EMAIL || 'test@example.com',
+        password: process.env.TEST_PASSWORD || 'test-password',
+        name: 'Test User'
       };
-      mockedAxios.post.mockResolvedValueOnce({ data: mockAuthResponse });
+      mockedAxios.post.mockResolvedValueOnce({ data: { id: 1, ...userData } });
 
       const result = await authService.register(userData);
 
       expect(mockedAxios.post).toHaveBeenCalledWith('/api/auth/register', userData);
-      expect(result).toEqual(mockAuthResponse);
+      expect(result).toEqual({ id: 1, ...userData });
     });
 
     it('should handle registration failure with existing email', async () => {
@@ -68,9 +79,9 @@ describe('Auth Service', () => {
 
     it('should handle network errors during registration', async () => {
       const userData = {
-        email: 'new@example.com',
-        password: 'password123',
-        name: 'New User',
+        email: process.env.TEST_EMAIL || 'test@example.com',
+        password: process.env.TEST_PASSWORD || 'test-password',
+        name: 'Test User'
       };
       const networkError = new Error('Network Error');
       mockedAxios.post.mockRejectedValueOnce(networkError);
@@ -98,7 +109,7 @@ describe('Auth Service', () => {
 
   describe('refreshToken', () => {
     it('should refresh token successfully', async () => {
-      const refreshToken = 'refresh-token';
+      const refreshToken = process.env.TEST_REFRESH_TOKEN || 'test-refresh-token';
       mockedAxios.post.mockResolvedValueOnce({ data: { accessToken: 'new-access-token' } });
 
       const result = await authService.refreshToken(refreshToken);

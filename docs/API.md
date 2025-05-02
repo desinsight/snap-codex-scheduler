@@ -246,4 +246,194 @@ export {
   CacheError,
   CacheErrorCode
 };
-``` 
+```
+
+## Authentication
+
+### POST /api/auth/login
+Authenticates a user and returns a JWT token.
+
+**Request Body:**
+```json
+{
+  "username": "string",
+  "password": "string"
+}
+```
+
+**Response:**
+```json
+{
+  "token": "string",
+  "user": {
+    "id": "string",
+    "username": "string",
+    "email": "string",
+    "role": "string"
+  }
+}
+```
+
+### POST /api/auth/refresh
+Refreshes an expired JWT token.
+
+**Request Body:**
+```json
+{
+  "token": "string"
+}
+```
+
+**Response:**
+```json
+{
+  "token": "string"
+}
+```
+
+## Cache Management
+
+### GET /api/cache/metrics
+Retrieves cache metrics for a specified time range.
+
+**Query Parameters:**
+- `timeRange`: "24h" | "7d" | "30d" (default: "24h")
+
+**Response:**
+```json
+{
+  "metrics": [
+    {
+      "hitRate": {
+        "rate": "number",
+        "trend": "up" | "down" | "stable",
+        "change": "number"
+      },
+      "latency": {
+        "average": "number",
+        "trend": "up" | "down" | "stable",
+        "change": "number"
+      },
+      "memory": {
+        "usage": "number",
+        "trend": "up" | "down" | "stable",
+        "change": "number"
+      },
+      "items": {
+        "count": "number",
+        "trend": "up" | "down" | "stable",
+        "change": "number"
+      },
+      "timestamp": "string"
+    }
+  ]
+}
+```
+
+### POST /api/cache/configure
+Updates cache configuration.
+
+**Request Body:**
+```json
+{
+  "maxSize": "number",
+  "maxAge": "number",
+  "updateAgeOnGet": "boolean",
+  "evictionPolicy": "lru" | "fifo" | "random"
+}
+```
+
+**Response:**
+```json
+{
+  "success": "boolean",
+  "message": "string"
+}
+```
+
+### DELETE /api/cache/clear
+Clears all cache entries.
+
+**Response:**
+```json
+{
+  "success": "boolean",
+  "message": "string"
+}
+```
+
+## Performance Monitoring
+
+### GET /api/performance/metrics
+Retrieves performance metrics for a specified time range.
+
+**Query Parameters:**
+- `timeRange`: "24h" | "7d" | "30d" (default: "24h")
+
+**Response:**
+```json
+{
+  "metrics": [
+    {
+      "cpu": {
+        "usage": "number",
+        "trend": "up" | "down" | "stable",
+        "change": "number"
+      },
+      "memory": {
+        "usage": "number",
+        "trend": "up" | "down" | "stable",
+        "change": "number"
+      },
+      "responseTime": {
+        "average": "number",
+        "trend": "up" | "down" | "stable",
+        "change": "number"
+      },
+      "errorRate": {
+        "rate": "number",
+        "trend": "up" | "down" | "stable",
+        "change": "number"
+      },
+      "timestamp": "string"
+    }
+  ]
+}
+```
+
+## Error Responses
+
+All API endpoints may return the following error responses:
+
+### 401 Unauthorized
+```json
+{
+  "error": "string"
+}
+```
+
+### 403 Forbidden
+```json
+{
+  "error": "string"
+}
+```
+
+### 500 Internal Server Error
+```json
+{
+  "error": "string"
+}
+```
+
+## Rate Limiting
+
+API endpoints are rate-limited to prevent abuse:
+- Authentication endpoints: 5 requests per minute
+- Cache management endpoints: 10 requests per minute
+- Performance monitoring endpoints: 20 requests per minute
+
+Rate limit headers are included in responses:
+- `X-RateLimit-Limit`: Maximum number of requests allowed
+- `X-RateLimit-Remaining`: Number of requests remaining
+- `X-RateLimit-Reset`: Time when the rate limit will reset 

@@ -1,0 +1,81 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "refresh": "Refresh",
+    "close": "Close"
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "username": "Username",
+    "password": "Password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "createAccount": "Create account",
+    "invalidCredentials": "Invalid username or password",
+    "sessionExpired": "Your session has expired"
+  },
+  "cache": {
+    "metrics": {
+      "title": "Cache Metrics",
+      "hitRate": "Hit Rate",
+      "latency": "Latency",
+      "memoryUsage": "Memory Usage",
+      "itemCount": "Item Count",
+      "timeRange": {
+        "24h": "Last 24 Hours",
+        "7d": "Last 7 Days",
+        "30d": "Last 30 Days"
+      }
+    },
+    "configuration": {
+      "title": "Cache Configuration",
+      "maxSize": "Maximum Size",
+      "maxAge": "Maximum Age",
+      "updateAgeOnGet": "Update Age on Get",
+      "evictionPolicy": "Eviction Policy",
+      "save": "Save Configuration",
+      "clear": "Clear Cache"
+    }
+  },
+  "performance": {
+    "metrics": {
+      "title": "Performance Metrics",
+      "cpu": "CPU Usage",
+      "memory": "Memory Usage",
+      "responseTime": "Response Time",
+      "errorRate": "Error Rate",
+      "timeRange": {
+        "24h": "Last 24 Hours",
+        "7d": "Last 7 Days",
+        "30d": "Last 30 Days"
+      }
+    },
+    "alerts": {
+      "title": "Performance Alerts",
+      "thresholds": "Alert Thresholds",
+      "notifications": "Notification Settings",
+      "save": "Save Alerts"
+    }
+  },
+  "errors": {
+    "network": "Network error occurred",
+    "server": "Server error occurred",
+    "unauthorized": "Unauthorized access",
+    "forbidden": "Access forbidden",
+    "notFound": "Resource not found",
+    "validation": "Validation error",
+    "timeout": "Request timeout"
+  }
+} 

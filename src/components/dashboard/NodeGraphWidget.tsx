@@ -1,88 +1,53 @@
-import React, { useEffect, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import React, { useState, useEffect, useRef } from 'react';
+import { NodeGraphService } from '../../services/NodeGraphService';
+import { NodeGraphData } from '../../types/nodeGraph';
 import * as d3 from 'd3';
-import { WidgetConfig } from '../../types/dashboard';
 
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  position: relative;
-`;
-
-const Tooltip = styled.div`
-  position: absolute;
-  background-color: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.borderRadius.small};
-  padding: 8px;
-  font-size: ${({ theme }) => theme.typography.fontSize.small};
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.2s;
-  z-index: 1000;
-`;
-
-interface Node {
-  id: string;
-  name: string;
-  type: string;
-  value?: number;
-  group?: string;
+interface NodeGraphWidgetProps {
+  timeRange?: '24h' | '7d' | '30d';
+  layout?: 'force' | 'hierarchical';
 }
 
-interface Link {
-  source: string;
-  target: string;
-  value?: number;
-  type?: string;
-}
-
-interface GraphData {
-  nodes: Node[];
-  links: Link[];
-}
-
-interface Props {
-  widget: WidgetConfig;
-}
-
-const NodeGraphWidget: React.FC<Props> = ({ widget }) => {
-  const { t } = useTranslation();
+export const NodeGraphWidget: React.FC<NodeGraphWidgetProps> = ({
+  timeRange = '24h',
+  layout = 'force'
+}) => {
+  const [data, setData] = useState<NodeGraphData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedNode, setSelectedNode] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
-  const tooltipRef = useRef<HTMLDivElement>(null);
-  const simulationRef = useRef<d3.Simulation<Node, Link> | null>(null);
 
   useEffect(() => {
-    if (!containerRef.current || !svgRef.current) return;
+    loadNodeGraphData();
+  }, [timeRange]);
 
-    const loadData = async () => {
-      try {
-        // 실제 구현에서는 API에서 데이터를 가져와야 합니다
-        const response = await fetch(widget.settings.query || '');
-        const data: GraphData = await response.json();
-
-        renderGraph(data);
-      } catch (error) {
-        console.error('Failed to load graph data:', error);
-      }
-    };
-
-    loadData();
-
-    // 실시간 업데이트 설정
-    if (widget.settings.refreshInterval) {
-      const interval = setInterval(loadData, widget.settings.refreshInterval);
-      return () => clearInterval(interval);
+  useEffect(() => {
+    if (data && containerRef.current && svgRef.current) {
+      renderGraph();
     }
-  }, [widget.settings.query, widget.settings.refreshInterval]);
+  }, [data, layout]);
 
-  const renderGraph = (data: GraphData) => {
-    if (!containerRef.current || !svgRef.current) return;
+  const loadNodeGraphData = async () => {
+    try {
+      setLoading(true);
+      const nodeGraphService = NodeGraphService.getInstance();
+      const graphData = await nodeGraphService.getNodeGraphData(timeRange);
+      setData(graphData);
+      setLoading(false);
+    } catch (err) {
+      setError('노드 그래프 데이터를 불러오는데 실패했습니다.');
+      setLoading(false);
+    }
+  };
+
+  const renderGraph = () => {
+    if (!data || !containerRef.current || !svgRef.current) return;
 
     const width = containerRef.current.clientWidth;
     const height = containerRef.current.clientHeight;
+    const margin = { top: 20, right: 20, bottom: 20, left: 20 };
 
     // SVG 초기화
     const svg = d3.select(svgRef.current);
@@ -91,130 +56,180 @@ const NodeGraphWidget: React.FC<Props> = ({ widget }) => {
 
     // 시뮬레이션 설정
     const simulation = d3
-      .forceSimulation<Node>(data.nodes)
-      .force(
-        'link',
-        d3
-          .forceLink<Node, Link>(data.links)
-          .id(d => d.id)
-          .distance(100)
-      )
+      .forceSimulation(data.nodes)
+      .force('link', d3.forceLink(data.links).id((d: any) => d.id))
       .force('charge', d3.forceManyBody().strength(-300))
       .force('center', d3.forceCenter(width / 2, height / 2))
       .force('collision', d3.forceCollide().radius(30));
 
-    simulationRef.current = simulation;
-
     // 링크 그리기
     const link = svg
       .append('g')
-      .attr('class', 'links')
       .selectAll('line')
       .data(data.links)
       .enter()
       .append('line')
       .attr('stroke', '#999')
       .attr('stroke-opacity', 0.6)
-      .attr('stroke-width', d => Math.sqrt(d.value || 1));
+      .attr('stroke-width', d => Math.sqrt(d.value));
 
-    // 노드 그리기
+    // 노드 그룹 생성
     const node = svg
       .append('g')
-      .attr('class', 'nodes')
-      .selectAll('circle')
+      .selectAll('g')
       .data(data.nodes)
       .enter()
+      .append('g')
+      .call(d3.drag()
+        .on('start', dragstarted)
+        .on('drag', dragged)
+        .on('end', dragended));
+
+    // 노드 원형 추가
+    node
       .append('circle')
-      .attr('r', d => Math.sqrt(d.value || 5) + 5)
-      .attr('fill', d => {
-        const color = d3.scaleOrdinal(d3.schemeCategory10);
-        return color(d.group || 'default');
-      })
-      .call(drag(simulation));
+      .attr('r', 10)
+      .attr('fill', d => getNodeColor(d.type))
+      .on('click', (event, d) => setSelectedNode(d.id));
 
     // 노드 레이블 추가
-    const label = svg
-      .append('g')
-      .attr('class', 'labels')
-      .selectAll('text')
-      .data(data.nodes)
-      .enter()
-      .append('text')
-      .text(d => d.name)
-      .attr('font-size', '10px')
-      .attr('dx', 15)
-      .attr('dy', 4);
-
-    // 툴팁 이벤트
     node
-      .on('mouseover', (event, d) => {
-        if (tooltipRef.current) {
-          tooltipRef.current.style.opacity = '1';
-          tooltipRef.current.style.left = event.pageX + 'px';
-          tooltipRef.current.style.top = event.pageY + 'px';
-          tooltipRef.current.innerHTML = `
-            <div>${d.name}</div>
-            <div>Type: ${d.type}</div>
-            ${d.value ? `<div>Value: ${d.value}</div>` : ''}
-            ${d.group ? `<div>Group: ${d.group}</div>` : ''}
-          `;
-        }
-      })
-      .on('mouseout', () => {
-        if (tooltipRef.current) {
-          tooltipRef.current.style.opacity = '0';
-        }
-      });
+      .append('text')
+      .text(d => d.id)
+      .attr('x', 15)
+      .attr('y', 3)
+      .style('font-size', '12px');
 
     // 시뮬레이션 업데이트
     simulation.on('tick', () => {
       link
-        .attr('x1', d => (d.source as any).x)
-        .attr('y1', d => (d.source as any).y)
-        .attr('x2', d => (d.target as any).x)
-        .attr('y2', d => (d.target as any).y);
+        .attr('x1', d => d.source.x)
+        .attr('y1', d => d.source.y)
+        .attr('x2', d => d.target.x)
+        .attr('y2', d => d.target.y);
 
-      node
-        .attr('cx', d => d.x!)
-        .attr('cy', d => d.y!);
-
-      label
-        .attr('x', d => d.x!)
-        .attr('y', d => d.y!);
+      node.attr('transform', d => `translate(${d.x},${d.y})`);
     });
-  };
 
-  const drag = (simulation: d3.Simulation<Node, Link>) => {
-    function dragstarted(event: any) {
+    // 드래그 이벤트 핸들러
+    function dragstarted(event: any, d: any) {
       if (!event.active) simulation.alphaTarget(0.3).restart();
-      event.subject.fx = event.subject.x;
-      event.subject.fy = event.subject.y;
+      d.fx = d.x;
+      d.fy = d.y;
     }
 
-    function dragged(event: any) {
-      event.subject.fx = event.x;
-      event.subject.fy = event.y;
+    function dragged(event: any, d: any) {
+      d.fx = event.x;
+      d.fy = event.y;
     }
 
-    function dragended(event: any) {
+    function dragended(event: any, d: any) {
       if (!event.active) simulation.alphaTarget(0);
-      event.subject.fx = null;
-      event.subject.fy = null;
+      d.fx = null;
+      d.fy = null;
     }
-
-    return d3
-      .drag<SVGCircleElement, Node>()
-      .on('start', dragstarted)
-      .on('drag', dragged)
-      .on('end', dragended);
   };
+
+  const getNodeColor = (type: string) => {
+    switch (type) {
+      case 'service':
+        return '#4d94ff';
+      case 'database':
+        return '#ff4d4d';
+      case 'cache':
+        return '#40c463';
+      default:
+        return '#999';
+    }
+  };
+
+  if (loading) {
+    return <div className="node-graph-widget loading">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="node-graph-widget error">{error}</div>;
+  }
 
   return (
-    <Container ref={containerRef}>
-      <svg ref={svgRef} />
-      <Tooltip ref={tooltipRef} />
-    </Container>
-  );
-};
+    <div className="node-graph-widget">
+      <div className="header">
+        <h3>노드 그래프</h3>
+        <div className="controls">
+          <select
+            value={layout}
+            onChange={e => setLayout(e.target.value as 'force' | 'hierarchical')}
+          >
+            <option value="force">Force Layout</option>
+            <option value="hierarchical">Hierarchical Layout</option>
+          </select>
+        </div>
+      </div>
 
-export default NodeGraphWidget; 
+      <div className="graph-container" ref={containerRef}>
+        <svg ref={svgRef} />
+      </div>
+
+      {selectedNode && (
+        <div className="node-details">
+          <h4>노드 상세 정보</h4>
+          <div className="details-content">
+            <p>ID: {selectedNode}</p>
+            <p>타입: {data?.nodes.find(n => n.id === selectedNode)?.type}</p>
+            <p>연결 수: {
+              data?.links.filter(l => l.source.id === selectedNode || l.target.id === selectedNode).length
+            }</p>
+          </div>
+        </div>
+      )}
+
+      <style jsx>{`
+        .node-graph-widget {
+          background: white;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          padding: 20px;
+        }
+
+        .header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 20px;
+        }
+
+        .graph-container {
+          width: 100%;
+          height: 500px;
+          border: 1px solid #eee;
+          border-radius: 4px;
+          overflow: hidden;
+        }
+
+        .node-details {
+          margin-top: 20px;
+          padding: 15px;
+          background: #f8f9fa;
+          border-radius: 4px;
+        }
+
+        .details-content {
+          margin-top: 10px;
+        }
+
+        .loading {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 200px;
+        }
+
+        .error {
+          color: #dc3545;
+          padding: 20px;
+          text-align: center;
+        }
+      `}</style>
+    </div>
+  );
+}; 

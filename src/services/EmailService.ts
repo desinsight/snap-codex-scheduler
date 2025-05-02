@@ -38,17 +38,15 @@ export class EmailService {
   }
 
   private initializeTransporter() {
-    const config: EmailConfig = {
-      host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    this.transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT || '587'),
       secure: process.env.SMTP_SECURE === 'true',
       auth: {
-        user: process.env.SMTP_USER || '',
-        pass: process.env.SMTP_PASS || '',
-      },
-    };
-
-    this.transporter = nodemailer.createTransport(config);
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
+      }
+    });
   }
 
   private initializeQueue() {
@@ -103,23 +101,77 @@ export class EmailService {
   }
 
   public async sendEmail(
-    to: string,
-    template: NotificationTemplate,
-    variables: Record<string, string>
+    userId: string,
+    content: string,
+    template?: NotificationTemplate
   ): Promise<void> {
-    const templateFn = this.templates.get(template);
-    if (!templateFn) {
-      throw new Error(`Template ${template} not found`);
+    try {
+      const userEmail = await this.getUserEmail(userId);
+      if (!userEmail) {
+        throw new Error(`Email not found for user: ${userId}`);
+      }
+
+      const emailContent = template
+        ? this.formatEmail(template, content)
+        : content;
+
+      await this.transporter.sendMail({
+        from: process.env.SMTP_FROM,
+        to: userEmail,
+        subject: template?.subject || 'Notification',
+        html: emailContent
+      });
+
+      console.log(`Email sent successfully to ${userEmail}`);
+    } catch (error) {
+      console.error('Failed to send email:', error);
+      throw error;
     }
+  }
 
-    const html = templateFn(variables);
-    const subject = variables.subject || 'Notification';
+  private async getUserEmail(userId: string): Promise<string | null> {
+    // TODO: 사용자 이메일 조회 구현
+    return 'user@example.com';
+  }
 
-    await this.emailQueue.add({
-      to,
-      subject,
-      html,
-    });
+  private formatEmail(template: NotificationTemplate, content: string): string {
+    return `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background-color: #f8f9fa; padding: 20px; text-align: center; }
+            .content { padding: 20px; }
+            .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>${template.subject}</h1>
+            </div>
+            <div class="content">
+              ${content}
+            </div>
+            <div class="footer">
+              <p>This is an automated message. Please do not reply to this email.</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+  }
+
+  public async verifyConnection(): Promise<boolean> {
+    try {
+      await this.transporter.verify();
+      return true;
+    } catch (error) {
+      console.error('SMTP connection verification failed:', error);
+      return false;
+    }
   }
 
   public getQueueUI() {

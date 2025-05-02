@@ -1,24 +1,14 @@
 import { Server } from 'socket.io';
-import { createServer } from 'http';
-import express from 'express';
-import { NotificationHistory } from '../types/notification';
-
-interface WebSocketConfig {
-  port: number;
-  cors: {
-    origin: string;
-    methods: string[];
-  };
-}
+import { Server as HttpServer } from 'http';
+import { NotificationTemplate } from '../types/notification';
 
 export class WebSocketService {
   private static instance: WebSocketService;
   private io: Server;
-  private connectedClients: Map<string, Set<string>>; // userId -> socketIds
+  private userSockets: Map<string, string[]>;
 
   private constructor() {
-    this.initializeServer();
-    this.connectedClients = new Map();
+    this.userSockets = new Map();
   }
 
   public static getInstance(): WebSocketService {
@@ -28,76 +18,86 @@ export class WebSocketService {
     return WebSocketService.instance;
   }
 
-  private initializeServer() {
-    const app = express();
-    const httpServer = createServer(app);
-    
-    const config: WebSocketConfig = {
-      port: parseInt(process.env.WS_PORT || '3001'),
+  public initialize(server: HttpServer): void {
+    this.io = new Server(server, {
       cors: {
-        origin: process.env.WS_CORS_ORIGIN || '*',
-        methods: ['GET', 'POST'],
-      },
-    };
-
-    this.io = new Server(httpServer, {
-      cors: config.cors,
+        origin: process.env.CORS_ORIGIN || '*',
+        methods: ['GET', 'POST']
+      }
     });
 
+    this.setupEventHandlers();
+  }
+
+  private setupEventHandlers(): void {
     this.io.on('connection', (socket) => {
-      const userId = socket.handshake.auth.userId;
-      if (!userId) {
-        socket.disconnect();
-        return;
-      }
+      console.log('Client connected:', socket.id);
 
-      // Add socket to user's connected clients
-      if (!this.connectedClients.has(userId)) {
-        this.connectedClients.set(userId, new Set());
-      }
-      this.connectedClients.get(userId)?.add(socket.id);
+      socket.on('authenticate', (userId: string) => {
+        this.associateUserWithSocket(userId, socket.id);
+      });
 
-      // Handle disconnection
       socket.on('disconnect', () => {
-        this.connectedClients.get(userId)?.delete(socket.id);
-        if (this.connectedClients.get(userId)?.size === 0) {
-          this.connectedClients.delete(userId);
-        }
+        this.removeSocket(socket.id);
+        console.log('Client disconnected:', socket.id);
       });
-
-      // Handle custom events
-      socket.on('subscribe', (channel: string) => {
-        socket.join(channel);
-      });
-
-      socket.on('unsubscribe', (channel: string) => {
-        socket.leave(channel);
-      });
-    });
-
-    httpServer.listen(config.port, () => {
-      console.log(`WebSocket server running on port ${config.port}`);
     });
   }
 
-  public sendNotification(userId: string, notification: NotificationHistory) {
-    const clients = this.connectedClients.get(userId);
-    if (clients) {
-      clients.forEach((socketId) => {
-        this.io.to(socketId).emit('notification', notification);
-      });
+  private associateUserWithSocket(userId: string, socketId: string): void {
+    if (!this.userSockets.has(userId)) {
+      this.userSockets.set(userId, []);
+    }
+    this.userSockets.get(userId)?.push(socketId);
+  }
+
+  private removeSocket(socketId: string): void {
+    for (const [userId, sockets] of this.userSockets.entries()) {
+      const index = sockets.indexOf(socketId);
+      if (index !== -1) {
+        sockets.splice(index, 1);
+        if (sockets.length === 0) {
+          this.userSockets.delete(userId);
+        }
+        break;
+      }
     }
   }
 
-  public broadcastToChannel(channel: string, event: string, data: any) {
-    this.io.to(channel).emit(event, data);
+  public async sendNotification(
+    userId: string,
+    content: string,
+    template?: NotificationTemplate
+  ): Promise<void> {
+    try {
+      const sockets = this.userSockets.get(userId);
+      if (!sockets || sockets.length === 0) {
+        console.log(`No active sockets for user: ${userId}`);
+        return;
+      }
+
+      const notification = {
+        content,
+        template,
+        timestamp: new Date().toISOString()
+      };
+
+      sockets.forEach(socketId => {
+        this.io.to(socketId).emit('notification', notification);
+      });
+
+      console.log(`Notification sent to user ${userId} via ${sockets.length} sockets`);
+    } catch (error) {
+      console.error('Failed to send WebSocket notification:', error);
+      throw error;
+    }
   }
 
-  public getConnectedUsers(): string[] {
-    return Array.from(this.connectedClients.keys());
+  public getActiveUsers(): string[] {
+    return Array.from(this.userSockets.keys());
   }
 
-  public getConnectedClientsCount(): number {
-    return this.connectedClients.size;
+  public getActiveSockets(userId: string): string[] {
+    return this.userSockets.get(userId) || [];
   }
 }

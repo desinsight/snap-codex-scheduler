@@ -1,6 +1,7 @@
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import LRU from 'lru-cache';
+import { PerformanceMetrics } from '../types/performance';
 
 export interface CacheConfig {
   maxSize?: number;
@@ -28,12 +29,14 @@ export class PerformanceService {
   private cache: LRU<string, any>;
   private renderQueue: Map<string, Subject<void>> = new Map();
   private rafCallbacks: Map<string, number> = new Map();
+  private metrics: PerformanceMetrics[] = [];
 
   private constructor() {
     this.cache = new LRU({
       max: 1000,
       maxAge: 1000 * 60 * 60 // 1시간
     });
+    this.loadInitialData();
   }
 
   static getInstance(): PerformanceService {
@@ -169,6 +172,98 @@ export class PerformanceService {
     this.rafCallbacks.forEach(rafId => cancelAnimationFrame(rafId));
     this.rafCallbacks.clear();
     this.renderQueue.clear();
+  }
+
+  private async loadInitialData(): Promise<void> {
+    try {
+      const response = await fetch('/api/performance-metrics');
+      if (!response.ok) {
+        throw new Error('Failed to load performance metrics');
+      }
+      this.metrics = await response.json();
+    } catch (error) {
+      console.error('Error loading performance metrics:', error);
+      this.metrics = [];
+    }
+  }
+
+  public async getMetrics(timeRange: '24h' | '7d' | '30d'): Promise<PerformanceMetrics> {
+    try {
+      const now = new Date();
+      const startTime = new Date(now.getTime() - this.getTimeRangeInMs(timeRange));
+      
+      const filteredMetrics = this.metrics.filter(metric => {
+        const metricTime = new Date(metric.timestamp);
+        return metricTime >= startTime && metricTime <= now;
+      });
+
+      if (filteredMetrics.length === 0) {
+        throw new Error('No metrics found for the specified time range');
+      }
+
+      const currentMetrics = filteredMetrics[filteredMetrics.length - 1];
+      const previousMetrics = filteredMetrics[0];
+
+      return {
+        cpu: {
+          usage: currentMetrics.cpu.usage,
+          trend: currentMetrics.cpu.usage > previousMetrics.cpu.usage ? 'up' : 'down',
+          change: Math.abs(currentMetrics.cpu.usage - previousMetrics.cpu.usage)
+        },
+        memory: {
+          usage: currentMetrics.memory.usage,
+          trend: currentMetrics.memory.usage > previousMetrics.memory.usage ? 'up' : 'down',
+          change: Math.abs(currentMetrics.memory.usage - previousMetrics.memory.usage)
+        },
+        latency: {
+          average: currentMetrics.latency.average,
+          trend: currentMetrics.latency.average > previousMetrics.latency.average ? 'up' : 'down',
+          change: Math.abs(currentMetrics.latency.average - previousMetrics.latency.average)
+        },
+        errorRate: {
+          rate: currentMetrics.errorRate.rate,
+          trend: currentMetrics.errorRate.rate > previousMetrics.errorRate.rate ? 'up' : 'down',
+          change: Math.abs(currentMetrics.errorRate.rate - previousMetrics.errorRate.rate)
+        },
+        timestamp: currentMetrics.timestamp
+      };
+    } catch (error) {
+      console.error('Error getting performance metrics:', error);
+      throw error;
+    }
+  }
+
+  public async addMetrics(metrics: PerformanceMetrics): Promise<void> {
+    try {
+      this.metrics.push(metrics);
+      const response = await fetch('/api/performance-metrics', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(metrics)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add performance metrics');
+      }
+    } catch (error) {
+      console.error('Error adding performance metrics:', error);
+      throw error;
+    }
+  }
+
+  private getTimeRangeInMs(timeRange: '24h' | '7d' | '30d'): number {
+    switch (timeRange) {
+      case '24h':
+        return 24 * 60 * 60 * 1000;
+      case '7d':
+        return 7 * 24 * 60 * 60 * 1000;
+      case '30d':
+        return 30 * 24 * 60 * 60 * 1000;
+      default:
+        return 24 * 60 * 60 * 1000;
+    }
   }
 }
 

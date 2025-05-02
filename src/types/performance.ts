@@ -240,4 +240,28 @@ export interface PerformanceDashboardData {
   suggestions: PerformanceOptimizationSuggestion[];
   components: ComponentMetrics[];
   resources: ResourceTiming[];
+}
+
+export interface PerformanceMetrics {
+  cpu: {
+    usage: number;
+    trend: 'up' | 'down';
+    change: number;
+  };
+  memory: {
+    usage: number;
+    trend: 'up' | 'down';
+    change: number;
+  };
+  latency: {
+    average: number;
+    trend: 'up' | 'down';
+    change: number;
+  };
+  errorRate: {
+    rate: number;
+    trend: 'up' | 'down';
+    change: number;
+  };
+  timestamp: string;
 } 

@@ -2,22 +2,37 @@ import {
   NotificationType,
   NotificationPreference,
   NotificationHistory,
+  NotificationTemplate,
 } from '../types/notification';
 import { Schedule } from '../types/schedule';
 import { EmailService } from './EmailService';
 import { WebSocketService } from './WebSocketService';
 import { DatabaseService } from './DatabaseService';
+import { EventEmitter } from 'events';
+
+export interface NotificationOptions {
+  userId: string;
+  type: string;
+  data: any;
+  priority?: 'low' | 'medium' | 'high';
+  channels?: ('email' | 'websocket' | 'push')[];
+}
 
 export class NotificationService {
   private static instance: NotificationService;
-  private permission: NotificationPermission = 'default';
+  private eventEmitter: EventEmitter;
   private emailService: EmailService;
   private webSocketService: WebSocketService;
   private databaseService: DatabaseService;
+  private templates: Map<string, NotificationTemplate>;
 
   private constructor() {
-    this.initializeServices();
-    this.initializeBrowserNotifications();
+    this.eventEmitter = new EventEmitter();
+    this.emailService = EmailService.getInstance();
+    this.webSocketService = WebSocketService.getInstance();
+    this.databaseService = new DatabaseService();
+    this.templates = new Map();
+    this.initializeEventListeners();
   }
 
   public static getInstance(): NotificationService {
@@ -27,60 +42,76 @@ export class NotificationService {
     return NotificationService.instance;
   }
 
-  private initializeServices() {
-    // 이메일 서비스 초기화
-    this.emailService = new EmailService();
-
-    // 웹소켓 서비스 초기화
-    this.webSocketService = new WebSocketService();
-
-    // 데이터베이스 서비스 초기화
-    this.databaseService = new DatabaseService();
-
-    // 웹소켓 이벤트 구독
-    this.webSocketService.subscribe('notification', (notification: NotificationHistory) => {
-      this.handleIncomingNotification(notification);
+  private initializeEventListeners(): void {
+    this.eventEmitter.on('notification', async (options: NotificationOptions) => {
+      await this.processNotification(options);
     });
   }
 
-  private async initializeBrowserNotifications() {
-    if (!('Notification' in window)) {
-      console.warn('이 브라우저는 알림을 지원하지 않습니다.');
-      return;
-    }
-
-    this.permission = await Notification.requestPermission();
+  public async sendNotification(options: NotificationOptions): Promise<void> {
+    this.eventEmitter.emit('notification', options);
   }
 
-  private async handleIncomingNotification(notification: NotificationHistory) {
-    // 데이터베이스에 저장
-    await this.databaseService.saveNotification(notification);
+  private async processNotification(options: NotificationOptions): Promise<void> {
+    const { userId, type, data, priority = 'medium', channels = ['email', 'websocket'] } = options;
+    
+    try {
+      const template = this.getTemplate(type);
+      if (!template) {
+        throw new Error(`Template not found for type: ${type}`);
+      }
 
-    // 브라우저 알림 표시
-    if (this.permission === 'granted') {
-      await this.sendBrowserNotification(notification.eventTitle, {
-        body: notification.message,
-        icon: '/notification-icon.png',
-        tag: notification.id,
-      });
+      const notification = this.formatNotification(template, data);
+
+      // 채널별 알림 전송
+      for (const channel of channels) {
+        switch (channel) {
+          case 'email':
+            await this.emailService.sendEmail(userId, notification);
+            break;
+          case 'websocket':
+            await this.webSocketService.sendNotification(userId, notification);
+            break;
+          // push 알림은 추후 구현
+        }
+      }
+
+      // 알림 로깅
+      await this.logNotification(userId, type, notification, priority);
+    } catch (error) {
+      console.error('Failed to process notification:', error);
+      throw error;
     }
   }
 
-  public async sendBrowserNotification(title: string, options: NotificationOptions) {
-    if (this.permission !== 'granted') {
-      console.warn('브라우저 알림 권한이 없습니다.');
-      return;
-    }
-
-    return new Notification(title, options);
+  private getTemplate(type: string): NotificationTemplate | undefined {
+    return this.templates.get(type);
   }
 
-  public async sendEmailNotification(
-    to: string,
-    template: NotificationTemplate,
-    variables: Record<string, string>
-  ) {
-    return this.emailService.sendEmail(to, template, variables);
+  private formatNotification(template: NotificationTemplate, data: any): string {
+    let message = template.message;
+    Object.keys(data).forEach(key => {
+      message = message.replace(`{${key}}`, data[key]);
+    });
+    return message;
+  }
+
+  private async logNotification(
+    userId: string,
+    type: string,
+    content: string,
+    priority: string
+  ): Promise<void> {
+    // TODO: 알림 로깅 구현
+    console.log(`Notification logged: ${userId}, ${type}, ${priority}`);
+  }
+
+  public registerTemplate(type: string, template: NotificationTemplate): void {
+    this.templates.set(type, template);
+  }
+
+  public getTemplates(): Map<string, NotificationTemplate> {
+    return this.templates;
   }
 
   public async scheduleNotification(
@@ -108,7 +139,7 @@ export class NotificationService {
 
       // 이메일 알림 전송
       if (preferences.type === 'EMAIL' || preferences.type === 'BOTH') {
-        await this.sendEmailNotification(
+        await this.emailService.sendEmail(
           'user@example.com', // 실제 사용자 이메일
           {
             id: 'event-reminder',

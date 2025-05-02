@@ -1,225 +1,146 @@
-import { Observable, Subject, from } from 'rxjs';
-import { map, mergeMap, catchError } from 'rxjs/operators';
-import LRU from 'lru-cache';
-
-export interface CacheEntry<T> {
-  data: T;
-  timestamp: number;
-  expiresAt: number;
-  tags?: string[];
-}
-
-export interface CacheConfig {
-  maxSize: number;
-  maxAge: number;
-  updateAgeOnGet: boolean;
-  prefetchThreshold: number;
-}
-
-export interface PrefetchRule {
-  pattern: RegExp | string;
-  relatedKeys: string[];
-  condition?: (data: any) => boolean;
-}
+import { RedisCacheManager } from './RedisCacheManager';
+import { CacheConfig, CacheEntry, CacheStats, CacheMetrics } from '../types/cache';
 
 export class AdvancedCacheService {
   private static instance: AdvancedCacheService;
-  private cache: LRU<string, CacheEntry<any>>;
-  private prefetchRules: PrefetchRule[] = [];
-  private prefetchQueue: Set<string> = new Set();
-  private fetchCallbacks: Map<string, (key: string) => Promise<any>> = new Map();
-  private cacheHits: Subject<string> = new Subject();
-  private cacheMisses: Subject<string> = new Subject();
+  private cacheManager: RedisCacheManager;
+  private metrics: CacheMetrics[] = [];
+  private config: CacheConfig;
 
-  private constructor(config: CacheConfig) {
-    this.cache = new LRU({
-      max: config.maxSize,
-      maxAge: config.maxAge,
-      updateAgeOnGet: config.updateAgeOnGet
-    });
+  private constructor(config: Partial<CacheConfig> = {}) {
+    this.config = {
+      maxSize: config.maxSize || 1000,
+      maxAge: config.maxAge || 3600000, // 1시간
+      updateAgeOnGet: config.updateAgeOnGet || false,
+      evictionPolicy: config.evictionPolicy || 'lru'
+    };
 
-    // 캐시 히트/미스 모니터링
-    this.monitorCachePerformance();
+    this.cacheManager = RedisCacheManager.getInstance(this.config);
+    this.initializeMetrics();
   }
 
-  static getInstance(config?: CacheConfig): AdvancedCacheService {
+  public static getInstance(config?: Partial<CacheConfig>): AdvancedCacheService {
     if (!AdvancedCacheService.instance) {
-      AdvancedCacheService.instance = new AdvancedCacheService(config || {
-        maxSize: 1000,
-        maxAge: 1000 * 60 * 60,
-        updateAgeOnGet: true,
-        prefetchThreshold: 0.8
-      });
+      AdvancedCacheService.instance = new AdvancedCacheService(config);
     }
     return AdvancedCacheService.instance;
   }
 
-  // 데이터 저장
-  set<T>(key: string, data: T, options?: { tags?: string[]; maxAge?: number }): void {
-    const entry: CacheEntry<T> = {
-      data,
-      timestamp: Date.now(),
-      expiresAt: Date.now() + (options?.maxAge || this.cache.maxAge || 0),
-      tags: options?.tags
-    };
-
-    this.cache.set(key, entry);
-    this.checkPrefetchRules(key, data);
-  }
-
-  // 데이터 조회
-  get<T>(key: string): T | undefined {
-    const entry = this.cache.get(key) as CacheEntry<T>;
-    
-    if (entry) {
-      this.cacheHits.next(key);
-      if (Date.now() > entry.expiresAt) {
-        this.cache.delete(key);
-        this.cacheMisses.next(key);
-        return undefined;
-      }
-      return entry.data;
-    }
-
-    this.cacheMisses.next(key);
-    return undefined;
-  }
-
-  // 프리페치 규칙 등록
-  registerPrefetchRule(rule: PrefetchRule) {
-    this.prefetchRules.push(rule);
-  }
-
-  // 데이터 가져오기 콜백 등록
-  registerFetchCallback(pattern: RegExp | string, callback: (key: string) => Promise<any>) {
-    this.fetchCallbacks.set(pattern.toString(), callback);
-  }
-
-  // 프리페치 실행
-  private async prefetch(keys: string[]) {
-    const uniqueKeys = Array.from(new Set(keys));
-    const fetchPromises = uniqueKeys
-      .filter(key => !this.cache.has(key) && !this.prefetchQueue.has(key))
-      .map(key => this.fetchData(key));
-
-    await Promise.all(fetchPromises);
-  }
-
-  // 데이터 가져오기
-  private async fetchData(key: string): Promise<void> {
-    this.prefetchQueue.add(key);
-
+  private async initializeMetrics(): Promise<void> {
     try {
-      const callback = this.findFetchCallback(key);
-      if (!callback) {
-        console.warn(`No fetch callback found for key: ${key}`);
-        return;
-      }
-
-      const data = await callback(key);
-      this.set(key, data);
+      const stats = await this.cacheManager.getStats();
+      this.metrics.push(this.createMetricsFromStats(stats));
     } catch (error) {
-      console.error(`Failed to fetch data for key: ${key}`, error);
-    } finally {
-      this.prefetchQueue.delete(key);
+      console.error('Error initializing metrics:', error);
     }
   }
 
-  // 적절한 fetch 콜백 찾기
-  private findFetchCallback(key: string): ((key: string) => Promise<any>) | undefined {
-    for (const [pattern, callback] of this.fetchCallbacks.entries()) {
-      if (new RegExp(pattern).test(key)) {
-        return callback;
-      }
+  private createMetricsFromStats(stats: CacheStats): CacheMetrics {
+    const previousMetrics = this.metrics[this.metrics.length - 1];
+    const timestamp = new Date().toISOString();
+
+    return {
+      hitRate: {
+        rate: stats.hitRate || 0,
+        trend: this.calculateTrend(stats.hitRate, previousMetrics?.hitRate.rate),
+        change: this.calculateChange(stats.hitRate, previousMetrics?.hitRate.rate)
+      },
+      latency: {
+        average: 0, // 실제 구현에서는 Redis의 latency를 측정
+        trend: 'stable',
+        change: 0
+      },
+      memory: {
+        usage: (stats.size / stats.maxSize) * 100,
+        trend: this.calculateTrend(stats.size, previousMetrics?.items.count),
+        change: this.calculateChange(stats.size, previousMetrics?.items.count)
+      },
+      items: {
+        count: stats.size,
+        trend: this.calculateTrend(stats.size, previousMetrics?.items.count),
+        change: this.calculateChange(stats.size, previousMetrics?.items.count)
+      },
+      timestamp
+    };
+  }
+
+  private calculateTrend(current: number, previous?: number): 'up' | 'down' | 'stable' {
+    if (previous === undefined) return 'stable';
+    if (current > previous) return 'up';
+    if (current < previous) return 'down';
+    return 'stable';
+  }
+
+  private calculateChange(current: number, previous?: number): number {
+    if (previous === undefined) return 0;
+    return ((current - previous) / previous) * 100;
+  }
+
+  public async get<T>(key: string): Promise<T | null> {
+    return this.cacheManager.get<T>(key);
+  }
+
+  public async set<T>(key: string, value: T, ttl?: number): Promise<void> {
+    await this.cacheManager.set(key, value, ttl);
+    await this.updateMetrics();
+  }
+
+  public async delete(key: string): Promise<boolean> {
+    const result = await this.cacheManager.delete(key);
+    await this.updateMetrics();
+    return result;
+  }
+
+  public async clear(): Promise<void> {
+    await this.cacheManager.clear();
+    await this.updateMetrics();
+  }
+
+  public async getMetrics(timeRange: '24h' | '7d' | '30d' = '24h'): Promise<CacheMetrics[]> {
+    const now = Date.now();
+    const rangeMs = this.getTimeRangeInMs(timeRange);
+    
+    return this.metrics.filter(metric => {
+      const metricTime = new Date(metric.timestamp).getTime();
+      return now - metricTime <= rangeMs;
+    });
+  }
+
+  private getTimeRangeInMs(timeRange: '24h' | '7d' | '30d'): number {
+    switch (timeRange) {
+      case '24h':
+        return 24 * 60 * 60 * 1000;
+      case '7d':
+        return 7 * 24 * 60 * 60 * 1000;
+      case '30d':
+        return 30 * 24 * 60 * 60 * 1000;
     }
-    return undefined;
   }
 
-  // 프리페치 규칙 확인
-  private checkPrefetchRules(key: string, data: any) {
-    this.prefetchRules.forEach(rule => {
-      if (
-        (rule.pattern instanceof RegExp && rule.pattern.test(key)) ||
-        (typeof rule.pattern === 'string' && key.includes(rule.pattern))
-      ) {
-        if (!rule.condition || rule.condition(data)) {
-          this.prefetch(rule.relatedKeys);
-        }
-      }
-    });
+  private async updateMetrics(): Promise<void> {
+    try {
+      const stats = await this.cacheManager.getStats();
+      this.metrics.push(this.createMetricsFromStats(stats));
+      
+      // 오래된 메트릭 제거
+      const oneMonthAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
+      this.metrics = this.metrics.filter(metric => 
+        new Date(metric.timestamp).getTime() > oneMonthAgo
+      );
+    } catch (error) {
+      console.error('Error updating metrics:', error);
+    }
   }
 
-  // 태그로 캐시 항목 삭제
-  invalidateByTag(tag: string): void {
-    this.cache.forEach((entry, key) => {
-      if (entry.tags?.includes(tag)) {
-        this.cache.delete(key);
-      }
-    });
-  }
-
-  // 패턴으로 캐시 항목 삭제
-  invalidateByPattern(pattern: RegExp): void {
-    this.cache.forEach((_, key) => {
-      if (pattern.test(key)) {
-        this.cache.delete(key);
-      }
-    });
-  }
-
-  // 캐시 성능 모니터링
-  private monitorCachePerformance() {
-    const hitCount = new Map<string, number>();
-    const missCount = new Map<string, number>();
-
-    this.cacheHits.subscribe(key => {
-      hitCount.set(key, (hitCount.get(key) || 0) + 1);
-    });
-
-    this.cacheMisses.subscribe(key => {
-      missCount.set(key, (missCount.get(key) || 0) + 1);
-    });
-
-    // 주기적으로 성능 메트릭 계산
-    setInterval(() => {
-      const metrics = this.calculateCacheMetrics(hitCount, missCount);
-      console.log('Cache Performance Metrics:', metrics);
-    }, 60000); // 1분마다
-  }
-
-  // 캐시 성능 메트릭 계산
-  private calculateCacheMetrics(hitCount: Map<string, number>, missCount: Map<string, number>) {
-    const totalHits = Array.from(hitCount.values()).reduce((sum, count) => sum + count, 0);
-    const totalMisses = Array.from(missCount.values()).reduce((sum, count) => sum + count, 0);
-    const total = totalHits + totalMisses;
-
-    return {
-      hitRate: total > 0 ? totalHits / total : 0,
-      missRate: total > 0 ? totalMisses / total : 0,
-      totalRequests: total,
-      cacheSize: this.cache.size,
-      maxSize: this.cache.max
+  public async configure(config: Partial<CacheConfig>): Promise<void> {
+    this.config = {
+      ...this.config,
+      ...config
     };
+    await this.cacheManager.configure(this.config);
   }
 
-  // 캐시 상태 가져오기
-  getCacheStats() {
-    return {
-      size: this.cache.size,
-      maxSize: this.cache.max,
-      keys: Array.from(this.cache.keys()),
-      prefetchQueueSize: this.prefetchQueue.size
-    };
-  }
-
-  // 캐시 초기화
-  clear(): void {
-    this.cache.clear();
-    this.prefetchQueue.clear();
-  }
-
-  // 특정 키의 캐시 삭제
-  delete(key: string): void {
-    this.cache.delete(key);
+  public async close(): Promise<void> {
+    await this.cacheManager.close();
   }
 } 
