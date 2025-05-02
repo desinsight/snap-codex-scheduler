@@ -11,6 +11,10 @@ import 'jest-styled-components';
 import { setupTestEnvironment } from './utils/testUtils';
 import { server } from './mocks/server';
 
+// Add web API globals
+import { Response, Request, Headers, fetch } from 'undici';
+Object.assign(global, { Response, Request, Headers, fetch });
+
 // Add TextEncoder and TextDecoder to global
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
@@ -63,57 +67,46 @@ jest.mock('i18next', () => ({
   }),
 }));
 
-// 테스트 환경에서 console.error와 console.warn을 무시하도록 설정
+// Configure console error and warning handling
 const originalError = console.error;
 const originalWarn = console.warn;
 
-beforeAll(() => {
+beforeAll(async () => {
+  // Start MSW server
+  await server.listen({ onUnhandledRequest: 'warn' });
+
   console.error = (...args) => {
-    if (args[0]?.includes('Warning: An update to')) {
-      return;
-    }
-    if (args[0]?.includes('React does not recognize the')) {
-      return;
-    }
+    if (args[0]?.includes('Warning: An update to')) return;
+    if (args[0]?.includes('React does not recognize the')) return;
     originalError.call(console, ...args);
   };
 
   console.warn = (...args) => {
-    if (args[0]?.includes('react-i18next::')) {
-      return;
-    }
+    if (args[0]?.includes('react-i18next::')) return;
     originalWarn.call(console, ...args);
   };
 });
 
-afterAll(() => {
+afterEach(async () => {
+  // Reset MSW handlers
+  await server.resetHandlers();
+});
+
+afterAll(async () => {
+  // Stop MSW server
+  await server.close();
+  
   console.error = originalError;
   console.warn = originalWarn;
 });
 
-// 테스트 라이브러리 설정
+// Configure testing library
 configure({
   testIdAttribute: 'data-testid',
 });
 
-// 테스트 타임아웃 설정
+// Set test timeout
 jest.setTimeout(10000);
-
-// MSW 서버 설정
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
-
-// 테스트 환경에서 사용할 전역 변수 설정
-global.matchMedia =
-  global.matchMedia ||
-  function () {
-    return {
-      matches: false,
-      addListener: jest.fn(),
-      removeListener: jest.fn(),
-    };
-  };
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -149,7 +142,7 @@ const sessionStorageMock = (() => {
   };
 })();
 
-// Mock window object
+// Mock window storage
 Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
   writable: true,

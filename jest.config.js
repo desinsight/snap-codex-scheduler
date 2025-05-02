@@ -1,10 +1,11 @@
-module.exports = {
+export default {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
+  setupFiles: ['<rootDir>/src/setupPolyfill.ts'],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
@@ -25,7 +26,22 @@ module.exports = {
     '<rootDir>/src/**/*.{spec,test}.{ts,tsx}',
   ],
   transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest',
+    '^.+\\.(ts|tsx)$': ['ts-jest', {
+      useESM: true,
+    }],
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  extensionsToTreatAsEsm: ['.ts', '.tsx'],
+  testEnvironmentOptions: {
+    customExportConditions: ['node', 'node-addons'],
+  },
+  transformIgnorePatterns: [
+    'node_modules/(?!(@mswjs|msw)/)',
+  ],
+  globals: {
+    'ts-jest': {
+      isolatedModules: true,
+      useESM: true,
+    },
+  },
 }; 

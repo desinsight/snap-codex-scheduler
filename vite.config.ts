@@ -1,5 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { Response, Request, Headers, fetch } from 'undici'
+import { TextEncoder, TextDecoder } from 'util'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -24,3 +26,12 @@ export default defineConfig({
     strictPort: true,
   },
 })
+
+global.TextEncoder = TextEncoder
+global.TextDecoder = TextDecoder
+
+Object.assign(global, { Response, Request, Headers, fetch })
+
+
+
+
