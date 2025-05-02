@@ -1,115 +1,220 @@
-import React from 'react';
-import { CheckCircleIcon, ClockIcon } from '@heroicons/react/24/outline';
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+import { DashboardLayout, WidgetConfig } from '../../types/dashboard';
+import { DashboardService } from '../../services/DashboardService';
+import Widget from './Widget';
+import WidgetEditor from './WidgetEditor';
+import ThemeEditor from './ThemeEditor';
+import { GridLayout } from 'react-grid-layout';
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
+
+const Container = styled.div`
+  padding: 20px;
+  height: 100%;
+  background-color: ${({ theme }) => theme.colors.background};
+`;
+
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+
+const Title = styled.h1`
+  margin: 0;
+  color: ${({ theme }) => theme.colors.text};
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
+  padding: 8px 16px;
+  border: none;
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  background-color: ${({ theme, variant }) =>
+    variant === 'secondary' ? theme.colors.secondary : theme.colors.primary};
+  color: white;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.9;
+  }
+`;
 
 const Dashboard: React.FC = () => {
+  const { t } = useTranslation();
+  const [layouts, setLayouts] = useState<DashboardLayout[]>([]);
+  const [currentLayout, setCurrentLayout] = useState<DashboardLayout | null>(null);
+  const [isWidgetEditorOpen, setWidgetEditorOpen] = useState(false);
+  const [isThemeEditorOpen, setThemeEditorOpen] = useState(false);
+  const [editingWidget, setEditingWidget] = useState<WidgetConfig | null>(null);
+  
+  const dashboardService = DashboardService.getInstance();
+
+  useEffect(() => {
+    loadLayouts();
+  }, []);
+
+  const loadLayouts = async () => {
+    try {
+      const userLayouts = await dashboardService.getUserLayouts();
+      setLayouts(userLayouts);
+      if (userLayouts.length > 0) {
+        setCurrentLayout(userLayouts[0]);
+      }
+    } catch (error) {
+      console.error('Failed to load layouts:', error);
+    }
+  };
+
+  const handleLayoutChange = async (layout: GridLayout.Layout[]) => {
+    if (!currentLayout) return;
+
+    const updatedWidgets = currentLayout.widgets.map((widget, i) => ({
+      ...widget,
+      x: layout[i].x,
+      y: layout[i].y,
+      width: layout[i].w,
+      height: layout[i].h
+    }));
+
+    try {
+      await dashboardService.saveLayout({
+        ...currentLayout,
+        widgets: updatedWidgets
+      });
+    } catch (error) {
+      console.error('Failed to save layout:', error);
+    }
+  };
+
+  const handleAddWidget = () => {
+    setEditingWidget(null);
+    setWidgetEditorOpen(true);
+  };
+
+  const handleEditWidget = (widget: WidgetConfig) => {
+    setEditingWidget(widget);
+    setWidgetEditorOpen(true);
+  };
+
+  const handleDeleteWidget = async (widgetId: string) => {
+    try {
+      await dashboardService.deleteWidget(widgetId);
+      if (currentLayout) {
+        setCurrentLayout({
+          ...currentLayout,
+          widgets: currentLayout.widgets.filter(w => w.id !== widgetId)
+        });
+      }
+    } catch (error) {
+      console.error('Failed to delete widget:', error);
+    }
+  };
+
+  const handleSaveWidget = async (widget: Partial<WidgetConfig>) => {
+    try {
+      if (editingWidget) {
+        const updated = await dashboardService.updateWidget(editingWidget.id, widget);
+        if (currentLayout) {
+          setCurrentLayout({
+            ...currentLayout,
+            widgets: currentLayout.widgets.map(w =>
+              w.id === updated.id ? updated : w
+            )
+          });
+        }
+      } else {
+        const created = await dashboardService.addWidget(widget as Omit<WidgetConfig, 'id'>);
+        if (currentLayout) {
+          setCurrentLayout({
+            ...currentLayout,
+            widgets: [...currentLayout.widgets, created]
+          });
+        }
+      }
+      setWidgetEditorOpen(false);
+    } catch (error) {
+      console.error('Failed to save widget:', error);
+    }
+  };
+
+  const handleSaveTheme = async (theme: any) => {
+    try {
+      await dashboardService.saveTheme(theme);
+      if (currentLayout) {
+        setCurrentLayout({
+          ...currentLayout,
+          theme
+        });
+      }
+      setThemeEditorOpen(false);
+    } catch (error) {
+      console.error('Failed to save theme:', error);
+    }
+  };
+
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="md:flex md:items-center md:justify-between">
-        <div className="min-w-0 flex-1">
-          <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-            대시보드
-          </h2>
-          <p className="mt-1 text-sm text-gray-500">
-            {new Date().toLocaleDateString('ko-KR', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-              weekday: 'long',
-            })}
-          </p>
-        </div>
-      </div>
+    <Container>
+      <Header>
+        <Title>{currentLayout?.name || t('dashboard.untitled')}</Title>
+        <ButtonGroup>
+          <Button onClick={handleAddWidget}>
+            {t('dashboard.addWidget')}
+          </Button>
+          <Button variant="secondary" onClick={() => setThemeEditorOpen(true)}>
+            {t('dashboard.customizeTheme')}
+          </Button>
+        </ButtonGroup>
+      </Header>
 
-      {/* Today's Tasks */}
-      <div className="bg-white shadow sm:rounded-lg">
-        <div className="px-4 py-5 sm:p-6">
-          <h3 className="text-lg font-medium leading-6 text-gray-900">오늘의 과제</h3>
-          <div className="mt-6 space-y-4">
-            <div className="flex items-center justify-between space-x-4 rounded-lg border border-gray-200 p-4">
-              <div className="flex items-center space-x-4">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-100">
-                  <CheckCircleIcon className="h-5 w-5 text-primary-600" />
-                </div>
-                <div>
-                  <p className="font-medium text-gray-900">보정 디자인보고</p>
-                  <p className="text-sm text-gray-500">ID_2301_동인천중</p>
-                </div>
-              </div>
-              <span className="inline-flex items-center rounded-full bg-primary-100 px-3 py-0.5 text-sm font-medium text-primary-800">
-                진행중
-              </span>
-            </div>
-
-            <div className="flex items-center justify-between space-x-4 rounded-lg border border-gray-200 p-4">
-              <div className="flex items-center space-x-4">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100">
-                  <ClockIcon className="h-5 w-5 text-gray-500" />
-                </div>
-                <div>
-                  <p className="font-medium text-gray-900">방어진조명계획</p>
-                  <p className="text-sm text-gray-500">ID_2301_동인천중</p>
-                </div>
-              </div>
-              <span className="inline-flex items-center rounded-full bg-gray-100 px-3 py-0.5 text-sm font-medium text-gray-800">
-                예정
-              </span>
-            </div>
+      <GridLayout
+        className="layout"
+        layout={currentLayout?.widgets.map(widget => ({
+          i: widget.id,
+          x: widget.x,
+          y: widget.y,
+          w: widget.width,
+          h: widget.height
+        })) || []}
+        cols={12}
+        rowHeight={30}
+        width={1200}
+        onLayoutChange={handleLayoutChange}
+        draggableHandle=".widget-header"
+      >
+        {currentLayout?.widgets.map(widget => (
+          <div key={widget.id}>
+            <Widget
+              widget={widget}
+              onEdit={() => handleEditWidget(widget)}
+              onDelete={() => handleDeleteWidget(widget.id)}
+            />
           </div>
+        ))}
+      </GridLayout>
 
-          <button className="mt-6 w-full rounded-lg border border-dashed border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-600 hover:border-gray-400 hover:bg-gray-50">
-            + 과제 추가하기
-          </button>
-        </div>
-      </div>
+      {isWidgetEditorOpen && (
+        <WidgetEditor
+          widget={editingWidget}
+          onSave={handleSaveWidget}
+          onClose={() => setWidgetEditorOpen(false)}
+        />
+      )}
 
-      {/* Project Status and Weekly Calendar */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        {/* Weekly Calendar */}
-        <div className="bg-white shadow sm:rounded-lg">
-          <div className="px-4 py-5 sm:p-6">
-            <h3 className="text-lg font-medium leading-6 text-gray-900">주간 일정</h3>
-            <div className="mt-6 h-48 rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
-              주간 캘린더가 이곳에 표시됩니다
-            </div>
-            <button className="mt-6 w-full rounded-lg bg-primary-600 px-4 py-2 text-center text-sm font-medium text-white hover:bg-primary-700">
-              전체 일정 보기
-            </button>
-          </div>
-        </div>
-
-        {/* Project Status */}
-        <div className="bg-white shadow sm:rounded-lg">
-          <div className="px-4 py-5 sm:p-6">
-            <h3 className="text-lg font-medium leading-6 text-gray-900">프로젝트 현황</h3>
-            <div className="mt-6 space-y-6">
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-900">ID_2301_동인천중</span>
-                  <span className="text-sm font-medium text-primary-600">65%</span>
-                </div>
-                <div className="mt-2 h-2 rounded-full bg-gray-200">
-                  <div className="h-2 rounded-full bg-primary-600" style={{ width: '65%' }} />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-900">ID_2302_복사초</span>
-                  <span className="text-sm font-medium text-primary-600">40%</span>
-                </div>
-                <div className="mt-2 h-2 rounded-full bg-gray-200">
-                  <div className="h-2 rounded-full bg-primary-600" style={{ width: '40%' }} />
-                </div>
-              </div>
-            </div>
-            <button className="mt-6 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-center text-sm font-medium text-gray-600 hover:bg-gray-50">
-              모든 프로젝트 보기
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+      {isThemeEditorOpen && (
+        <ThemeEditor
+          theme={currentLayout?.theme}
+          onSave={handleSaveTheme}
+          onClose={() => setThemeEditorOpen(false)}
+        />
+      )}
+    </Container>
   );
 };
 

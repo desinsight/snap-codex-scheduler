@@ -1,48 +1,27 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import ProtectedRoute from '../components/auth/ProtectedRoute';
-import LoginForm from '../components/auth/LoginForm';
-import RegisterForm from '../components/auth/RegisterForm';
-import Dashboard from '../pages/Dashboard';
-import Unauthorized from '../pages/Unauthorized';
+import { Routes, Route } from 'react-router-dom';
+import MainLayout from '../components/layout/MainLayout';
+import Calendar from '../components/calendar/CalendarView';
+import Notification from '../components/notification/Notification';
+import Schedule from '../components/schedule/Schedule';
+
+// Placeholder pages
+const Analytics = () => <div>Analytics Page</div>;
+const Settings = () => <div>Settings Page</div>;
+const Profile = () => <div>Profile Page</div>;
 
 const AppRoutes: React.FC = () => {
   return (
     <Routes>
-      {/* Public routes */}
-      <Route path="/login" element={<LoginForm />} />
-      <Route path="/register" element={<RegisterForm />} />
-      <Route path="/unauthorized" element={<Unauthorized />} />
-
-      {/* Protected routes */}
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* Admin routes */}
-      <Route
-        path="/admin/*"
-        element={
-          <ProtectedRoute requiredRole="admin">
-            <div>Admin Dashboard</div>
-          </ProtectedRoute>
-        }
-      />
-
-      {/* Redirect root to dashboard if authenticated, otherwise to login */}
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute>
-            <Navigate to="/dashboard" replace />
-          </ProtectedRoute>
-        }
-      />
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<Calendar />} />
+        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/schedule" element={<Schedule />} />
+        <Route path="/notifications" element={<Notification />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/profile" element={<Profile />} />
+      </Route>
     </Routes>
   );
 };

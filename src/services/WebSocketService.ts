@@ -1,116 +1,103 @@
+import { Server } from 'socket.io';
+import { createServer } from 'http';
+import express from 'express';
 import { NotificationHistory } from '../types/notification';
 
 interface WebSocketConfig {
-  url: string;
-  reconnectInterval: number;
-  maxReconnectAttempts: number;
+  port: number;
+  cors: {
+    origin: string;
+    methods: string[];
+  };
 }
 
-class WebSocketService {
+export class WebSocketService {
   private static instance: WebSocketService;
-  private ws: WebSocket | null = null;
-  private config: WebSocketConfig;
-  private reconnectAttempts = 0;
-  private listeners: Map<string, Set<Function>> = new Map();
+  private io: Server;
+  private connectedClients: Map<string, Set<string>>; // userId -> socketIds
 
-  private constructor(config: WebSocketConfig) {
-    this.config = config;
-    this.connect();
+  private constructor() {
+    this.initializeServer();
+    this.connectedClients = new Map();
   }
 
-  public static getInstance(config: WebSocketConfig): WebSocketService {
+  public static getInstance(): WebSocketService {
     if (!WebSocketService.instance) {
-      WebSocketService.instance = new WebSocketService(config);
+      WebSocketService.instance = new WebSocketService();
     }
     return WebSocketService.instance;
   }
 
-  private connect() {
-    try {
-      this.ws = new WebSocket(this.config.url);
-      this.setupEventListeners();
-    } catch (error) {
-      console.error('WebSocket 연결 실패:', error);
-      this.handleReconnect();
-    }
-  }
-
-  private setupEventListeners() {
-    if (!this.ws) return;
-
-    this.ws.onopen = () => {
-      console.log('WebSocket 연결됨');
-      this.reconnectAttempts = 0;
+  private initializeServer() {
+    const app = express();
+    const httpServer = createServer(app);
+    
+    const config: WebSocketConfig = {
+      port: parseInt(process.env.WS_PORT || '3001'),
+      cors: {
+        origin: process.env.WS_CORS_ORIGIN || '*',
+        methods: ['GET', 'POST'],
+      },
     };
 
-    this.ws.onmessage = event => {
-      try {
-        const data = JSON.parse(event.data);
-        this.notifyListeners(data.type, data.payload);
-      } catch (error) {
-        console.error('메시지 파싱 실패:', error);
+    this.io = new Server(httpServer, {
+      cors: config.cors,
+    });
+
+    this.io.on('connection', (socket) => {
+      const userId = socket.handshake.auth.userId;
+      if (!userId) {
+        socket.disconnect();
+        return;
       }
-    };
 
-    this.ws.onclose = () => {
-      console.log('WebSocket 연결 종료');
-      this.handleReconnect();
-    };
-
-    this.ws.onerror = error => {
-      console.error('WebSocket 에러:', error);
-    };
-  }
-
-  private handleReconnect() {
-    if (this.reconnectAttempts < this.config.maxReconnectAttempts) {
-      this.reconnectAttempts++;
-      setTimeout(() => this.connect(), this.config.reconnectInterval);
-    } else {
-      console.error('최대 재연결 시도 횟수 초과');
-    }
-  }
-
-  public subscribe(eventType: string, callback: Function) {
-    if (!this.listeners.has(eventType)) {
-      this.listeners.set(eventType, new Set());
-    }
-    this.listeners.get(eventType)?.add(callback);
-  }
-
-  public unsubscribe(eventType: string, callback: Function) {
-    this.listeners.get(eventType)?.delete(callback);
-  }
-
-  private notifyListeners(eventType: string, payload: any) {
-    this.listeners.get(eventType)?.forEach(callback => {
-      try {
-        callback(payload);
-      } catch (error) {
-        console.error(`이벤트 핸들러 에러 (${eventType}):`, error);
+      // Add socket to user's connected clients
+      if (!this.connectedClients.has(userId)) {
+        this.connectedClients.set(userId, new Set());
       }
+      this.connectedClients.get(userId)?.add(socket.id);
+
+      // Handle disconnection
+      socket.on('disconnect', () => {
+        this.connectedClients.get(userId)?.delete(socket.id);
+        if (this.connectedClients.get(userId)?.size === 0) {
+          this.connectedClients.delete(userId);
+        }
+      });
+
+      // Handle custom events
+      socket.on('subscribe', (channel: string) => {
+        socket.join(channel);
+      });
+
+      socket.on('unsubscribe', (channel: string) => {
+        socket.leave(channel);
+      });
+    });
+
+    httpServer.listen(config.port, () => {
+      console.log(`WebSocket server running on port ${config.port}`);
     });
   }
 
-  public sendNotification(notification: NotificationHistory) {
-    if (this.ws?.readyState === WebSocket.OPEN) {
-      this.ws.send(
-        JSON.stringify({
-          type: 'notification',
-          payload: notification,
-        })
-      );
-    } else {
-      console.warn('WebSocket이 연결되지 않았습니다.');
+  public sendNotification(userId: string, notification: NotificationHistory) {
+    const clients = this.connectedClients.get(userId);
+    if (clients) {
+      clients.forEach((socketId) => {
+        this.io.to(socketId).emit('notification', notification);
+      });
     }
   }
 
-  public close() {
-    if (this.ws) {
-      this.ws.close();
-      this.ws = null;
-    }
+  public broadcastToChannel(channel: string, event: string, data: any) {
+    this.io.to(channel).emit(event, data);
+  }
+
+  public getConnectedUsers(): string[] {
+    return Array.from(this.connectedClients.keys());
+  }
+
+  public getConnectedClientsCount(): number {
+    return this.connectedClients.size;
   }
 }
-
-export default WebSocketService;

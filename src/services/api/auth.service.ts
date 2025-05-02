@@ -4,7 +4,7 @@ import { API_URL } from '../../config';
 import { getCsrfToken } from '../../utils/csrf';
 import { handleApiError } from '../../utils/errorHandling';
 
-class AuthService {
+export default class AuthService {
   private baseUrl = `${API_URL}/auth`;
 
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
@@ -58,6 +58,4 @@ class AuthService {
       throw handleApiError(error);
     }
   }
-}
-
-export default new AuthService(); 
+} 

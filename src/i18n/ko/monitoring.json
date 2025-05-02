@@ -1,0 +1,47 @@
+{
+  "monitoring": {
+    "distributedCache": {
+      "title": "분산 캐시 모니터링",
+      "totalKeys": "전체 키 수",
+      "totalMemory": "전체 메모리",
+      "totalHits": "전체 히트 수",
+      "hitRate": "히트율",
+      "missRate": "미스율",
+      "latency": "지연 시간",
+      "errorRate": "오류율",
+      "migration": "마이그레이션 상태",
+      "progress": "진행률",
+      "processed": "처리된 항목",
+      "errors": "오류",
+      "duration": "소요 시간",
+      "nodes": "노드 상태",
+      "keysTrend": "키 추이",
+      "memoryTrend": "메모리 추이",
+      "nodeDistribution": "노드 분포",
+      "memoryDistribution": "메모리 분포",
+      "performanceMetrics": "성능 지표",
+      "systemMetrics": "시스템 지표"
+    },
+    "timeRange": {
+      "5m": "5분",
+      "15m": "15분",
+      "1h": "1시간",
+      "6h": "6시간",
+      "24h": "24시간"
+    },
+    "refresh": {
+      "1s": "1초",
+      "5s": "5초",
+      "10s": "10초",
+      "30s": "30초"
+    },
+    "system": {
+      "cpu": "CPU 사용률",
+      "memory": "메모리 사용률",
+      "network": "네트워크 I/O"
+    },
+    "pause": "일시정지",
+    "resume": "재시작",
+    "refresh": "새로고침"
+  }
+} 

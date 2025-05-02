@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { motion } from 'framer-motion';
+import { CardProps } from '../../types/props';
 
 type CardVariant = 'elevation' | 'outlined';
 
@@ -95,13 +96,7 @@ const CardSubtitle = styled.h4`
   ${({ theme }) => theme.typography.body2};
 `;
 
-export const Card: React.FC<CardProps> & {
-  Header: typeof CardHeader;
-  Content: typeof CardContent;
-  Footer: typeof CardFooter;
-  Title: typeof CardTitle;
-  Subtitle: typeof CardSubtitle;
-} = ({ children, ...props }) => {
+const Card: React.FC<CardProps> = ({ children, ...props }) => {
   return <StyledCard {...props}>{children}</StyledCard>;
 };
 
@@ -110,3 +105,5 @@ Card.Content = CardContent;
 Card.Footer = CardFooter;
 Card.Title = CardTitle;
 Card.Subtitle = CardSubtitle;
+
+export default Card;

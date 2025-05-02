@@ -2,24 +2,40 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Task, Note } from '../../types/models';
 import { TaskService } from '../../services/api/task.service';
 
-interface TaskState {
-  tasks: Task[];
-  currentTask: Task | null;
+// 상태 정규화
+interface NormalizedTaskState {
+  entities: {
+    tasks: Record<string, Task>;
+    notes: Record<string, Note>;
+  };
+  ids: string[];
+  currentTaskId: string | null;
   loading: boolean;
   error: string | null;
+  lastUpdated: number;
 }
 
-const initialState: TaskState = {
-  tasks: [],
-  currentTask: null,
+const initialState: NormalizedTaskState = {
+  entities: {
+    tasks: {},
+    notes: {}
+  },
+  ids: [],
+  currentTaskId: null,
   loading: false,
   error: null,
+  lastUpdated: 0
 };
 
 // Async thunks
-export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (projectId?: string) => {
-  return await TaskService.getTasks(projectId);
-});
+export const fetchTasks = createAsyncThunk(
+  'tasks/fetchTasks',
+  async (projectId?: string, { getState }) => {
+    const state = getState() as { tasks: NormalizedTaskState };
+    const forceRefresh = Date.now() - state.tasks.lastUpdated > 5 * 60 * 1000;
+    return await TaskService.getTasks(projectId, forceRefresh);
+  }
+);
 
 export const updateTaskStatus = createAsyncThunk(
   'tasks/updateStatus',
@@ -40,11 +56,25 @@ const taskSlice = createSlice({
   initialState,
   reducers: {
     setCurrentTask: (state, action) => {
-      state.currentTask = action.payload;
+      state.currentTaskId = action.payload;
     },
     clearError: state => {
       state.error = null;
     },
+    // 낙관적 업데이트를 위한 리듀서
+    optimisticUpdate: (state, action) => {
+      const { taskId, status } = action.payload;
+      if (state.entities.tasks[taskId]) {
+        state.entities.tasks[taskId].status = status;
+      }
+    },
+    // 롤백을 위한 리듀서
+    rollbackUpdate: (state, action) => {
+      const { taskId, previousStatus } = action.payload;
+      if (state.entities.tasks[taskId]) {
+        state.entities.tasks[taskId].status = previousStatus;
+      }
+    }
   },
   extraReducers: builder => {
     builder
@@ -55,7 +85,20 @@ const taskSlice = createSlice({
       })
       .addCase(fetchTasks.fulfilled, (state, action) => {
         state.loading = false;
-        state.tasks = action.payload;
+        state.lastUpdated = Date.now();
+        
+        // 상태 정규화
+        action.payload.forEach(task => {
+          state.entities.tasks[task.taskId] = task;
+          if (!state.ids.includes(task.taskId)) {
+            state.ids.push(task.taskId);
+          }
+          
+          // 노트 정규화
+          task.notes?.forEach(note => {
+            state.entities.notes[note.noteId] = note;
+          });
+        });
       })
       .addCase(fetchTasks.rejected, (state, action) => {
         state.loading = false;
@@ -63,26 +106,39 @@ const taskSlice = createSlice({
       })
       // Update task status
       .addCase(updateTaskStatus.fulfilled, (state, action) => {
-        const index = state.tasks.findIndex(task => task.taskId === action.payload.taskId);
-        if (index !== -1) {
-          state.tasks[index] = action.payload;
-        }
-        if (state.currentTask?.taskId === action.payload.taskId) {
-          state.currentTask = action.payload;
+        const task = action.payload;
+        state.entities.tasks[task.taskId] = task;
+        if (state.currentTaskId === task.taskId) {
+          state.currentTaskId = task.taskId;
         }
       })
       // Add note
       .addCase(addTaskNote.fulfilled, (state, action) => {
-        const task = state.tasks.find(t => t.taskId === action.payload.taskId);
+        const note = action.payload;
+        state.entities.notes[note.noteId] = note;
+        const task = state.entities.tasks[note.taskId];
         if (task) {
-          task.notes.push(action.payload);
-        }
-        if (state.currentTask?.taskId === action.payload.taskId) {
-          state.currentTask.notes.push(action.payload);
+          task.notes = task.notes || [];
+          task.notes.push(note);
         }
       });
   },
 });
 
-export const { setCurrentTask, clearError } = taskSlice.actions;
+// 셀렉터
+export const selectAllTasks = (state: { tasks: NormalizedTaskState }) => 
+  state.tasks.ids.map(id => state.tasks.entities.tasks[id]);
+
+export const selectTaskById = (taskId: string) => (state: { tasks: NormalizedTaskState }) => 
+  state.tasks.entities.tasks[taskId];
+
+export const selectCurrentTask = (state: { tasks: NormalizedTaskState }) => 
+  state.tasks.currentTaskId ? state.tasks.entities.tasks[state.tasks.currentTaskId] : null;
+
+export const selectTaskNotes = (taskId: string) => (state: { tasks: NormalizedTaskState }) => {
+  const task = state.tasks.entities.tasks[taskId];
+  return task?.notes?.map(noteId => state.tasks.entities.notes[noteId]) || [];
+};
+
+export const { setCurrentTask, clearError, optimisticUpdate, rollbackUpdate } = taskSlice.actions;
 export default taskSlice.reducer;

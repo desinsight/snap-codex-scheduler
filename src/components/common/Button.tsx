@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { motion } from 'framer-motion';
+import { ButtonProps } from '../../types/props';
 
 type ButtonVariant = 'contained' | 'outlined' | 'text';
 type ButtonColor = 'primary' | 'secondary' | 'error' | 'warning' | 'success' | 'info';
@@ -157,7 +158,7 @@ const LoadingSpinner = styled.div`
   }
 `;
 
-export const Button: React.FC<ButtonProps> = ({
+const Button: React.FC<ButtonProps> = ({
   children,
   variant = 'contained',
   color = 'primary',
@@ -210,3 +211,5 @@ export const Button: React.FC<ButtonProps> = ({
     </StyledButton>
   );
 };
+
+export default Button;

@@ -3,11 +3,12 @@ import {
   NotificationPreference,
   NotificationHistory,
 } from '../types/notification';
-import EmailService from './EmailService';
-import WebSocketService from './WebSocketService';
-import DatabaseService from './DatabaseService';
+import { Schedule } from '../types/schedule';
+import { EmailService } from './EmailService';
+import { WebSocketService } from './WebSocketService';
+import { DatabaseService } from './DatabaseService';
 
-class NotificationService {
+export class NotificationService {
   private static instance: NotificationService;
   private permission: NotificationPermission = 'default';
   private emailService: EmailService;
@@ -28,25 +29,13 @@ class NotificationService {
 
   private initializeServices() {
     // 이메일 서비스 초기화
-    this.emailService = EmailService.getInstance({
-      provider: 'sendgrid', // 또는 'ses'
-      apiKey: process.env.EMAIL_API_KEY || '',
-      fromEmail: 'notifications@example.com',
-      fromName: 'SnapCodex 알림',
-    });
+    this.emailService = new EmailService();
 
     // 웹소켓 서비스 초기화
-    this.webSocketService = WebSocketService.getInstance({
-      url: process.env.WS_URL || 'ws://localhost:8080',
-      reconnectInterval: 5000,
-      maxReconnectAttempts: 5,
-    });
+    this.webSocketService = new WebSocketService();
 
     // 데이터베이스 서비스 초기화
-    this.databaseService = DatabaseService.getInstance({
-      type: 'indexeddb',
-      config: {},
-    });
+    this.databaseService = new DatabaseService();
 
     // 웹소켓 이벤트 구독
     this.webSocketService.subscribe('notification', (notification: NotificationHistory) => {
@@ -180,5 +169,3 @@ class NotificationService {
     await this.databaseService.restore(backupFile);
   }
 }
-
-export default NotificationService;

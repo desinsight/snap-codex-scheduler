@@ -1,3 +1,9 @@
+export enum UserRole {
+  ADMIN = 'admin',
+  USER = 'user',
+  MANAGER = 'manager',
+}
+
 export interface User {
   id: string;
   email: string;
@@ -6,8 +12,6 @@ export interface User {
   createdAt: Date;
   updatedAt: Date;
 }
-
-export type UserRole = 'admin' | 'manager' | 'user';
 
 export interface AuthState {
   user: User | null;
@@ -29,6 +33,6 @@ export interface RegisterCredentials {
 }
 
 export interface AuthResponse {
-  user: User;
   token: string;
+  user: User;
 }

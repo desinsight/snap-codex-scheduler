@@ -64,7 +64,11 @@ export interface NotificationTemplateState {
   error: string | null;
 }
 
-export type NotificationPriority = 'low' | 'medium' | 'high' | 'urgent';
+export enum NotificationPriority {
+  LOW = 'low',
+  MEDIUM = 'medium',
+  HIGH = 'high',
+}
 
 export interface NotificationGroup {
   id: string;
@@ -105,28 +109,11 @@ export interface TemplateImportExport {
 }
 
 export interface NotificationStats {
-  successRate: number;
-  totalSent: number;
-  totalSuccess: number;
-  totalFailed: number;
-  hourlyDistribution: {
-    hour: number;
-    count: number;
-  }[];
-  categoryDistribution: {
-    category: string;
-    count: number;
-  }[];
-  failureReasons: {
-    reason: string;
-    count: number;
-  }[];
-  userResponseRates: {
-    userId: string;
-    responseRate: number;
-    totalNotifications: number;
-    respondedCount: number;
-  }[];
+  total: number;
+  unread: number;
+  byType: Record<NotificationType, number>;
+  byPriority: Record<NotificationPriority, number>;
+  byCategory: Record<NotificationTemplateCategory, number>;
 }
 
 export interface UserBehaviorPattern {
@@ -588,7 +575,57 @@ export interface NotificationPreference {
 }
 
 export interface NotificationState {
-  preferences: NotificationPreference;
-  history: NotificationHistory[];
+  notifications: Notification[];
   unreadCount: number;
+  isLoading: boolean;
+  error: string | null;
+}
+
+export enum NotificationStatus {
+  UNREAD = 'unread',
+  READ = 'read',
+  ARCHIVED = 'archived',
+}
+
+export interface Notification {
+  id: string;
+  title: string;
+  message: string;
+  type: NotificationType;
+  priority: NotificationPriority;
+  status: NotificationStatus;
+  scheduleId?: string;
+  userId: string;
+  createdAt: Date;
+  readAt?: Date;
+}
+
+export interface NotificationPreferences {
+  userId: string;
+  email: boolean;
+  push: boolean;
+  sms: boolean;
+  inApp: boolean;
+  doNotDisturb: {
+    enabled: boolean;
+    startTime?: string; // HH:mm format
+    endTime?: string; // HH:mm format
+  };
+  categories: {
+    [key in NotificationTemplateCategory]: boolean;
+  };
+}
+
+export interface NotificationTemplate {
+  id: string;
+  name: string;
+  subject: string;
+  content: string;
+  variables: string[];
+  type: NotificationType;
+  category: NotificationTemplateCategory;
+}
+
+export interface ScheduleCategory {
+  // Add appropriate properties for ScheduleCategory
 }

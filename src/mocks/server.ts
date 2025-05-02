@@ -1,5 +1,6 @@
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
+import { handlers } from './handlers';
 
 const handlers = [
   // 서비스 설정
@@ -75,3 +76,12 @@ const handlers = [
 ];
 
 export const server = setupServer(...handlers);
+
+// 모든 테스트 전에 서버 시작
+beforeAll(() => server.listen());
+
+// 각 테스트 후에 핸들러 초기화
+afterEach(() => server.resetHandlers());
+
+// 모든 테스트 후에 서버 종료
+afterAll(() => server.close());
