@@ -40,6 +40,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode, customTheme?: 
   const currentTheme = themeMode === 'light' ? flatLightTheme : flatDarkTheme;
   const mergedTheme = customTheme ? merge({}, currentTheme, customTheme) : currentTheme;
 
+  // 디버깅: 실제 theme 객체 구조 확인
+  console.log('ThemeProvider theme:', mergedTheme);
+
   return (
     <ThemeContext.Provider value={{ themeMode, toggleTheme }}>
       <StyledThemeProvider theme={mergedTheme}>
