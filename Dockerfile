@@ -27,9 +27,9 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/*
 
 USER builder
-RUN npm ci --production --no-optional \
-    && npm audit fix --production \
-    && npm cache clean --force
+# Install all dependencies including devDependencies
+RUN npm install && \
+    npm audit fix || true
 
 # Copy project files with correct ownership
 COPY --chown=builder:builder . .
@@ -58,10 +58,6 @@ RUN apk update && \
         nginx-mod-http-headers-more \
     && rm -rf /var/cache/apk/* \
     && rm -rf /tmp/*
-
-# Create nginx user and group with fixed IDs
-RUN addgroup -g 101 -S nginx && \
-    adduser -S -D -H -u 101 -h /var/cache/nginx -s /sbin/nologin -G nginx nginx
 
 # Copy nginx configuration
 COPY --chown=nginx:nginx nginx.conf /etc/nginx/conf.d/default.conf

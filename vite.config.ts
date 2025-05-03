@@ -7,7 +7,7 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/snap-codex-scheduler/',
+  base: process.env.NODE_ENV === 'production' ? '/snap-codex-scheduler/' : '/',
   resolve: {
     extensions: ['.mjs', '.js', '.mts', '.ts', '.jsx', '.tsx', '.json'],
     alias: {
@@ -16,12 +16,21 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    sourcemap: false,
+    sourcemap: process.env.NODE_ENV !== 'production',
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true,
-        drop_debugger: true
+        drop_console: process.env.NODE_ENV === 'production',
+        drop_debugger: process.env.NODE_ENV === 'production'
+      }
+    },
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          ui: ['@headlessui/react', '@heroicons/react', 'framer-motion'],
+          calendar: ['@fullcalendar/core', '@fullcalendar/daygrid', '@fullcalendar/timegrid', '@fullcalendar/interaction']
+        }
       }
     }
   },

@@ -1,0 +1,17 @@
+{
+  "Changes": [
+    {
+      "Action": "UPSERT",
+      "ResourceRecordSet": {
+        "Name": "_ba2eb807e78cbe6ad4a57b2ac3d7912e.snap-codex.com",
+        "Type": "CNAME",
+        "TTL": 300,
+        "ResourceRecords": [
+          {
+            "Value": "_9590aae3a19a68862c3bfb68ac6f1eaa.xlfgrmvvlj.acm-validations.aws"
+          }
+        ]
+      }
+    }
+  ]
+} 
