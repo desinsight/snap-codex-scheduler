@@ -1,6 +1,12 @@
-# SnapCodex Scheduler
+# Snap Codex Scheduler
+
+[![Deploy to GitHub Pages](https://github.com/desinsight/snap-codex-scheduler/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/desinsight/snap-codex-scheduler/actions/workflows/deploy-pages.yml)
 
 알림 스케줄링 및 관리 시스템
+
+## 배포 URL
+
+- GitHub Pages: https://desinsight.github.io/snap-codex-scheduler/
 
 ## 기능
 
