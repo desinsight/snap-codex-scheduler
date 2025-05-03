@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
+import { DefaultTheme } from 'styled-components';
 import { lightTheme, darkTheme } from '../styles/theme';
 
 type ThemeMode = 'light' | 'dark';
@@ -36,11 +37,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setThemeMode(prevMode => (prevMode === 'light' ? 'dark' : 'light'));
   };
 
-  const theme = themeMode === 'light' ? lightTheme : darkTheme;
+  const currentTheme = themeMode === 'light' ? lightTheme : darkTheme;
 
   return (
     <ThemeContext.Provider value={{ themeMode, toggleTheme }}>
-      <StyledThemeProvider theme={theme}>{children}</StyledThemeProvider>
+      <StyledThemeProvider theme={currentTheme}>
+        {children}
+      </StyledThemeProvider>
     </ThemeContext.Provider>
   );
 };

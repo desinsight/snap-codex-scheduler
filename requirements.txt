@@ -1,0 +1,4 @@
+PyGithub==2.6.1
+requests>=2.14.0
+pyjwt[crypto]>=2.4.0
+pynacl>=1.4.0 

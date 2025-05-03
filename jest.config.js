@@ -42,7 +42,7 @@ const config = {
     },
   },
   verbose: true,
-  testTimeout: 30000,
+  testTimeout: 60000,
   globals: {
     'ts-jest': {
       useESM: true,

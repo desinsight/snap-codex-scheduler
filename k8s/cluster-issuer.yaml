@@ -4,19 +4,11 @@ metadata:
   name: letsencrypt-prod
 spec:
   acme:
+    email: gyungchulbae@gmail.com  # Please replace with your actual email
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: admin@snap-codex.com
     privateKeySecretRef:
-      name: letsencrypt-prod
+      name: letsencrypt-prod-private-key
     solvers:
     - http01:
         ingress:
-          class: nginx
-    - dns01:
-        route53:
-          region: ap-northeast-2
-          hostedZoneID: [YOUR_HOSTED_ZONE_ID]
-          accessKeyID: [YOUR_AWS_ACCESS_KEY_ID]
-          secretAccessKeySecretRef:
-            name: route53-credentials
-            key: secret-access-key 
+          class: nginx 

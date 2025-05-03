@@ -2,11 +2,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: snap-codex-scheduler
+  namespace: default
 spec:
   selector:
     app: snap-codex-scheduler
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 3000
-  type: LoadBalancer 
+      targetPort: 3000   # 실제 앱 컨테이너 포트에 맞게 수정
+  type: ClusterIP 

@@ -1,38 +1,29 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: snap-codex-scheduler-ingress
+  name: snap-codex-ingress
+  namespace: snap-codex
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    cert-manager.io/cluster-issuer: "selfsigned-issuer"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - scheduler.snap-codex.com
-    - api.snap-codex.com
-    secretName: snap-codex-scheduler-tls
+    - snap-codex.com
+    secretName: snap-codex-tls
   rules:
-  - host: scheduler.snap-codex.com
+  - host: snap-codex.com
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: snap-codex-scheduler
+            name: snap-codex-nginx
             port:
-              number: 80
-  - host: api.snap-codex.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: snap-codex-scheduler
-            port:
-              number: 80 
+              number: 443 

@@ -4,6 +4,7 @@ import MainLayout from '../components/layout/MainLayout';
 import Calendar from '../components/calendar/CalendarView';
 import Notification from '../components/notification/Notification';
 import Schedule from '../components/schedule/Schedule';
+import TestPage from '../components/TestPage';
 
 // Placeholder pages
 const Analytics = () => <div>Analytics Page</div>;
@@ -21,6 +22,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/test" element={<TestPage />} />
       </Route>
     </Routes>
   );

@@ -21,18 +21,24 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <button
                 type="button"
                 className="rounded-full bg-white p-2 text-gray-400 hover:text-gray-500"
+                aria-label="Search"
+                title="Search"
               >
                 <MagnifyingGlassIcon className="h-6 w-6" />
               </button>
               <button
                 type="button"
                 className="ml-3 rounded-full bg-white p-2 text-gray-400 hover:text-gray-500"
+                aria-label="Notifications"
+                title="Notifications"
               >
                 <BellIcon className="h-6 w-6" />
               </button>
               <button
                 type="button"
                 className="ml-3 rounded-full bg-white p-2 text-gray-400 hover:text-gray-500"
+                aria-label="Menu"
+                title="Menu"
               >
                 <Bars3Icon className="h-6 w-6" />
               </button>

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: snap-codex-scheduler
-  namespace: snap-codex
+  namespace: default
   labels:
     app: snap-codex-scheduler
 spec:
@@ -20,19 +20,21 @@ spec:
         prometheus.io/path: "/metrics"
     spec:
       serviceAccountName: snap-codex-scheduler
+      imagePullSecrets:
+      - name: ecr-secret
       containers:
       - name: snap-codex-scheduler
-        image: snap-codex-scheduler:${VERSION}
-        imagePullPolicy: IfNotPresent
+        image: 848598601877.dkr.ecr.us-east-1.amazonaws.com/snap-codex-scheduler:latest
+        imagePullPolicy: Always
         ports:
-        - containerPort: 80
+        - containerPort: 3000
         resources:
           requests:
-            memory: "512Mi"
-            cpu: "200m"
+            cpu: "100m"
+            memory: "128Mi"
           limits:
-            memory: "1Gi"
-            cpu: "1000m"
+            cpu: "500m"
+            memory: "512Mi"
         envFrom:
         - configMapRef:
             name: snap-codex-scheduler-config
@@ -40,20 +42,16 @@ spec:
             name: snap-codex-scheduler-secrets
         readinessProbe:
           httpGet:
-            path: /health
-            port: 80
+            path: /
+            port: 3000
           initialDelaySeconds: 5
-          periodSeconds: 10
-          timeoutSeconds: 3
-          failureThreshold: 3
+          periodSeconds: 5
         livenessProbe:
           httpGet:
-            path: /health
-            port: 80
-          initialDelaySeconds: 15
-          periodSeconds: 20
-          timeoutSeconds: 3
-          failureThreshold: 3
+            path: /
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
         volumeMounts:
         - name: config-volume
           mountPath: /app/config
@@ -64,4 +62,12 @@ spec:
         configMap:
           name: snap-codex-scheduler-config
       - name: logs
-        emptyDir: {} 
+        emptyDir: {}
+      - name: ssl-cert
+        secret:
+          secretName: snap-codex-tls
+          items:
+          - key: tls.crt
+            path: tls.crt
+          - key: tls.key
+            path: tls.key 

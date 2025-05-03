@@ -61,10 +61,17 @@ declare module 'styled-components' {
         paper: string;
         surface: string;
       };
+      surface: string;
+      border: string;
       divider: string;
     };
     typography: {
       fontFamily: string;
+      fontSize: {
+        small: string;
+        medium: string;
+        large: string;
+      };
       h1: {
         fontSize: string;
         fontWeight: number;
@@ -140,12 +147,8 @@ declare module 'styled-components' {
       lg: string;
       xl: string;
     };
-    breakpoints: {
-      xs: string;
-      sm: string;
-      md: string;
-      lg: string;
-      xl: string;
+    shape: {
+      borderRadius: string;
     };
     shadows: {
       none: string;
@@ -179,9 +182,6 @@ declare module 'styled-components' {
       modal: number;
       snackbar: number;
       tooltip: number;
-    };
-    shape: {
-      borderRadius: string;
     };
   }
 }

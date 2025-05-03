@@ -101,6 +101,31 @@ const PreviewContainer = styled.div`
   margin-top: 16px;
 `;
 
+const PreviewTitle = styled.div<{ fontSize: string }>`
+  font-size: ${({ fontSize }) => fontSize};
+`;
+
+const PreviewText = styled.div<{ fontSize: string; marginTop: string }>`
+  font-size: ${({ fontSize }) => fontSize};
+  margin-top: ${({ marginTop }) => marginTop};
+`;
+
+const PreviewBox = styled.div<{ backgroundColor: string; borderColor: string; spacing: string }>`
+  background-color: ${({ backgroundColor }) => backgroundColor};
+  border: 1px solid ${({ borderColor }) => borderColor};
+  border-radius: 4px;
+  padding: ${({ spacing }) => spacing};
+  margin-top: ${({ spacing }) => spacing};
+`;
+
+const PreviewPrimary = styled.div<{ color: string }>`
+  color: ${({ color }) => color};
+`;
+
+const PreviewSecondary = styled.div<{ color: string }>`
+  color: ${({ color }) => color};
+`;
+
 interface Props {
   theme?: ThemeConfig;
   onSave: (theme: ThemeConfig) => void;
@@ -236,26 +261,27 @@ const ThemeEditor: React.FC<Props> = ({ theme: initialTheme, onSave, onClose }) 
             color: theme.colors.text,
             fontFamily: theme.typography.fontFamily
           }}>
-            <div style={{ fontSize: theme.typography.fontSize.large }}>
+            <PreviewTitle fontSize={theme.typography.fontSize.large}>
               {t('dashboard.theme.previewTitle')}
-            </div>
-            <div style={{ fontSize: theme.typography.fontSize.medium, marginTop: theme.spacing.medium }}>
+            </PreviewTitle>
+            <PreviewText 
+              fontSize={theme.typography.fontSize.medium}
+              marginTop={theme.spacing.medium}
+            >
               {t('dashboard.theme.previewText')}
-            </div>
-            <div style={{ 
-              backgroundColor: theme.colors.surface,
-              border: `1px solid ${theme.colors.border}`,
-              borderRadius: '4px',
-              padding: theme.spacing.medium,
-              marginTop: theme.spacing.medium
-            }}>
-              <div style={{ color: theme.colors.primary }}>
+            </PreviewText>
+            <PreviewBox
+              backgroundColor={theme.colors.surface}
+              borderColor={theme.colors.border}
+              spacing={theme.spacing.medium}
+            >
+              <PreviewPrimary color={theme.colors.primary}>
                 {t('dashboard.theme.previewPrimary')}
-              </div>
-              <div style={{ color: theme.colors.secondary }}>
+              </PreviewPrimary>
+              <PreviewSecondary color={theme.colors.secondary}>
                 {t('dashboard.theme.previewSecondary')}
-              </div>
-            </div>
+              </PreviewSecondary>
+            </PreviewBox>
           </PreviewContainer>
 
           <ButtonGroup>

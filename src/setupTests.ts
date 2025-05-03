@@ -23,9 +23,7 @@ class MessageChannel {
 }
 
 class MessagePort {
-  onmessage: any;
-  onmessageerror: any;
-  postMessage(message: any) {}
+  postMessage() {}
   start() {}
   close() {}
 }

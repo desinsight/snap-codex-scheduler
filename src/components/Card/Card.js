@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { motion } from 'framer-motion';
 const StyledCard = styled(motion.div) `
   background-color: ${({ theme }) => theme.colors.background.paper};
-  border-radius: ${({ theme }) => theme.spacing.sm};
+  border-radius: ${({ theme }) => theme.shape.borderRadius};
   overflow: hidden;
   width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
 
