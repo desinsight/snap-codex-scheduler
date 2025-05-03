@@ -1,8 +1,18 @@
 import { DefaultTheme } from 'styled-components';
+import { createTheme } from '@mui/material/styles';
+
+declare module '@mui/material/styles' {
+  interface Shape { borderRadius: number | number[]; }
+}
+
+const borderRadii = [4, 8, 16]; // [small, medium, large]
+
+export const radius = (size: 'small' | 'medium' | 'large') =>
+  borderRadii[['small', 'medium', 'large'].indexOf(size)];
 
 const baseTheme = {
   shape: {
-    borderRadius: '4px',
+    borderRadius: borderRadii,
   },
   spacing: {
     xs: '4px',
@@ -334,5 +344,9 @@ export const flatDarkTheme = {
   }
 };
 
-export { lightTheme, darkTheme };
-export default lightTheme;
+const theme = createTheme({
+  shape: { borderRadius: borderRadii },
+  // ... existing theme config ...
+});
+
+export default theme;
