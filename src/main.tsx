@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider, CssBaseline } from '@mui/material';
+import theme from './styles/theme';
 import App from './App';
 import './index.css';
 import './i18n';
@@ -17,7 +20,12 @@ async function initializeMockServiceWorker() {
 initializeMockServiceWorker().then(() => {
   ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-      <App />
+      <BrowserRouter basename="/snap-codex-scheduler">
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <App />
+        </ThemeProvider>
+      </BrowserRouter>
     </React.StrictMode>
   );
 });

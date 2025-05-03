@@ -1,17 +1,20 @@
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { GlobalStyle } from './styles/GlobalStyle';
 import AppRoutes from './routes';
+import ErrorBoundary from './components/ErrorBoundary';
 
 const App: React.FC = () => {
   return (
-    <ThemeProvider>
-      <GlobalStyle />
-      <Router>
-        <AppRoutes />
-      </Router>
-    </ThemeProvider>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <GlobalStyle />
+        <Routes>
+          <Route path="/*" element={<AppRoutes />} />
+        </Routes>
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 };
 

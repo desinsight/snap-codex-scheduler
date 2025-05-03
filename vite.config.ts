@@ -7,7 +7,10 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: process.env.NODE_ENV === 'production' ? '/snap-codex-scheduler/' : '/',
+  base: '/snap-codex-scheduler/',
+  define: {
+    __API__: JSON.stringify(process.env.VITE_API ?? 'https://api.example.com')
+  },
   resolve: {
     extensions: ['.mjs', '.js', '.mts', '.ts', '.jsx', '.tsx', '.json'],
     alias: {
