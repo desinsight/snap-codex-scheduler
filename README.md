@@ -6,7 +6,7 @@
 
 ## 배포 URL
 
-- GitHub Pages: https://desinsight.github.io/snap-codex-scheduler/
+- GitHub Pages: <https://desinsight.github.io/snap-codex-scheduler/>
 
 ## 기능
 

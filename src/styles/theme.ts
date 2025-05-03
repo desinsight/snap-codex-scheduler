@@ -257,5 +257,63 @@ const darkTheme: DefaultTheme = {
   },
 };
 
+export const flatLightTheme = {
+  colors: {
+    primary: lightTheme.colors.primary.main,
+    secondary: lightTheme.colors.secondary.main,
+    background: lightTheme.colors.background.default,
+    surface: lightTheme.colors.background.paper,
+    text: lightTheme.colors.text.primary,
+    border: lightTheme.colors.divider,
+  },
+  typography: {
+    fontFamily: lightTheme.typography.fontFamily,
+    fontSize: {
+      small: lightTheme.typography.body2.fontSize,
+      medium: lightTheme.typography.body1.fontSize,
+      large: lightTheme.typography.h5.fontSize,
+    }
+  },
+  spacing: {
+    small: lightTheme.spacing.sm,
+    medium: lightTheme.spacing.md,
+    large: lightTheme.spacing.lg,
+  },
+  borderRadius: {
+    small: '4px',
+    medium: '8px',
+    large: '16px',
+  }
+};
+
+export const flatDarkTheme = {
+  colors: {
+    primary: darkTheme.colors.primary.main,
+    secondary: darkTheme.colors.secondary.main,
+    background: darkTheme.colors.background.default,
+    surface: darkTheme.colors.background.paper,
+    text: darkTheme.colors.text.primary,
+    border: darkTheme.colors.divider,
+  },
+  typography: {
+    fontFamily: darkTheme.typography.fontFamily,
+    fontSize: {
+      small: darkTheme.typography.body2.fontSize,
+      medium: darkTheme.typography.body1.fontSize,
+      large: darkTheme.typography.h5.fontSize,
+    }
+  },
+  spacing: {
+    small: darkTheme.spacing.sm,
+    medium: darkTheme.spacing.md,
+    large: darkTheme.spacing.lg,
+  },
+  borderRadius: {
+    small: '4px',
+    medium: '8px',
+    large: '16px',
+  }
+};
+
 export { lightTheme, darkTheme };
 export default lightTheme;
