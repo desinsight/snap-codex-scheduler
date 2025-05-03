@@ -1,0 +1,41 @@
+name: Progress Tracker
+
+on:
+  issues:
+    types: [opened, edited, closed, reopened]
+  schedule:
+    - cron: '0 */2 * * *'  # 2시간마다 실행 (0, 2, 4, 6, ..., 22시)
+
+jobs:
+  update-progress:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: read
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install PyGithub==2.1.1
+          
+      - name: Generate Progress Report
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          chmod +x generate_progress.py
+          ./generate_progress.py
+          
+      - name: Update Progress Report
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: '["milestone_progress.json"]'
+          message: "docs: 마일스톤 진행률 보고서 업데이트"
+          default_author: github_actions 
