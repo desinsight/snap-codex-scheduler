@@ -9,121 +9,33 @@ on:
 jobs:
   update-progress:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: read
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: '3.11'
+          cache: 'pip'
           
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests pandas matplotlib
+          pip install PyGithub==2.1.1
           
       - name: Generate Progress Report
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cat > generate_progress.py << 'EOF'
-          import os
-          import requests
-          import pandas as pd
-          import matplotlib.pyplot as plt
-          from datetime import datetime
-          
-          # GitHub API 설정
-          token = os.environ['GITHUB_TOKEN']
-          headers = {'Authorization': f'token {token}'}
-          repo = os.environ['GITHUB_REPOSITORY']
-          
-          # 이슈 데이터 가져오기
-          url = f'https://api.github.com/repos/{repo}/issues?state=all'
-          response = requests.get(url, headers=headers)
-          issues = response.json()
-          
-          # 카테고리별 진행률 데이터 수집
-          categories = {
-              'UI/UX': [],
-              '인증/권한': [],
-              '캘린더 연동': [],
-              '데이터 모델': [],
-              '상태 관리': [],
-              'API 통합': [],
-              '테스트': []
-          }
-          
-          for issue in issues:
-              if 'feature' in [label['name'] for label in issue.get('labels', [])]:
-                  body = issue['body']
-                  if not body:
-                      continue
-                  
-                  # 카테고리와 진행률 추출
-                  try:
-                      category_line = [line for line in body.split('\n') if '### 개발 주제' in line][0]
-                      category = category_line.split('\n')[1].strip()
-                      
-                      progress_line = [line for line in body.split('\n') if '### 진행률' in line][0]
-                      progress = int(progress_line.split('\n')[1].strip())
-                      
-                      if category in categories:
-                          categories[category].append(progress)
-                  except:
-                      continue
-          
-          # 평균 진행률 계산
-          progress_data = {
-              category: sum(progress) / len(progress) if progress else 0
-              for category, progress in categories.items()
-          }
-          
-          # 시각화
-          plt.figure(figsize=(12, 6))
-          
-          # 막대 그래프
-          bars = plt.bar(progress_data.keys(), progress_data.values())
-          plt.axhline(y=100, color='r', linestyle='--', alpha=0.3)
-          
-          # 스타일링
-          plt.title('SnapCodex 개발 진행률 현황', pad=20)
-          plt.xlabel('개발 주제')
-          plt.ylabel('진행률 (%)')
-          
-          # 회전된 x축 레이블
-          plt.xticks(rotation=45, ha='right')
-          
-          # 진행률 표시
-          for bar in bars:
-              height = bar.get_height()
-              plt.text(bar.get_x() + bar.get_width()/2., height,
-                      f'{height:.1f}%',
-                      ha='center', va='bottom')
-          
-          # 여백 조정
-          plt.tight_layout()
-          
-          # 저장
-          plt.savefig('progress.png')
-          
-          # 마크다운 보고서 생성
-          with open('progress_report.md', 'w', encoding='utf-8') as f:
-              f.write('# 📊 개발 진행률 보고서\n\n')
-              f.write(f'*마지막 업데이트: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}*\n\n')
-              f.write('## 카테고리별 진행률\n\n')
-              
-              for category, progress in progress_data.items():
-                  progress_bar = '█' * int(progress/10) + '░' * (10 - int(progress/10))
-                  f.write(f'### {category}\n')
-                  f.write(f'{progress_bar} {progress:.1f}%\n\n')
-          EOF
-          
-          python generate_progress.py
+          chmod +x generate_progress.py
+          ./generate_progress.py
           
       - name: Update Progress Report
         uses: EndBug/add-and-commit@v9
         with:
-          add: '["progress.png", "progress_report.md"]'
-          message: "docs: 개발 진행률 보고서 업데이트"
+          add: '["milestone_progress.json"]'
+          message: "docs: 마일스톤 진행률 보고서 업데이트"
           default_author: github_actions 
