@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { flatLightTheme, flatDarkTheme } from '../styles/theme';
+import { merge } from 'lodash';
 
 type ThemeMode = 'light' | 'dark';
 
@@ -19,7 +20,7 @@ export const useTheme = () => {
   return context;
 };
 
-export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const ThemeProvider: React.FC<{ children: React.ReactNode, customTheme?: any }> = ({ children, customTheme }) => {
   const [themeMode, setThemeMode] = useState<ThemeMode>(() => {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
@@ -37,10 +38,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   const currentTheme = themeMode === 'light' ? flatLightTheme : flatDarkTheme;
+  const mergedTheme = customTheme ? merge({}, currentTheme, customTheme) : currentTheme;
 
   return (
     <ThemeContext.Provider value={{ themeMode, toggleTheme }}>
-      <StyledThemeProvider theme={currentTheme}>
+      <StyledThemeProvider theme={mergedTheme}>
         {children}
       </StyledThemeProvider>
     </ThemeContext.Provider>

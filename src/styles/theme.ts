@@ -284,6 +284,11 @@ export const flatLightTheme = {
     medium: lightTheme.spacing.md,
     large: lightTheme.spacing.lg,
   },
+  borderRadius: {
+    small: '4px',
+    medium: '8px',
+    large: '16px',
+  },
   shape: {
     borderRadius: {
       small: '4px',
@@ -314,6 +319,11 @@ export const flatDarkTheme = {
     small: darkTheme.spacing.sm,
     medium: darkTheme.spacing.md,
     large: darkTheme.spacing.lg,
+  },
+  borderRadius: {
+    small: '4px',
+    medium: '8px',
+    large: '16px',
   },
   shape: {
     borderRadius: {
