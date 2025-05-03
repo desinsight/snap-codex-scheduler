@@ -124,7 +124,7 @@ const baseTheme = {
   borderRadius: {
     small: '4px',
     medium: '8px',
-    large: '16px',
+    large: '12px',
   },
 };
 
@@ -287,13 +287,13 @@ export const flatLightTheme = {
   borderRadius: {
     small: '4px',
     medium: '8px',
-    large: '16px',
+    large: '12px',
   },
   shape: {
     borderRadius: {
       small: '4px',
       medium: '8px',
-      large: '16px',
+      large: '12px',
     }
   }
 };
@@ -323,13 +323,13 @@ export const flatDarkTheme = {
   borderRadius: {
     small: '4px',
     medium: '8px',
-    large: '16px',
+    large: '12px',
   },
   shape: {
     borderRadius: {
       small: '4px',
       medium: '8px',
-      large: '16px',
+      large: '12px',
     }
   }
 };
