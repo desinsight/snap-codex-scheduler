@@ -4,9 +4,10 @@ import { Response, Request, Headers, fetch } from 'undici'
 import { TextEncoder, TextDecoder } from 'util'
 import path from 'path'
 
-// https://vite.dev/config/
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: '/snap-codex-scheduler/',
   resolve: {
     extensions: ['.mjs', '.js', '.mts', '.ts', '.jsx', '.tsx', '.json'],
     alias: {
@@ -14,8 +15,15 @@ export default defineConfig({
     }
   },
   build: {
-    target: 'esnext',
-    sourcemap: true
+    outDir: 'dist',
+    sourcemap: false,
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
+    }
   },
   optimizeDeps: {
     include: ['styled-components'],
@@ -31,19 +39,9 @@ export default defineConfig({
     }
   },
   server: {
-    host: true,
-    port: 5186,
-    open: true,
-    hmr: {
-      overlay: true,
-      protocol: 'ws',
-      host: 'localhost',
-      port: 5186,
-    },
-    watch: {
-      usePolling: true,
-      interval: 1000,
-    },
+    port: 3000,
+    strictPort: true,
+    host: true
   },
   preview: {
     port: 5186,
