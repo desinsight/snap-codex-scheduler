@@ -86,6 +86,7 @@
     "postcss-cli": "^11.0.0",
     "postcss-import": "^16.1.0",
     "prettier": "^3.2.5",
+    "rollup": "^4.40.1",
     "styled-components": "^6.1.17",
     "tailwindcss": "^3.4.1",
     "terser": "^5.29.2",
