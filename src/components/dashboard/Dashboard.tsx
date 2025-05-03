@@ -36,7 +36,7 @@ const ButtonGroup = styled.div`
 const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
   padding: 8px 16px;
   border: none;
-  border-radius: ${({ theme }) => theme.borderRadius.small};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.small};
   background-color: ${({ theme, variant }) =>
     variant === 'secondary' ? theme.colors.secondary : theme.colors.primary};
   color: white;

@@ -66,7 +66,7 @@ const RefreshButton = styled.button`
   background-color: ${({ theme }) => theme.colors.primary};
   color: white;
   border: none;
-  border-radius: ${({ theme }) => theme.borderRadius.small};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.small};
   cursor: pointer;
   &:hover {
     opacity: 0.9;

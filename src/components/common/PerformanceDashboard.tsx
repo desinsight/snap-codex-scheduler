@@ -24,7 +24,7 @@ const MetricsGrid = styled.div`
 
 const MetricCard = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
-  border-radius: ${({ theme }) => theme.borderRadius.small};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.small};
   padding: ${({ theme }) => theme.spacing.md};
   box-shadow: ${({ theme }) => theme.shadows.small};
 `;
@@ -45,7 +45,7 @@ const ChartContainer = styled.div`
   width: 100%;
   height: 300px;
   background-color: ${({ theme }) => theme.colors.background};
-  border-radius: ${({ theme }) => theme.borderRadius.small};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.small};
   padding: ${({ theme }) => theme.spacing.md};
   margin-bottom: ${({ theme }) => theme.spacing.lg};
 `;

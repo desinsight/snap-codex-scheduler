@@ -60,7 +60,7 @@ const AlertItem = styled.div<{ priority: AlertPriority }>`
         return theme.colors.success;
     }
   }};
-  border-radius: ${({ theme }) => theme.borderRadius.small};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.small};
 `;
 
 const AlertContent = styled.div`

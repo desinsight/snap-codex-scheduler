@@ -38,7 +38,7 @@ const Label = styled.label`
 const Input = styled.input`
   padding: 8px;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.borderRadius.small};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.small};
   background-color: ${({ theme }) => theme.colors.background};
   color: ${({ theme }) => theme.colors.text};
 `;
@@ -46,7 +46,7 @@ const Input = styled.input`
 const TextArea = styled.textarea`
   padding: 8px;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.borderRadius.small};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.small};
   background-color: ${({ theme }) => theme.colors.background};
   color: ${({ theme }) => theme.colors.text};
   min-height: 100px;
@@ -56,7 +56,7 @@ const TextArea = styled.textarea`
 const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
   padding: 8px 16px;
   border: none;
-  border-radius: ${({ theme }) => theme.borderRadius.small};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.small};
   background-color: ${({ theme, variant }) =>
     variant === 'secondary' ? theme.colors.secondary : theme.colors.primary};
   color: white;
@@ -74,7 +74,7 @@ const ButtonGroup = styled.div`
 
 const StatusMessage = styled.div<{ isError?: boolean }>`
   padding: 10px;
-  border-radius: ${({ theme }) => theme.borderRadius.small};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.small};
   background-color: ${({ theme, isError }) =>
     isError ? theme.colors.error : theme.colors.success};
   color: white;

@@ -14,7 +14,7 @@ const Tooltip = styled.div`
   position: absolute;
   background-color: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.borderRadius.small};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.small};
   padding: 8px;
   font-size: ${({ theme }) => theme.typography.fontSize.small};
   pointer-events: none;
@@ -29,7 +29,7 @@ const Legend = styled.div`
   right: 10px;
   background-color: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.borderRadius.small};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.small};
   padding: 8px;
   font-size: ${({ theme }) => theme.typography.fontSize.small};
 `;

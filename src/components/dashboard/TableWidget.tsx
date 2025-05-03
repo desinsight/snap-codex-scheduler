@@ -49,7 +49,7 @@ const PageInfo = styled.div`
 const PageButton = styled.button<{ disabled?: boolean }>`
   padding: 4px 8px;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.borderRadius.small};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.small};
   background-color: ${({ theme }) => theme.colors.surface};
   color: ${({ theme }) => theme.colors.text};
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
@@ -62,7 +62,7 @@ const PageButton = styled.button<{ disabled?: boolean }>`
 const FilterInput = styled.input`
   padding: 4px 8px;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.borderRadius.small};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.small};
   background-color: ${({ theme }) => theme.colors.surface};
   color: ${({ theme }) => theme.colors.text};
   margin-bottom: 8px;
