@@ -49,7 +49,7 @@ jobs:
           
       - name: Notify on security issues
         if: failure()
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             github.rest.issues.create({
@@ -61,7 +61,7 @@ jobs:
             })
             
       - name: Check for secrets
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
