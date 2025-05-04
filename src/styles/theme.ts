@@ -49,6 +49,10 @@ const baseTheme = {
       dark: '#1b5e20',
       contrastText: '#ffffff',
     },
+    text: {
+      primary: '#1f2937',
+      secondary: '#6b7280',
+    },
     grey: {
       50: '#fafafa',
       100: '#f5f5f5',
@@ -60,11 +64,6 @@ const baseTheme = {
       700: '#616161',
       800: '#424242',
       900: '#212121',
-    },
-    text: {
-      primary: 'rgba(0, 0, 0, 0.87)',
-      secondary: 'rgba(0, 0, 0, 0.6)',
-      disabled: 'rgba(0, 0, 0, 0.38)',
     },
     background: {
       default: '#ffffff',
@@ -180,8 +179,18 @@ export const darkTheme: DefaultTheme = {
 };
 
 const theme = createTheme({
-  shape: { borderRadius: borderRadii },
-  // ... existing theme config ...
+  palette: {
+    primary: baseTheme.colors.primary,
+    secondary: baseTheme.colors.secondary,
+    error: baseTheme.colors.error,
+    warning: baseTheme.colors.warning,
+    info: baseTheme.colors.info,
+    success: baseTheme.colors.success,
+    text: baseTheme.colors.text,
+  },
+  shape: {
+    borderRadius: baseTheme.borderRadius[0],
+  },
 });
 
 export default theme;
