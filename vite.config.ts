@@ -18,7 +18,8 @@ export default defineConfig({
   ],
   base: process.env.NODE_ENV === 'production' ? '/snap-codex-scheduler/' : '/',
   define: {
-    __API__: JSON.stringify(process.env.VITE_API ?? 'https://api.example.com')
+    __API__: JSON.stringify(process.env.VITE_API ?? 'https://api.example.com'),
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
   },
   resolve: {
     extensions: ['.mjs', '.js', '.mts', '.ts', '.jsx', '.tsx', '.json'],
@@ -49,12 +50,21 @@ export default defineConfig({
         },
         chunkFileNames: 'assets/js/[name]-[hash].js',
         entryFileNames: 'assets/js/[name]-[hash].js',
-        assetFileNames: 'assets/[ext]/[name]-[hash].[ext]'
+        assetFileNames: ({name}) => {
+          if (/\.(gif|jpe?g|png|svg)$/.test(name ?? '')) {
+            return 'assets/images/[name]-[hash][extname]';
+          }
+          if (/\.css$/.test(name ?? '')) {
+            return 'assets/css/[name]-[hash][extname]';
+          }
+          return 'assets/[name]-[hash][extname]';
+        }
       }
     },
     chunkSizeWarningLimit: 1000,
     cssCodeSplit: true,
-    reportCompressedSize: true
+    reportCompressedSize: true,
+    copyPublicDir: true
   },
   optimizeDeps: {
     include: ['styled-components'],
