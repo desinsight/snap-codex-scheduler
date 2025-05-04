@@ -16,7 +16,7 @@ export default defineConfig({
       brotliSize: true
     })
   ],
-  base: process.env.NODE_ENV === 'production' ? '/snap-codex-scheduler/' : '/',
+  base: '/snap-codex-scheduler/',
   define: {
     __API__: JSON.stringify(process.env.VITE_API ?? 'https://api.example.com'),
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
@@ -48,8 +48,8 @@ export default defineConfig({
           state: ['@reduxjs/toolkit', 'react-redux'],
           utils: ['date-fns', 'lodash', 'rxjs']
         },
-        chunkFileNames: 'assets/js/[name]-[hash].js',
-        entryFileNames: 'assets/js/[name]-[hash].js',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
         assetFileNames: ({name}) => {
           if (/\.(gif|jpe?g|png|svg)$/.test(name ?? '')) {
             return 'assets/images/[name]-[hash][extname]';
