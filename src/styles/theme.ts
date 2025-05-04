@@ -12,7 +12,7 @@ export const radius = (size: keyof DefaultTheme['borderRadius']) => {
 };
 
 // 기본 테마 설정
-const baseColors = {
+export const baseColors = {
   primary: {
     main: '#1976d2',
     light: '#42a5f5',
@@ -64,12 +64,5 @@ const theme = createTheme({
     borderRadius: borderRadii[0],
   },
 });
-
-// varsLib용 export
-export const varsLib = {
-  palette: {
-    ...baseColors,
-  },
-};
 
 export default theme;

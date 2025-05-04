@@ -1,1 +1,7 @@
-export { varsLib } from './theme'; 
+import { baseColors } from './theme';
+
+export const varsLib = {
+  palette: {
+    ...baseColors,
+  },
+}; 
