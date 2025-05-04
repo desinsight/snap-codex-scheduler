@@ -14,6 +14,7 @@ jobs:
         with:
           node-version: 20.x
           cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
       - run: npm ci
       - run: npm run lint
       - run: npm run test --if-present
@@ -26,6 +27,7 @@ jobs:
         with:
           node-version: 20.x
           cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
       - run: npm ci
       - run: npm run build
   deploy:
