@@ -16,7 +16,7 @@ export default defineConfig({
       brotliSize: true
     })
   ],
-  base: '/snap-codex-scheduler/',
+  base: '/',
   define: {
     __API__: JSON.stringify(process.env.VITE_API ?? 'https://api.example.com'),
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
