@@ -1,195 +1,58 @@
 import { rest } from 'msw';
-import { API_URL } from '../config';
+
+const API_URL = process.env.VITE_API_URL || 'https://api.example.com';
 
 export const handlers = [
-  // Auth handlers
+  // Auth
   rest.post(`${API_URL}/auth/login`, (req, res, ctx) => {
     return res(
+      ctx.status(200),
       ctx.json({
         token: 'mock-jwt-token',
         user: {
-          id: '1',
+          id: 1,
           email: 'test@example.com',
           name: 'Test User',
-          role: 'user',
-          createdAt: new Date(),
-          updatedAt: new Date(),
         },
       })
     );
   }),
 
-  rest.post(`${API_URL}/auth/register`, (req, res, ctx) => {
+  // Tasks
+  rest.get(`${API_URL}/tasks`, (req, res, ctx) => {
     return res(
-      ctx.status(201),
-      ctx.json({
-        token: 'mock-jwt-token',
-        user: {
-          id: '2',
-          email: 'new@example.com',
-          name: 'New User',
-          role: 'user',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      })
-    );
-  }),
-
-  // Schedule handlers
-  rest.get(`${API_URL}/schedules`, (req, res, ctx) => {
-    return res(
+      ctx.status(200),
       ctx.json([
         {
-          id: '1',
-          title: 'Test Schedule',
+          id: 1,
+          title: 'Test Task',
           description: 'Test Description',
-          startTime: new Date(),
-          endTime: new Date(),
-          category: 'work',
-          createdBy: '1',
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          status: 'pending',
+          dueDate: '2024-05-01',
         },
       ])
     );
   }),
 
-  // Microservice handlers
-  rest.get(`${API_URL}/microservices/configs`, (req, res, ctx) => {
-    return res(
-      ctx.json({
-        services: {
-          scheduler: {
-            name: 'scheduler',
-            version: '1.0.0',
-            port: 3000,
-            healthCheck: {
-              path: '/health',
-              interval: 30,
-            },
-            dependencies: [],
-            environment: {},
-          },
-        },
-      })
-    );
-  }),
-
-  rest.get(`${API_URL}/microservices/health/:name`, (req, res, ctx) => {
-    return res(
-      ctx.json({
-        status: 'healthy',
-        uptime: 3600,
-        memoryUsage: 45,
-        cpuUsage: 30,
-        lastCheck: new Date().toISOString(),
-        errors: [],
-      })
-    );
-  }),
-
-  rest.get(`${API_URL}/microservices/metrics/:name`, (req, res, ctx) => {
-    return res(
-      ctx.json({
-        requestCount: 1000,
-        errorCount: 5,
-        averageLatency: 150,
-        activeConnections: 50,
-        resourceUsage: {
-          memory: 45,
-          cpu: 30,
-          disk: 25,
-        },
-      })
-    );
-  }),
-
-  // Notification handlers
+  // Notifications
   rest.get(`${API_URL}/notifications`, (req, res, ctx) => {
     return res(
+      ctx.status(200),
       ctx.json([
         {
-          id: '1',
-          title: 'Test Notification',
-          message: 'This is a test notification',
+          id: 1,
           type: 'info',
+          message: 'Test Notification',
           read: false,
-          createdAt: new Date(),
+          createdAt: '2024-05-01T00:00:00Z',
         },
       ])
     );
   }),
 
-  rest.post(`${API_URL}/notifications`, (req, res, ctx) => {
-    return res(
-      ctx.status(201),
-      ctx.json({
-        id: '2',
-        title: 'New Notification',
-        message: 'This is a new notification',
-        type: 'info',
-        read: false,
-        createdAt: new Date(),
-      })
-    );
-  }),
-
-  rest.put(`${API_URL}/notifications/:id`, (req, res, ctx) => {
-    return res(
-      ctx.json({
-        id: '1',
-        title: 'Updated Notification',
-        message: 'This notification has been updated',
-        type: 'info',
-        read: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      })
-    );
-  }),
-
-  rest.delete(`${API_URL}/notifications/:id`, (req, res, ctx) => {
-    return res(ctx.status(204));
-  }),
-
-  // User preferences handlers
-  rest.get(`${API_URL}/user-preferences`, (req, res, ctx) => {
-    return res(
-      ctx.json({
-        notifications: {
-          email: true,
-          push: true,
-          sms: false,
-        },
-        theme: 'light',
-        language: 'ko',
-      })
-    );
-  }),
-
-  // Circuit breaker configuration
-  rest.put('/api/microservices/circuit-breakers/:name', (req, res, ctx) => {
-    const { name } = req.params;
-    return res(
-      ctx.json({
-        name,
-        config: {
-          failureThreshold: 5,
-          successThreshold: 2,
-          timeout: 5000,
-          resetTimeout: 30000,
-        },
-      })
-    );
-  }),
-
-  // Error handler - 항상 마지막에 위치
-  rest.all('*', (req, res, ctx) => {
-    console.error(`Unhandled request: ${req.method} ${req.url.toString()}`);
-    return res(
-      ctx.status(500),
-      ctx.json({ error: 'Unhandled request' })
-    );
+  // Error handling
+  rest.get('*', (req, res, ctx) => {
+    console.error(`Unhandled request: ${req.url.toString()}`);
+    return res(ctx.status(500));
   }),
 ]; 

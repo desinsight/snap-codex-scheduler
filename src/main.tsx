@@ -20,7 +20,7 @@ async function initializeMockServiceWorker() {
 initializeMockServiceWorker().then(() => {
   ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-      <BrowserRouter basename="/snap-codex-scheduler">
+      <BrowserRouter basename={process.env.NODE_ENV === 'production' ? '/snap-codex-scheduler' : '/'}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <App />

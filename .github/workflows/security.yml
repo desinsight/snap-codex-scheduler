@@ -58,4 +58,30 @@ jobs:
               title: 'Security Scan Failed',
               body: 'Security scan detected vulnerabilities. Please check the security report artifact.',
               labels: ['security']
-            }) 
+            })
+            
+      - name: Check for secrets
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            const checkForSecrets = (dir) => {
+              const files = fs.readdirSync(dir);
+              for (const file of files) {
+                const filePath = path.join(dir, file);
+                const stat = fs.statSync(filePath);
+                
+                if (stat.isDirectory()) {
+                  checkForSecrets(filePath);
+                } else if (file.endsWith('.js') || file.endsWith('.ts') || file.endsWith('.json')) {
+                  const content = fs.readFileSync(filePath, 'utf8');
+                  if (content.includes('password') || content.includes('secret') || content.includes('token')) {
+                    console.warn(`Potential secret found in ${filePath}`);
+                  }
+                }
+              }
+            };
+            
+            checkForSecrets('.'); 

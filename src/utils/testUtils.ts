@@ -2,13 +2,14 @@ import { Request, Response, NextFunction } from 'express';
 import { User } from '../types/user';
 import { CacheConfig } from '../types/cache';
 import { configureStore } from '@reduxjs/toolkit';
-import { render } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { RootState } from '../store';
 import { Task, TaskStatus } from '../types/task';
 import { Schedule, ScheduleCategory } from '../types/schedule';
 import { User as AuthUser } from '../types/auth';
 import * as React from 'react';
+import userEvent from '@testing-library/user-event';
 
 export const mockRequest = (options: Partial<Request> = {}): Request => {
   return {
@@ -146,16 +147,27 @@ export const createMockStore = (preloadedState?: Partial<RootState>) => {
   });
 };
 
-export const renderWithProviders = (
-  ui: React.ReactElement,
-  preloadedState?: Partial<RootState>
-) => {
-  const store = createMockStore(preloadedState);
-  const Wrapper = ({ children }: { children: React.ReactNode }) => (
-    React.createElement(Provider, { store }, children)
-  );
+export const renderWithProviders = (ui: React.ReactElement) => {
   return {
-    store,
-    ...render(ui, { wrapper: Wrapper }),
+    user: userEvent.setup(),
+    ...render(ui),
   };
+};
+
+export const waitForLoadingToFinish = async () => {
+  await waitFor(
+    () => {
+      const loadingElements = screen.queryAllByText(/loading/i);
+      return loadingElements.length === 0;
+    },
+    { timeout: 5000 }
+  );
+};
+
+export const expectToBeInTheDocument = (text: string) => {
+  expect(screen.getByText(text)).toBeInTheDocument();
+};
+
+export const expectNotToBeInTheDocument = (text: string) => {
+  expect(screen.queryByText(text)).not.toBeInTheDocument();
 }; 
