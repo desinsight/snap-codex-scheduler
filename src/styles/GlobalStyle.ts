@@ -1,37 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
-import { DefaultTheme } from 'styled-components';
-import { radius } from './theme';
+import type { AppTheme } from './theme';
 
-declare module 'styled-components' {
-  export interface DefaultTheme {
-    borderRadius: {
-      small: string;
-      medium: string;
-      large: string;
-    };
-    transitions: {
-      duration: {
-        shortest: number;
-        shorter: number;
-        short: number;
-        standard: number;
-        medium: number;
-        long: number;
-        complex: number;
-        enteringScreen: number;
-        leavingScreen: number;
-      };
-      easing: {
-        easeInOut: string;
-        easeOut: string;
-        easeIn: string;
-        sharp: string;
-      };
-    };
-  }
-}
-
-export const GlobalStyle = createGlobalStyle`
+export const GlobalStyle = createGlobalStyle<{ theme: AppTheme }>`
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
   * {
@@ -48,8 +18,8 @@ export const GlobalStyle = createGlobalStyle`
 
   body {
     font-family: ${({ theme }) => theme.typography.fontFamily};
-    background-color: ${({ theme }) => theme.colors.background.default};
-    color: ${({ theme }) => theme.colors.text.primary};
+    background-color: ${({ theme }) => theme.palette.background.default};
+    color: ${({ theme }) => theme.palette.text.primary};
     line-height: 1.5;
   }
 
@@ -80,8 +50,8 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   ::selection {
-    background-color: ${({ theme }) => theme.colors.primary.main};
-    color: ${({ theme }) => theme.colors.primary.contrastText};
+    background-color: ${({ theme }) => theme.palette.primary.main};
+    color: ${({ theme }) => theme.palette.primary.contrastText};
   }
 
   ::-webkit-scrollbar {
@@ -90,21 +60,21 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   ::-webkit-scrollbar-track {
-    background: ${({ theme }) => theme.colors.grey[100]};
-    border-radius: ${({ theme }) => theme.borderRadius.small};
+    background: ${({ theme }) => theme.palette.grey[100]};
+    border-radius: ${({ theme }) => theme.shape.borderRadius}px;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.colors.grey[400]};
-    border-radius: ${({ theme }) => theme.borderRadius.small};
+    background: ${({ theme }) => theme.palette.grey[400]};
+    border-radius: ${({ theme }) => theme.shape.borderRadius}px;
   }
 
   .button {
-    border-radius: ${({ theme }) => theme.borderRadius.small};
+    border-radius: ${({ theme }) => theme.shape.borderRadius}px;
   }
 
   .card {
-    border-radius: ${({ theme }) => theme.borderRadius.small};
+    border-radius: ${({ theme }) => theme.shape.borderRadius}px;
   }
 
   .fade-enter {
