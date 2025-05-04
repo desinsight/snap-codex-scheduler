@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { motion } from 'framer-motion';
 import { CardProps } from '../../types/props';
+import { radius } from '../../styles/theme';
 
 type CardVariant = 'elevation' | 'outlined';
 
@@ -37,7 +38,7 @@ const getElevation = (elevation: number) => {
 
 const StyledCard = styled(motion.div)<CardProps>`
   background-color: ${({ theme }) => theme.colors.background.paper};
-  border-radius: ${({ theme }) => theme.borderRadius.medium};
+  border-radius: ${radius('medium')};
   padding: ${({ noPadding }) => (noPadding ? '0' : '1rem')};
   width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
   transition: all ${({ theme }) => theme.transitions.short};

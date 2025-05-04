@@ -2,6 +2,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import { radius } from 'styled-components';
 const Form = styled.form `
   background-color: ${({ theme }) => theme.colors.surface};
   border-radius: ${({ theme }) => theme.borderRadius.medium};
@@ -25,7 +26,7 @@ const Input = styled.input `
   width: 100%;
   padding: ${({ theme }) => theme.spacing.sm};
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.borderRadius.small};
+  border-radius: ${radius('small')};
   background-color: ${({ theme }) => theme.colors.background};
   color: ${({ theme }) => theme.colors.text};
   transition: border-color 0.3s ease;
@@ -40,7 +41,7 @@ const TextArea = styled.textarea `
   min-height: 120px;
   padding: ${({ theme }) => theme.spacing.sm};
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.borderRadius.small};
+  border-radius: ${radius('small')};
   background-color: ${({ theme }) => theme.colors.background};
   color: ${({ theme }) => theme.colors.text};
   resize: vertical;
@@ -83,7 +84,7 @@ const SubmitButton = styled.button `
   color: white;
   padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.lg};
   border: none;
-  border-radius: ${({ theme }) => theme.borderRadius.small};
+  border-radius: ${radius('small')};
   cursor: pointer;
   font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
   transition: background-color 0.3s ease;

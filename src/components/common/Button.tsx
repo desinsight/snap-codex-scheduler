@@ -107,7 +107,7 @@ const StyledButton = styled(motion.button)<ButtonProps>`
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border-radius: ${({ theme }) => theme.borderRadius.medium};
+  border-radius: ${({ size }) => radius(size || 'medium')};
   font-weight: 500;
   transition: all ${({ theme }) => theme.transitions.short};
   cursor: pointer;

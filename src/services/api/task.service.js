@@ -241,7 +241,7 @@ export const TaskService = {
         const response = await axios.get(`${API_URL}/tasks/${taskId}/notes`);
         return response.data;
     },
-    static async updateTaskStatuses(updates) {
+    async updateTaskStatuses(updates) {
         try {
             const response = await axios.patch(`${API_URL}/tasks/status`, { updates });
             return response.data;

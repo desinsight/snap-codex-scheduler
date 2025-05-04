@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { ThemeConfig } from '../../types/dashboard';
+import { radius } from '../../styles/helpers';
 
 const Modal = styled.div`
   position: fixed;
@@ -18,7 +19,7 @@ const Modal = styled.div`
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.surface};
-  border-radius: ${({ theme }) => theme.borderRadius.medium};
+  border-radius: ${radius('medium')};
   padding: 24px;
   width: 100%;
   max-width: 600px;
@@ -63,7 +64,7 @@ const Label = styled.label`
 const Input = styled.input`
   padding: 8px;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.shape.borderRadius.small};
+  border-radius: ${radius('small')};
   background-color: ${({ theme }) => theme.colors.background};
   color: ${({ theme }) => theme.colors.text};
 `;
@@ -84,7 +85,7 @@ const ButtonGroup = styled.div`
 const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
   padding: 8px 16px;
   border: none;
-  border-radius: ${({ theme }) => theme.shape.borderRadius.small};
+  border-radius: ${radius('small')};
   background-color: ${({ theme, variant }) =>
     variant === 'secondary' ? theme.colors.secondary : theme.colors.primary};
   color: white;
@@ -96,7 +97,7 @@ const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
 
 const PreviewContainer = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.borderRadius.medium};
+  border-radius: ${radius('medium')};
   padding: 16px;
   margin-top: 16px;
 `;

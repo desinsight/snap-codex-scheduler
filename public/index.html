@@ -1,45 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="msapplication-TileColor" content="#000000" />
-    <meta name="msapplication-navbutton-color" content="#000000" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web-app-manifest/
-    -->
-    <link rel="manifest" href="/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>Snap Codex Scheduler</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapCodex - AI로 설계부터 수주까지 자동화</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: #333;
+        }
+        .gradient-bg {
+            background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+        }
+        .snap-blue {
+            color: #6366f1;
+        }
+        .snap-purple {
+            color: #8b5cf6;
+        }
+        .bg-snap-blue {
+            background-color: #6366f1;
+        }
+        .bg-snap-purple {
+            background-color: #8b5cf6;
+        }
+    </style>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white shadow-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <h1 class="text-2xl font-bold snap-blue">SnapCodex</h1>
+                <span class="ml-2 text-gray-600">AI로 설계부터 수주까지 자동화</span>
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#overview" class="hover:text-purple-700">개요</a>
+                <a href="#features" class="hover:text-purple-700">기능</a>
+                <a href="#demo" class="hover:text-purple-700">데모 체험</a>
+                <a href="#concept" class="hover:text-purple-700">개념도</a>
+                <a href="#contact" class="hover:text-purple-700">문의하기</a>
+            </nav>
+            <div class="md:hidden">
+                <button class="text-gray-500" aria-label="메뉴 열기"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+    </header>
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+    <!-- Hero -->
+    <section id="overview" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h2 class="text-4xl font-bold mb-6 leading-tight">건축 설계 AI 혁신 플랫폼 <span class="snap-purple">SnapCodex</span></h2>
+                <p class="text-xl text-gray-600 mb-8">건축 예산 예측부터 문서화, 수주 전략까지. 모든 과정이 AI로 자동화됩니다.</p>
+                <a href="#demo" class="px-6 py-3 bg-snap-blue text-white rounded-md hover:bg-purple-700">데모 체험하기</a>
+            </div>
+            <div class="md:w-1/2">
+                <img src="https://snaprice.kr/preview-image.png" alt="SnapCodex Preview" class="rounded-lg shadow-lg">
+            </div>
+        </div>
+    </section>
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    <!-- Features -->
+    <section id="features" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">주요 기능</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="p-6 border border-gray-200 rounded-lg shadow-sm">
+                    <i class="fas fa-file-alt text-2xl snap-blue mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">AI 자동 견적</h3>
+                    <p>도면 데이터 분석을 기반으로 공사비를 자동 예측합니다.</p>
+                </div>
+                <div class="p-6 border border-gray-200 rounded-lg shadow-sm">
+                    <i class="fas fa-search text-2xl snap-purple mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">GPT Insight</h3>
+                    <p>문서 검색, 요약, 유사 프로젝트 추천까지 한 번에.</p>
+                </div>
+                <div class="p-6 border border-gray-200 rounded-lg shadow-sm">
+                    <i class="fas fa-users text-2xl text-green-600 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">협업 기반 일정 관리</h3>
+                    <p>프로젝트 일정, 역할 분담, 진행 상황을 실시간 공유합니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo -->
+    <section id="demo" class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-4">SnapCodex 데모 체험</h2>
+            <p class="text-xl text-gray-600 mb-8">AI 견적 생성과 GPT Insight 검색 기능을 직접 확인하세요.</p>
+            <iframe src="https://snaprice.kr/demo" class="w-full h-96 border rounded-md shadow-lg"></iframe>
+        </div>
+    </section>
+
+    <!-- Concept Diagram -->
+    <section id="concept" class="py-16 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-6">SnapCodex 개념도</h2>
+            <p class="text-lg text-gray-600 mb-6">워크플로우 자동화 → IP 인증 → NFT 또는 Arweave 저장 흐름까지 시각화</p>
+            <img src="/images/concept-diagram.png" alt="SnapCodex 개념도" class="mx-auto max-w-full rounded shadow-lg">
+        </div>
+    </section>
+
+    <!-- Contact CTA -->
+    <section id="contact" class="py-20 gradient-bg text-white text-center">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-4">지금 SnapCodex를 시작해보세요</h2>
+            <p class="text-xl mb-6">설계부터 수주까지, 가장 빠르고 정확한 방법으로 자동화하세요.</p>
+            <a href="mailto:contact@snapcodex.com" class="px-8 py-3 bg-white text-purple-700 rounded-md font-bold hover:bg-gray-100">문의하기</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>© 2025 SnapCodex. All rights reserved.</p>
+        </div>
+    </footer>
   </body>
 </html>

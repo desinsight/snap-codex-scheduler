@@ -90,12 +90,12 @@ export const GlobalStyle = createGlobalStyle`
 
   ::-webkit-scrollbar-track {
     background: ${({ theme }) => theme.colors.grey[100]};
-    border-radius: ${({ theme }) => theme.shape.borderRadius.small};
+    border-radius: ${radius('small')};
   }
 
   ::-webkit-scrollbar-thumb {
     background: ${({ theme }) => theme.colors.grey[400]};
-    border-radius: ${({ theme }) => theme.shape.borderRadius.small};
+    border-radius: ${radius('small')};
     
     &:hover {
       background: ${({ theme }) => theme.colors.grey[500]};
@@ -103,11 +103,11 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .button {
-    border-radius: ${({ theme }) => theme.shape.borderRadius.small};
+    border-radius: ${radius('small')};
   }
 
   .card {
-    border-radius: ${({ theme }) => theme.shape.borderRadius.small};
+    border-radius: ${radius('small')};
   }
 
   .fade-enter {

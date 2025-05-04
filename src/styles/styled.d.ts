@@ -64,6 +64,13 @@ declare module 'styled-components' {
       surface: string;
       border: string;
       divider: string;
+      danger: string;
+      gradient: {
+        primary: string;
+        secondary: string;
+      };
+      light: string;
+      textSecondary: string;
     };
     typography: {
       fontFamily: string;
@@ -71,6 +78,13 @@ declare module 'styled-components' {
         small: string;
         medium: string;
         large: string;
+      };
+      fontSizes: {
+        xs: string;
+        sm: string;
+        md: string;
+        lg: string;
+        xl: string;
       };
       h1: {
         fontSize: string;
@@ -147,6 +161,13 @@ declare module 'styled-components' {
       lg: string;
       xl: string;
     };
+    space: {
+      xs: string;
+      sm: string;
+      md: string;
+      lg: string;
+      xl: string;
+    };
     shape: {
       borderRadius: string;
     };
@@ -156,6 +177,7 @@ declare module 'styled-components' {
       md: string;
       lg: string;
       xl: string;
+      small: string;
     };
     transitions: {
       duration: {
@@ -173,6 +195,7 @@ declare module 'styled-components' {
         easeIn: string;
         sharp: string;
       };
+      fast: string;
     };
     zIndex: {
       mobileStepper: number;
@@ -182,6 +205,19 @@ declare module 'styled-components' {
       modal: number;
       snackbar: number;
       tooltip: number;
+    };
+    breakpoints: {
+      xs: string;
+      sm: string;
+      md: string;
+      lg: string;
+      xl: string;
+    };
+    radii: {
+      sm: string;
+      md: string;
+      lg: string;
+      xl: string;
     };
   }
 }

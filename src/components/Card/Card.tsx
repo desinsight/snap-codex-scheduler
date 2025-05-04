@@ -8,12 +8,7 @@ interface CardProps {
   clickable?: boolean;
   fullWidth?: boolean;
   onClick?: () => void;
-}
-
-interface CardComposition {
-  Header: typeof CardHeader;
-  Content: typeof CardContent;
-  Footer: typeof CardFooter;
+  children?: React.ReactNode;
 }
 
 const StyledCard = styled(motion.div)<CardProps>`
@@ -103,7 +98,6 @@ const CardHeader = styled.div<{ padding?: CardProps['padding'] }>`
   }};
   border-bottom: 1px solid ${({ theme }) => theme.colors.divider};
 `;
-
 const CardContent = styled.div<{ padding?: CardProps['padding'] }>`
   padding: ${({ padding, theme }) => {
     switch (padding) {
@@ -118,7 +112,6 @@ const CardContent = styled.div<{ padding?: CardProps['padding'] }>`
     }
   }};
 `;
-
 const CardFooter = styled.div<{ padding?: CardProps['padding'] }>`
   padding: ${({ padding, theme }) => {
     switch (padding) {
@@ -135,7 +128,7 @@ const CardFooter = styled.div<{ padding?: CardProps['padding'] }>`
   border-top: 1px solid ${({ theme }) => theme.colors.divider};
 `;
 
-const Card: React.FC<CardProps> & CardComposition = ({
+const Card: React.FC<CardProps> = ({
   children,
   elevation = 'sm',
   padding = 'md',
@@ -160,8 +153,5 @@ const Card: React.FC<CardProps> & CardComposition = ({
   );
 };
 
-Card.Header = CardHeader;
-Card.Content = CardContent;
-Card.Footer = CardFooter;
-
 export default Card;
+export { CardHeader, CardContent, CardFooter };
