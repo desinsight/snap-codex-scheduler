@@ -323,4 +323,31 @@ img {
     .contact-container {
         padding: 1rem;
     }
+}
+
+.landing-404-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: #f9fafb;
+}
+
+.landing-404-content {
+    text-align: center;
+}
+
+.landing-404-title {
+    font-size: 3rem;
+    color: #6366f1;
+}
+
+.landing-404-desc {
+    font-size: 1.25rem;
+    color: #6b7280;
+}
+
+.landing-404-btn {
+    margin-top: 2rem;
+    display: inline-block;
 } 
