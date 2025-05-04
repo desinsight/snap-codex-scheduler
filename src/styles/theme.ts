@@ -11,7 +11,7 @@ export const radius = (size: keyof DefaultTheme['borderRadius']) => {
   return ({ theme }: { theme: DefaultTheme }) => theme.borderRadius[size];
 };
 
-const baseTheme = {
+export const baseTheme = {
   colors: {
     primary: {
       main: '#1976d2',
