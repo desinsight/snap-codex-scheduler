@@ -7,139 +7,11 @@ declare module '@mui/material/styles' {
 
 const borderRadii = [4, 8, 16]; // [small, medium, large]
 
-export const radius = (size: 'small' | 'medium' | 'large') =>
-  borderRadii[['small', 'medium', 'large'].indexOf(size)];
-
-const baseTheme = {
-  shape: {
-    borderRadius: borderRadii,
-  },
-  spacing: {
-    xs: '4px',
-    sm: '8px',
-    md: '16px',
-    lg: '24px',
-    xl: '32px',
-  },
-  shadows: {
-    none: 'none',
-    sm: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
-    md: '0 3px 6px rgba(0,0,0,0.15), 0 2px 4px rgba(0,0,0,0.12)',
-    lg: '0 10px 20px rgba(0,0,0,0.15), 0 3px 6px rgba(0,0,0,0.10)',
-    xl: '0 15px 25px rgba(0,0,0,0.15), 0 5px 10px rgba(0,0,0,0.05)',
-  },
-  typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    fontSize: {
-      small: '0.875rem',
-      medium: '1rem',
-      large: '1.25rem'
-    },
-    h1: {
-      fontSize: '2.5rem',
-      fontWeight: 700,
-      lineHeight: 1.2,
-    },
-    h2: {
-      fontSize: '2rem',
-      fontWeight: 700,
-      lineHeight: 1.2,
-    },
-    h3: {
-      fontSize: '1.75rem',
-      fontWeight: 600,
-      lineHeight: 1.2,
-    },
-    h4: {
-      fontSize: '1.5rem',
-      fontWeight: 600,
-      lineHeight: 1.2,
-    },
-    h5: {
-      fontSize: '1.25rem',
-      fontWeight: 600,
-      lineHeight: 1.2,
-    },
-    h6: {
-      fontSize: '1rem',
-      fontWeight: 600,
-      lineHeight: 1.2,
-    },
-    subtitle1: {
-      fontSize: '1.125rem',
-      fontWeight: 500,
-      lineHeight: 1.5,
-    },
-    subtitle2: {
-      fontSize: '0.875rem',
-      fontWeight: 500,
-      lineHeight: 1.5,
-    },
-    body1: {
-      fontSize: '1rem',
-      fontWeight: 400,
-      lineHeight: 1.5,
-    },
-    body2: {
-      fontSize: '0.875rem',
-      fontWeight: 400,
-      lineHeight: 1.5,
-    },
-    button: {
-      fontSize: '0.875rem',
-      fontWeight: 500,
-      lineHeight: 1.75,
-      textTransform: 'none',
-    },
-    caption: {
-      fontSize: '0.75rem',
-      fontWeight: 400,
-      lineHeight: 1.5,
-    },
-    overline: {
-      fontSize: '0.75rem',
-      fontWeight: 400,
-      lineHeight: 2.5,
-      textTransform: 'uppercase',
-    },
-  },
-  transitions: {
-    duration: {
-      shortest: 150,
-      shorter: 200,
-      short: 250,
-      standard: 300,
-      medium: 400,
-      long: 500,
-      complex: 1000,
-      enteringScreen: 225,
-      leavingScreen: 195,
-    },
-    easing: {
-      easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
-      easeOut: 'cubic-bezier(0.0, 0, 0.2, 1)',
-      easeIn: 'cubic-bezier(0.4, 0, 1, 1)',
-      sharp: 'cubic-bezier(0.4, 0, 0.6, 1)',
-    },
-  },
-  zIndex: {
-    mobileStepper: 1000,
-    speedDial: 1050,
-    appBar: 1100,
-    drawer: 1200,
-    modal: 1300,
-    snackbar: 1400,
-    tooltip: 1500,
-  },
-  borderRadius: {
-    small: '4px',
-    medium: '8px',
-    large: '12px',
-  },
+export const radius = (size: keyof DefaultTheme['borderRadius']) => {
+  return ({ theme }: { theme: DefaultTheme }) => theme.borderRadius[size];
 };
 
-const lightTheme: DefaultTheme = {
-  ...baseTheme,
+const baseTheme = {
   colors: {
     primary: {
       main: '#1976d2',
@@ -198,63 +70,93 @@ const lightTheme: DefaultTheme = {
       default: '#ffffff',
       paper: '#ffffff',
       surface: '#f5f5f5',
+      light: '#fafafa',
+    },
+    surface: '#f5f5f5',
+    border: {
+      main: 'rgba(0, 0, 0, 0.12)',
+      light: 'rgba(0, 0, 0, 0.08)',
+      dark: 'rgba(0, 0, 0, 0.15)',
     },
     divider: 'rgba(0, 0, 0, 0.12)',
-    surface: '#f5f5f5',
-    border: 'rgba(0, 0, 0, 0.12)',
+  },
+  typography: {
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    sizes: {
+      xs: '0.75rem',
+      sm: '0.875rem',
+      base: '1rem',
+      lg: '1.125rem',
+      xl: '1.25rem',
+    },
+    weights: {
+      light: 300,
+      regular: 400,
+      medium: 500,
+      bold: 700,
+    },
+  },
+  borderRadius: {
+    sm: '4px',
+    md: '8px',
+    lg: '12px',
+  },
+  spacing: {
+    xs: '4px',
+    sm: '8px',
+    md: '16px',
+    lg: '24px',
+    xl: '32px',
+  },
+  transitions: {
+    duration: {
+      shortest: 150,
+      shorter: 200,
+      short: 250,
+      standard: 300,
+      medium: 400,
+      long: 500,
+      complex: 1000,
+      enteringScreen: 225,
+      leavingScreen: 195,
+    },
+    easing: {
+      easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
+      easeOut: 'cubic-bezier(0.0, 0, 0.2, 1)',
+      easeIn: 'cubic-bezier(0.4, 0, 1, 1)',
+      sharp: 'cubic-bezier(0.4, 0, 0.6, 1)',
+    },
+  },
+  zIndex: {
+    mobileStepper: 1000,
+    speedDial: 1050,
+    appBar: 1100,
+    drawer: 1200,
+    modal: 1300,
+    snackbar: 1400,
+    tooltip: 1500,
   },
 };
 
-const darkTheme: DefaultTheme = {
+export const lightTheme: DefaultTheme = {
+  ...baseTheme,
+};
+
+export const darkTheme: DefaultTheme = {
   ...baseTheme,
   colors: {
+    ...baseTheme.colors,
     primary: {
       main: '#90caf9',
       light: '#e3f2fd',
       dark: '#42a5f5',
-      contrastText: 'rgba(0, 0, 0, 0.87)',
+      contrastText: '#000000',
     },
     secondary: {
       main: '#ce93d8',
       light: '#f3e5f5',
       dark: '#ab47bc',
-      contrastText: 'rgba(0, 0, 0, 0.87)',
-    },
-    error: {
-      main: '#f44336',
-      light: '#e57373',
-      dark: '#d32f2f',
-      contrastText: '#ffffff',
-    },
-    warning: {
-      main: '#ffa726',
-      light: '#ffb74d',
-      dark: '#f57c00',
-      contrastText: 'rgba(0, 0, 0, 0.87)',
-    },
-    info: {
-      main: '#29b6f6',
-      light: '#4fc3f7',
-      dark: '#0288d1',
-      contrastText: 'rgba(0, 0, 0, 0.87)',
-    },
-    success: {
-      main: '#66bb6a',
-      light: '#81c784',
-      dark: '#388e3c',
-      contrastText: 'rgba(0, 0, 0, 0.87)',
-    },
-    grey: {
-      50: '#fafafa',
-      100: '#f5f5f5',
-      200: '#eeeeee',
-      300: '#e0e0e0',
-      400: '#bdbdbd',
-      500: '#9e9e9e',
-      600: '#757575',
-      700: '#616161',
-      800: '#424242',
-      900: '#212121',
+      contrastText: '#000000',
     },
     text: {
       primary: '#ffffff',
@@ -265,83 +167,16 @@ const darkTheme: DefaultTheme = {
       default: '#121212',
       paper: '#1e1e1e',
       surface: '#272727',
+      light: '#2a2a2a',
+    },
+    surface: '#272727',
+    border: {
+      main: 'rgba(255, 255, 255, 0.12)',
+      light: 'rgba(255, 255, 255, 0.08)',
+      dark: 'rgba(255, 255, 255, 0.15)',
     },
     divider: 'rgba(255, 255, 255, 0.12)',
-    surface: '#272727',
-    border: 'rgba(255, 255, 255, 0.12)',
   },
-};
-
-export const flatLightTheme = {
-  colors: {
-    primary: lightTheme.colors.primary.main,
-    secondary: lightTheme.colors.secondary.main,
-    background: lightTheme.colors.background.default,
-    surface: lightTheme.colors.background.paper,
-    text: lightTheme.colors.text.primary,
-    border: lightTheme.colors.divider,
-  },
-  typography: {
-    fontFamily: lightTheme.typography.fontFamily,
-    fontSize: {
-      small: lightTheme.typography.body2.fontSize,
-      medium: lightTheme.typography.body1.fontSize,
-      large: lightTheme.typography.h5.fontSize,
-    }
-  },
-  spacing: {
-    small: lightTheme.spacing.sm,
-    medium: lightTheme.spacing.md,
-    large: lightTheme.spacing.lg,
-  },
-  borderRadius: {
-    small: '4px',
-    medium: '8px',
-    large: '12px',
-  },
-  shape: {
-    borderRadius: {
-      small: '4px',
-      medium: '8px',
-      large: '12px',
-    }
-  }
-};
-
-export const flatDarkTheme = {
-  colors: {
-    primary: darkTheme.colors.primary.main,
-    secondary: darkTheme.colors.secondary.main,
-    background: darkTheme.colors.background.default,
-    surface: darkTheme.colors.background.paper,
-    text: darkTheme.colors.text.primary,
-    border: darkTheme.colors.divider,
-  },
-  typography: {
-    fontFamily: darkTheme.typography.fontFamily,
-    fontSize: {
-      small: darkTheme.typography.body2.fontSize,
-      medium: darkTheme.typography.body1.fontSize,
-      large: darkTheme.typography.h5.fontSize,
-    }
-  },
-  spacing: {
-    small: darkTheme.spacing.sm,
-    medium: darkTheme.spacing.md,
-    large: darkTheme.spacing.lg,
-  },
-  borderRadius: {
-    small: '4px',
-    medium: '8px',
-    large: '12px',
-  },
-  shape: {
-    borderRadius: {
-      small: '4px',
-      medium: '8px',
-      large: '12px',
-    }
-  }
 };
 
 const theme = createTheme({

@@ -60,99 +60,36 @@ declare module 'styled-components' {
         default: string;
         paper: string;
         surface: string;
+        light: string;
       };
       surface: string;
-      border: string;
-      divider: string;
-      danger: string;
-      gradient: {
-        primary: string;
-        secondary: string;
+      border: {
+        main: string;
+        light: string;
+        dark: string;
       };
-      light: string;
-      textSecondary: string;
+      divider: string;
     };
     typography: {
       fontFamily: string;
-      fontSize: {
-        small: string;
-        medium: string;
-        large: string;
-      };
-      fontSizes: {
+      sizes: {
         xs: string;
         sm: string;
-        md: string;
+        base: string;
         lg: string;
         xl: string;
       };
-      h1: {
-        fontSize: string;
-        fontWeight: number;
-        lineHeight: number;
+      weights: {
+        light: number;
+        regular: number;
+        medium: number;
+        bold: number;
       };
-      h2: {
-        fontSize: string;
-        fontWeight: number;
-        lineHeight: number;
-      };
-      h3: {
-        fontSize: string;
-        fontWeight: number;
-        lineHeight: number;
-      };
-      h4: {
-        fontSize: string;
-        fontWeight: number;
-        lineHeight: number;
-      };
-      h5: {
-        fontSize: string;
-        fontWeight: number;
-        lineHeight: number;
-      };
-      h6: {
-        fontSize: string;
-        fontWeight: number;
-        lineHeight: number;
-      };
-      subtitle1: {
-        fontSize: string;
-        fontWeight: number;
-        lineHeight: number;
-      };
-      subtitle2: {
-        fontSize: string;
-        fontWeight: number;
-        lineHeight: number;
-      };
-      body1: {
-        fontSize: string;
-        fontWeight: number;
-        lineHeight: number;
-      };
-      body2: {
-        fontSize: string;
-        fontWeight: number;
-        lineHeight: number;
-      };
-      button: {
-        fontSize: string;
-        fontWeight: number;
-        lineHeight: number;
-        textTransform: string;
-      };
-      caption: {
-        fontSize: string;
-        fontWeight: number;
-        lineHeight: number;
-      };
-      overline: {
-        fontSize: string;
-        fontWeight: number;
-        lineHeight: number;
-        textTransform: string;
-      };
+    };
+    borderRadius: {
+      sm: string;
+      md: string;
+      lg: string;
     };
     spacing: {
       xs: string;
@@ -161,30 +98,14 @@ declare module 'styled-components' {
       lg: string;
       xl: string;
     };
-    space: {
-      xs: string;
-      sm: string;
-      md: string;
-      lg: string;
-      xl: string;
-    };
-    shape: {
-      borderRadius: string;
-    };
-    shadows: {
-      none: string;
-      sm: string;
-      md: string;
-      lg: string;
-      xl: string;
-      small: string;
-    };
     transitions: {
       duration: {
         shortest: number;
         shorter: number;
         short: number;
         standard: number;
+        medium: number;
+        long: number;
         complex: number;
         enteringScreen: number;
         leavingScreen: number;
@@ -195,7 +116,6 @@ declare module 'styled-components' {
         easeIn: string;
         sharp: string;
       };
-      fast: string;
     };
     zIndex: {
       mobileStepper: number;
@@ -205,19 +125,6 @@ declare module 'styled-components' {
       modal: number;
       snackbar: number;
       tooltip: number;
-    };
-    breakpoints: {
-      xs: string;
-      sm: string;
-      md: string;
-      lg: string;
-      xl: string;
-    };
-    radii: {
-      sm: string;
-      md: string;
-      lg: string;
-      xl: string;
     };
   }
 }

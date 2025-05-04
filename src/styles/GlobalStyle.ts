@@ -1,5 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 import { DefaultTheme } from 'styled-components';
+import { radius } from './theme';
 
 declare module 'styled-components' {
   export interface DefaultTheme {
@@ -80,7 +81,7 @@ export const GlobalStyle = createGlobalStyle`
 
   ::selection {
     background-color: ${({ theme }) => theme.colors.primary.main};
-    color: white;
+    color: ${({ theme }) => theme.colors.primary.contrastText};
   }
 
   ::-webkit-scrollbar {
@@ -90,44 +91,40 @@ export const GlobalStyle = createGlobalStyle`
 
   ::-webkit-scrollbar-track {
     background: ${({ theme }) => theme.colors.grey[100]};
-    border-radius: ${radius('small')};
+    border-radius: ${({ theme }) => theme.borderRadius.small};
   }
 
   ::-webkit-scrollbar-thumb {
     background: ${({ theme }) => theme.colors.grey[400]};
-    border-radius: ${radius('small')};
-    
-    &:hover {
-      background: ${({ theme }) => theme.colors.grey[500]};
-    }
+    border-radius: ${({ theme }) => theme.borderRadius.small};
   }
 
   .button {
-    border-radius: ${radius('small')};
+    border-radius: ${({ theme }) => theme.borderRadius.small};
   }
 
   .card {
-    border-radius: ${radius('small')};
+    border-radius: ${({ theme }) => theme.borderRadius.small};
   }
 
   .fade-enter {
     opacity: 0;
-    transition: opacity ${({ theme }) => theme.transitions.duration.medium}ms;
+    transition: opacity ${({ theme }) => theme.transitions.duration.standard}ms;
   }
 
   .fade-enter-active {
     opacity: 1;
-    transition: opacity ${({ theme }) => theme.transitions.duration.medium}ms;
+    transition: opacity ${({ theme }) => theme.transitions.duration.standard}ms;
   }
 
   .fade-exit {
     opacity: 1;
-    transition: transform ${({ theme }) => theme.transitions.duration.medium}ms;
+    transition: transform ${({ theme }) => theme.transitions.duration.standard}ms;
   }
 
   .fade-exit-active {
     opacity: 0;
-    transition: transform ${({ theme }) => theme.transitions.duration.medium}ms;
+    transition: transform ${({ theme }) => theme.transitions.duration.standard}ms;
   }
 
   .slide-enter {
@@ -136,7 +133,7 @@ export const GlobalStyle = createGlobalStyle`
 
   .slide-enter-active {
     transform: translateX(0);
-    transition: transform ${({ theme }) => theme.transitions.medium};
+    transition: transform ${({ theme }) => theme.transitions.duration.standard}ms ${({ theme }) => theme.transitions.easing.easeOut};
   }
 
   .slide-exit {
@@ -145,6 +142,6 @@ export const GlobalStyle = createGlobalStyle`
 
   .slide-exit-active {
     transform: translateX(-100%);
-    transition: transform ${({ theme }) => theme.transitions.medium};
+    transition: transform ${({ theme }) => theme.transitions.duration.standard}ms ${({ theme }) => theme.transitions.easing.easeOut};
   }
 `;

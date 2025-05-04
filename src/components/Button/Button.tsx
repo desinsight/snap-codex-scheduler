@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import { motion } from 'framer-motion';
+import { rippleAnimation } from './animations';
 
 type ButtonVariant = 'contained' | 'outlined' | 'text';
 type ButtonColor = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
@@ -14,12 +15,15 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
   fullWidth?: boolean;
+  disabled?: boolean;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  children: React.ReactNode;
 }
 
 interface RippleProps {
+  size: number;
   x: number;
   y: number;
-  size: number;
 }
 
 const rippleAnimation = keyframes`
@@ -38,39 +42,28 @@ const StyledButton = styled(motion.button)<ButtonProps>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: ${({ theme }) => theme.spacing.xs};
-  border-radius: ${({ theme }) => theme.spacing.xs};
-  font-weight: ${({ theme }) => theme.typography.button.fontWeight};
-  font-size: ${({ theme }) => theme.typography.button.fontSize};
-  line-height: ${({ theme }) => theme.typography.button.lineHeight};
-  transition: all ${({ theme }) => theme.transitions.duration.short}ms
-    ${({ theme }) => theme.transitions.easing.easeInOut};
+  padding: ${({ size = 'medium' }) =>
+    size === 'small'
+      ? '6px 16px'
+      : size === 'large'
+      ? '12px 24px'
+      : '8px 20px'};
+  font-size: ${({ size = 'medium', theme }) =>
+    size === 'small'
+      ? theme.typography.sizes.sm
+      : size === 'large'
+      ? theme.typography.sizes.lg
+      : theme.typography.sizes.base};
+  font-weight: ${({ theme }) => theme.typography.weights.medium};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  transition: all ${({ theme }) => theme.transitions.duration.standard}ms ${({ theme }) => theme.transitions.easing.easeInOut};
   overflow: hidden;
   cursor: pointer;
-  user-select: none;
   width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
+  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
+  pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
 
-  ${({ size, theme }) => {
-    switch (size) {
-      case 'small':
-        return css`
-          padding: ${theme.spacing.xs} ${theme.spacing.sm};
-          min-height: 32px;
-        `;
-      case 'large':
-        return css`
-          padding: ${theme.spacing.sm} ${theme.spacing.lg};
-          min-height: 48px;
-        `;
-      default:
-        return css`
-          padding: ${theme.spacing.sm} ${theme.spacing.md};
-          min-height: 40px;
-        `;
-    }
-  }}
-
-  ${({ variant, color = 'primary', theme }) => {
+  ${({ variant = 'contained', color = 'primary', theme }) => {
     const colors = theme.colors[color];
 
     switch (variant) {
@@ -92,13 +85,13 @@ const StyledButton = styled(motion.button)<ButtonProps>`
             color: ${theme.colors.text.disabled};
             border-color: ${theme.colors.text.disabled};
             background: transparent;
-            cursor: not-allowed;
           }
         `;
       case 'text':
         return css`
           color: ${colors.main};
           background: transparent;
+          border: none;
 
           &:hover {
             background: ${colors.main}10;
@@ -111,7 +104,6 @@ const StyledButton = styled(motion.button)<ButtonProps>`
           &:disabled {
             color: ${theme.colors.text.disabled};
             background: transparent;
-            cursor: not-allowed;
           }
         `;
       default:
@@ -130,7 +122,6 @@ const StyledButton = styled(motion.button)<ButtonProps>`
 
           &:disabled {
             background: ${theme.colors.grey[300]};
-            cursor: not-allowed;
           }
         `;
     }
@@ -173,28 +164,19 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   const [ripples, setRipples] = useState<RippleProps[]>([]);
 
-  useEffect(() => {
-    const cleanup = ripples.reduce((acc, _, index) => {
-      const timer = setTimeout(() => {
-        setRipples(prev => prev.filter((_, i) => i !== index));
-      }, 600);
-      return [...acc, timer];
-    }, [] as number[]);
-
-    return () => cleanup.forEach(timer => clearTimeout(timer));
-  }, [ripples]);
-
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    if (!disabled && !loading) {
-      const button = event.currentTarget;
-      const rect = button.getBoundingClientRect();
-      const size = Math.max(button.clientWidth, button.clientHeight);
-      const x = event.clientX - rect.left - size / 2;
-      const y = event.clientY - rect.top - size / 2;
+    const button = event.currentTarget;
+    const rect = button.getBoundingClientRect();
+    const size = Math.max(button.clientWidth, button.clientHeight);
+    const x = event.clientX - rect.left - size / 2;
+    const y = event.clientY - rect.top - size / 2;
 
-      setRipples(prev => [...prev, { x, y, size }]);
-      onClick?.(event);
-    }
+    setRipples([...ripples, { size, x, y }]);
+    onClick?.(event);
+
+    setTimeout(() => {
+      setRipples(prev => prev.slice(1));
+    }, 600);
   };
 
   return (
@@ -217,8 +199,8 @@ const Button: React.FC<ButtonProps> = ({
       {!loading && startIcon}
       {!loading && children}
       {!loading && endIcon}
-      {ripples.map((ripple, index) => (
-        <RippleEffect key={index} {...ripple} />
+      {ripples.map((ripple, i) => (
+        <RippleEffect key={i} {...ripple} />
       ))}
     </StyledButton>
   );

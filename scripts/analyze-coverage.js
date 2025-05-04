@@ -1,3 +1,6 @@
+/* global console */
+/* eslint-env node */
+
 const fs = require('fs');
 const path = require('path');
 
@@ -8,7 +11,6 @@ const lines = coverageData.split('\n');
 const fileCoverage = {};
 
 let currentFile = '';
-let uncoveredLines = [];
 
 lines.forEach(line => {
   if (line.startsWith('SF:')) {
@@ -19,10 +21,11 @@ lines.forEach(line => {
       coveredLines: 0
     };
   } else if (line.startsWith('DA:')) {
-    const [_, lineNumber, hits] = line.split(':')[1].split(',');
+    const [lineData] = line.split(':').slice(1);
+    const [lineNumber, hits] = lineData.split(',');
     fileCoverage[currentFile].totalLines++;
     if (hits === '0') {
-      fileCoverage[currentFile].uncoveredLines.push(parseInt(lineNumber));
+      fileCoverage[currentFile].uncoveredLines.push(parseInt(lineNumber, 10));
     } else {
       fileCoverage[currentFile].coveredLines++;
     }

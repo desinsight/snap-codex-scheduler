@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/aws-cloudformation/cloudformation-schema/master/cloudformation.schema.json
+
 AWSTemplateFormatVersion: '2010-09-09'
 Description: 'CloudFormation template for snap-codex-scheduler ECS Service'
 
@@ -52,6 +54,9 @@ Resources:
       ContainerDefinitions:
         - Name: snap-codex-scheduler
           Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/snap-codex-scheduler:latest
+          Essential: true
+          ReadonlyRootFilesystem: true
+          Privileged: false
           PortMappings:
             - ContainerPort: !Ref ContainerPort
           LogConfiguration:
@@ -63,6 +68,21 @@ Resources:
           Environment:
             - Name: NODE_ENV
               Value: !Ref Environment
+          HealthCheck:
+            Command:
+              - CMD-SHELL
+              - curl -f http://localhost:3000/health || exit 1
+            Interval: 30
+            Timeout: 5
+            Retries: 3
+            StartPeriod: 60
+          SecurityContext:
+            RunAsNonRoot: true
+            RunAsUser: 1000
+          Ulimits:
+            - Name: nofile
+              SoftLimit: 1024
+              HardLimit: 2048
 
   ExecutionRole:
     Type: AWS::IAM::Role
