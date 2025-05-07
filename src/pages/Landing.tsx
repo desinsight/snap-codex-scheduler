@@ -3,7 +3,7 @@ import { Box, Typography, Button, Container, Grid, useTheme } from '@mui/materia
 import { styled } from '@mui/material/styles';
 import CloudAIDiagram from '../assets/cloud-ai-diagram.jpg';
 import SystemArchitecture from '../assets/system-architecture.jpg';
-import WorkflowAutomation from '../assets/workflow-automation.jpg';
+import WorkflowAutomationImg from '../assets/workflow-automation.jpg';
 import CopyrightInfo from '../assets/copyright.jpg';
 import CloudIcon from '@mui/icons-material/Cloud';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
@@ -86,7 +86,7 @@ const StyledImg = styled('img')({
 const captions = [
   { src: CloudAIDiagram, alt: '클라우드 기반 AI 설계 플랫폼 분석', label: '클라우드 기반 AI 설계 플랫폼 분석' },
   { src: SystemArchitecture, alt: '시스템 아키텍처와 데이터 흐름', label: '시스템 아키텍처와 데이터 흐름' },
-  { src: WorkflowAutomation, alt: '워크플로우 자동화 및 IP 검증', label: '워크플로우 자동화 및 IP 검증' },
+  { src: WorkflowAutomationImg, alt: '워크플로우 자동화 및 IP 검증', label: '워크플로우 자동화 및 IP 검증' },
   { src: CopyrightInfo, alt: '저작권 안내', label: '저작권 안내' },
 ];
 

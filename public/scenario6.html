@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapCodex EO + MCP - 시나리오 6</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #f5f7fa;
+        }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+        }
+        .tech-stack-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        .tech-stack-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .code-snippet {
+            background: #18181b;
+            border: 2px solid #4facfe;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: monospace;
+            position: relative;
+            overflow: hidden;
+            color: #f1f5f9;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+        }
+        .code-snippet::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: 0;
+        }
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+        .voice-command-ui {
+            background: rgba(10, 30, 50, 0.5);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .voice-wave {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 40px;
+        }
+        .voice-bar {
+            display: inline-block;
+            width: 5px;
+            height: 100%;
+            margin: 0 2px;
+            background: linear-gradient(to top, #4facfe, #00f2fe);
+            border-radius: 2px;
+            animation: voiceWave 1.5s ease-in-out infinite;
+        }
+        @keyframes voiceWave {
+            0%, 100% { transform: scaleY(0.2); }
+            50% { transform: scaleY(1); }
+        }
+        .voice-bar:nth-child(2) { animation-delay: 0.1s; }
+        .voice-bar:nth-child(3) { animation-delay: 0.2s; }
+        .voice-bar:nth-child(4) { animation-delay: 0.3s; }
+        .voice-bar:nth-child(5) { animation-delay: 0.4s; }
+        .voice-bar:nth-child(6) { animation-delay: 0.5s; }
+        .voice-bar:nth-child(7) { animation-delay: 0.6s; }
+        .workflow-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            position: relative;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: flex-start;
+        }
+        .workflow-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+        .workflow-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .schedule-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 16px;
+            transition: all 0.3s ease;
+        }
+        .schedule-card:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-5px);
+        }
+        .automation-card {
+            background: rgba(79, 172, 254, 0.1);
+            border-left: 4px solid #4facfe;
+            padding: 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .automation-card:hover {
+            background: rgba(79, 172, 254, 0.2);
+        }
+        .schedule-time {
+            display: inline-block;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        .task-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 5px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-content">
+        <div class="slide-container relative">
+            <div class="grid-pattern"></div>
+            <div class="content p-10 h-full flex flex-col">
+                <!-- Header -->
+                <div class="text-center mb-6">
+                    <p class="text-sm text-gray-400 mb-2">시나리오 6</p>
+                    <h2 class="text-3xl font-bold gradient-text">백그라운드 자동화 + 업무 종료</h2>
+                    <p class="text-gray-300 mt-2">퇴근 후에도 시스템이 자동으로 업무를 처리하는 24시간 생산성 향상</p>
+                </div>
+                
+                <!-- Voice Command UI -->
+                <div class="voice-command-ui mb-5">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-400 to-purple-300 flex items-center justify-center">
+                            <i class="fas fa-moon text-white"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-gray-300">퇴근 전 자동화 설정</p>
+                        </div>
+                        <div class="voice-wave ml-auto">
+                            <div class="voice-bar" style="height: 40%;"></div>
+                            <div class="voice-bar" style="height: 70%;"></div>
+                            <div class="voice-bar" style="height: 100%;"></div>
+                            <div class="voice-bar" style="height: 80%;"></div>
+                            <div class="voice-bar" style="height: 60%;"></div>
+                            <div class="voice-bar" style="height: 30%;"></div>
+                            <div class="voice-bar" style="height: 20%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-3 bg-opacity-50 bg-gray-800 rounded-lg mb-3">
+                        <p class="text-lg font-semibold text-purple-200">
+                            " 밤 11시에 이 도면 백업하고 VE 비교 리포트 생성 예약 "
+                        </p>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <div class="bg-purple-900 bg-opacity-30 text-purple-200 text-xs py-1 px-3 rounded-full">
+                            <i class="fas fa-check-circle mr-1"></i> 자동화 작업 예약 완료
+                        </div>
+                        <div class="text-sm text-gray-400">
+                            작업 ID: AUT-2305-11PM
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Schedule Visual Preview -->
+                <div class="schedule-card mb-5">
+                    <h3 class="text-lg font-semibold mb-3 gradient-text">
+                        <i class="fas fa-clock mr-2"></i>예약된 자동 작업
+                    </h3>
+                    
+                    <div class="flex items-center mb-4">
+                        <div class="schedule-time">23:00</div>
+                        <div>
+                            <div class="text-white font-medium">도면 백업 및 VE 리포트 생성</div>
+                            <div class="mt-2">
+                                <span class="task-badge"><i class="fas fa-save mr-1"></i> S3 백업</span>
+                                <span class="task-badge"><i class="fas fa-database mr-1"></i> Supabase 복제</span>
+                                <span class="task-badge"><i class="fas fa-file-alt mr-1"></i> VE 리포트</span>
+                                <span class="task-badge"><i class="fas fa-envelope mr-1"></i> 완료 알림</span>
+                            </div>
+                        </div>
+                        
+                        <div class="ml-auto flex items-center text-purple-200 text-sm">
+                            <i class="fas fa-robot mr-1"></i>
+                            <span>EO Agent 실행</span>
+                        </div>
+                    </div>
+                    
+                    <div class="text-xs text-gray-400">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        작업은 백그라운드에서 실행되며, 처리 결과는 아침 브리핑에 자동 포함됩니다
+                    </div>
+                </div>
+                
+                <!-- Background Automation Flow -->
+                <div class="mb-5">
+                    <h3 class="text-lg font-semibold mb-3 gradient-text">자동 작업 흐름</h3>
+                    
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="workflow-item">
+                            <div class="workflow-icon bg-gradient-to-br from-blue-400 to-cyan-300">
+                                <i class="fas fa-cloud-upload-alt text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-1">백업</h4>
+                                <p class="text-xs text-gray-300">S3 + Supabase</p>
+                                <p class="text-xs text-gray-400 mt-1">암호화 및 버전 제어 자동 적용</p>
+                            </div>
+                        </div>
+                        
+                        <div class="workflow-item">
+                            <div class="workflow-icon bg-gradient-to-br from-purple-400 to-pink-300">
+                                <i class="fas fa-brain text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-1">리포트</h4>
+                                <p class="text-xs text-gray-300">LLM + 분석 모듈</p>
+                                <p class="text-xs text-gray-400 mt-1">VE 비교 및 최적화 제안 생성</p>
+                            </div>
+                        </div>
+                        
+                        <div class="workflow-item">
+                            <div class="workflow-icon bg-gradient-to-br from-green-400 to-teal-300">
+                                <i class="fas fa-calendar-check text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-1">예약 실행</h4>
+                                <p class="text-xs text-gray-300">MCP Timer + Scheduler</p>
+                                <p class="text-xs text-gray-400 mt-1">정확한 시간 실행 보장 및 로깅</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tech Stack -->
+                <div class="mb-5">
+                    <h3 class="text-lg font-semibold mb-3 gradient-text">
+                        <i class="fas fa-cogs mr-2"></i>
+                        사용 기술
+                    </h3>
+                    
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="tech-stack-item">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-calendar-alt text-cyan-300 mr-2"></i>
+                                <h4 class="text-md font-semibold">MCP Schedule Module</h4>
+                            </div>
+                            <p class="text-xs text-gray-300">시간 기반 작업 관리 및 의존성 처리</p>
+                            <p class="text-xs text-gray-400 mt-1">cron 형식 지원: "0 23 * * *"</p>
+                        </div>
+                        
+                        <div class="tech-stack-item">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-file-code text-cyan-300 mr-2"></i>
+                                <h4 class="text-md font-semibold">YAML → MCP Form Editor</h4>
+                            </div>
+                            <p class="text-xs text-gray-300">스케줄 정의 자동 변환</p>
+                            <p class="text-xs text-gray-400 mt-1">텍스트 명령 → 구조화된 작업 정의</p>
+                        </div>
+                        
+                        <div class="tech-stack-item">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-tasks text-cyan-300 mr-2"></i>
+                                <h4 class="text-md font-semibold">FastAPI Task Queue</h4>
+                            </div>
+                            <p class="text-xs text-gray-300">비동기 작업 처리 및 모니터링</p>
+                            <p class="text-xs text-gray-400 mt-1">실패 시 자동 재시도 및 알림</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Code Snippet -->
+                <div class="code-snippet w-full text-gray-300 text-xs mb-5">
+                    <span class="text-blue-300">// 음성 명령을 스케줄 작업으로 변환하는 코드</span><br>
+                    <span class="text-green-300">async function</span> <span class="text-yellow-300">scheduleNightTask</span>(voiceCommand) {<br>
+                    &nbsp;&nbsp;<span class="text-purple-300">// 1. 음성 명령에서 시간 및 작업 추출</span><br>
+                    &nbsp;&nbsp;const { <span class="text-blue-300">scheduledTime</span>, <span class="text-blue-300">taskType</span>, <span class="text-blue-300">targets</span> } = <span class="text-green-300">await</span> CommandParser.extract(voiceCommand);<br>
+                    <br>
+                    &nbsp;&nbsp;<span class="text-purple-300">// 2. YAML 작업 정의 생성</span><br>
+                    &nbsp;&nbsp;const <span class="text-blue-300">yaml</span> = YAMLGenerator.createSchedule({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;time: scheduledTime, <span class="text-purple-300">// "23:00"</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;tasks: [<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ type: <span class="text-red-300">'backup'</span>, target: targets.drawing, storage: [<span class="text-red-300">'s3'</span>, <span class="text-red-300">'supabase'</span>] },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ type: <span class="text-red-300">'report'</span>, reportType: <span class="text-red-300">'ve_comparison'</span>, source: targets.drawing }<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;]<br>
+                    &nbsp;&nbsp;});<br>
+                    <br>
+                    &nbsp;&nbsp;<span class="text-purple-300">// 3. MCP 스케줄러에 작업 등록</span><br>
+                    &nbsp;&nbsp;const <span class="text-blue-300">taskId</span> = <span class="text-green-300">await</span> MCPScheduler.register(yaml);<br>
+                    <br>
+                    &nbsp;&nbsp;<span class="text-purple-300">// 4. FastAPI Task Queue에 작업 등록</span><br>
+                    &nbsp;&nbsp;<span class="text-green-300">await</span> TaskQueue.enqueue({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;id: taskId,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;executionTime: scheduledTime,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;priority: <span class="text-red-300">'medium'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;retryPolicy: { maxAttempts: 3, interval: <span class="text-red-300">'5m'</span> }<br>
+                    &nbsp;&nbsp;});<br>
+                    <br>
+                    &nbsp;&nbsp;<span class="text-green-300">return</span> { taskId, scheduledTime, confirmation: <span class="text-red-300">'자동화 작업 예약 완료'</span> };<br>
+                    }
+                </div>
+
+                <!-- Footer -->
+                <div class="text-right mt-auto">
+                    <p class="text-xs text-gray-400">SnapCodex EO + MCP 기반 풀세팅 자동화 환경</p>
+                    <p class="text-xs text-gray-400">7 / 8</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

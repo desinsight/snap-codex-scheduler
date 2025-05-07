@@ -25,17 +25,6 @@ const defaultTheme = {
   },
 };
 
-// 디버깅용 스타일
-const debugStyles = css`
-  * {
-    outline: 1px solid rgba(255, 0, 0, 0.1);
-  }
-  
-  body {
-    border: 3px solid blue;
-  }
-`;
-
 // theme 안전 접근 헬퍼 함수
 const getThemeValue = <T extends unknown>(
   theme: MuiTheme | undefined,
@@ -51,8 +40,6 @@ const getThemeValue = <T extends unknown>(
 
 export const GlobalStyle = createGlobalStyle<{ theme?: MuiTheme }>`
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-
-  ${process.env.NODE_ENV === 'development' && debugStyles}
 
   * {
     margin: 0;

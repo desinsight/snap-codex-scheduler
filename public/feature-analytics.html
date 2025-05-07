@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>실시간 분석 | SnapCodex</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white min-h-screen h-full flex flex-col relative" style="background: url('/bg-workspace.jpg') center center / cover no-repeat, #111827;">
+  <div class="absolute inset-0 bg-black bg-opacity-60 pointer-events-none z-0"></div>
+  <nav class="w-full bg-gray-900 bg-opacity-90 px-6 py-4 flex items-center justify-between z-10 relative">
+    <a href="/" class="text-2xl font-bold gradient-text flex items-center space-x-2">
+      <i class="fas fa-chart-line text-green-400"></i>
+      <span>SnapCodex</span>
+    </a>
+    <a href="/" class="text-blue-400 hover:underline">메인으로</a>
+  </nav>
+  <main class="flex-1 flex flex-col items-center justify-center py-12 px-4 z-10 relative w-full overflow-y-auto">
+    <div class="max-w-3xl w-full">
+      <h1 class="text-4xl font-bold mb-4 flex items-center"><i class="fas fa-chart-line text-green-400 mr-3"></i>실시간 분석</h1>
+      <p class="text-lg text-gray-200 mb-8">프로젝트의 모든 데이터를 실시간으로 수집, 시각화, 분석하여 즉각적인 의사결정과 문제 대응이 가능합니다. 대시보드, 알림, 자동 리포트 등 다양한 실시간 분석 기능을 제공합니다.</p>
+      <div class="bg-gray-800 rounded-xl p-6 mb-8 shadow-lg">
+        <h2 class="text-2xl font-semibold mb-4 text-green-300">실시간 분석 워크플로우</h2>
+        <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+          <div class="flex flex-col items-center">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-r from-green-400 to-cyan-300 flex items-center justify-center mb-2">
+              <i class="fas fa-database text-white text-2xl"></i>
+            </div>
+            <span class="text-sm text-gray-300">데이터 수집</span>
+          </div>
+          <i class="fas fa-arrow-right text-2xl text-green-400"></i>
+          <div class="flex flex-col items-center">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-r from-blue-400 to-green-300 flex items-center justify-center mb-2">
+              <i class="fas fa-chart-bar text-white text-2xl"></i>
+            </div>
+            <span class="text-sm text-gray-300">실시간 시각화</span>
+          </div>
+          <i class="fas fa-arrow-right text-2xl text-green-400"></i>
+          <div class="flex flex-col items-center">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-r from-purple-400 to-blue-300 flex items-center justify-center mb-2">
+              <i class="fas fa-bolt text-white text-2xl"></i>
+            </div>
+            <span class="text-sm text-gray-300">자동 알림/분석</span>
+          </div>
+        </div>
+      </div>
+      <section class="mb-8">
+        <h2 class="text-xl font-bold mb-3 text-green-200">주요 장점</h2>
+        <ul class="list-disc pl-6 space-y-2 text-base text-gray-100">
+          <li>실시간 데이터로 <span class="text-green-300 font-semibold">즉각적 의사결정</span> 가능</li>
+          <li>이상 징후, 위험 신호를 <span class="text-green-300 font-semibold">즉시 감지</span> 및 알림</li>
+          <li>대시보드, 리포트 등 다양한 시각화 제공</li>
+          <li>프로젝트 진행 상황을 한눈에 파악</li>
+        </ul>
+      </section>
+      <section>
+        <h2 class="text-xl font-bold mb-3 text-green-200">적용 예시</h2>
+        <ul class="list-disc pl-6 space-y-2 text-base text-gray-100">
+          <li>공정별 실시간 진척률, 비용, 리스크 모니터링</li>
+          <li>이상 데이터 발생 시 자동 알림 및 보고서 생성</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+</body>
+</html> 

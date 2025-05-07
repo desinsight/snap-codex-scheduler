@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="SnapCodex EO + MCP - 데모 체험 페이지" />
+    <meta name="theme-color" content="#0f172a" />
+    <title>SnapCodex 데모 체험</title>
+    <link rel="icon" href="/snap-codex-scheduler/favicon.ico" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/snap-codex-scheduler/css/style.css">
+    <script src="/snap-codex-scheduler/js/slider.js" type="module" defer></script>
+  </head>
+  <body class="bg-gray-900 text-white">
+    <nav class="fixed w-full z-50 bg-gray-900 bg-opacity-90 backdrop-blur-sm" role="navigation" aria-label="메인 네비게이션">
+      <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex items-center">
+            <a href="/snap-codex-scheduler/" class="flex items-center space-x-2" aria-label="SnapCodex 홈">
+              <span class="text-2xl font-bold gradient-text">SnapCodex</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <main class="min-h-screen flex flex-col justify-center items-center pt-32">
+      <h1 class="text-4xl md:text-5xl font-bold gradient-text mb-6">SnapCodex 데모 체험</h1>
+      <p class="text-lg text-gray-300 mb-8">아래 슬라이드를 통해 주요 기능을 직접 체험해보세요.</p>
+      <div class="w-full max-w-3xl">
+        <div class="demo-slider">
+          <div class="slide-container overflow-y-auto" role="region" aria-label="슬라이드 컨테이너">
+            <!-- 슬라이드 내용이 여기에 동적으로 로드됩니다 -->
+          </div>
+          <div class="slide-controls">
+            <button class="prev-slide" aria-label="이전 슬라이드">
+              <i class="fas fa-chevron-left" aria-hidden="true"></i>
+            </button>
+            <div class="slide-dots" role="tablist" aria-label="슬라이드 네비게이션"></div>
+            <button class="next-slide" aria-label="다음 슬라이드">
+              <i class="fas fa-chevron-right" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer class="footer py-8" role="contentinfo">
+      <div class="container mx-auto px-4">
+        <div class="text-center text-gray-400">
+          <p>&copy; 2024 SnapCodex. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+    <script src="/snap-codex-scheduler/js/main.js" type="module" defer></script>
+  </body>
+</html> 

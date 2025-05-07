@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapCodex EO + MCP - 시나리오 4</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #f5f7fa;
+        }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+        }
+        .tech-stack-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        .tech-stack-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .code-snippet {
+            background: #18181b;
+            border: 2px solid #4facfe;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: monospace;
+            position: relative;
+            overflow: hidden;
+            color: #f1f5f9;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+        }
+        .code-snippet::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: 0;
+        }
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+        .automation-card {
+            background: rgba(79, 172, 254, 0.1);
+            border-left: 4px solid #4facfe;
+            padding: 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .automation-card:hover {
+            background: rgba(79, 172, 254, 0.2);
+        }
+        .dashboard-section {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            height: 280px;
+            overflow: hidden;
+        }
+        .agent-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .agent-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        .progress-bar {
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 20px;
+            padding-bottom: 15px;
+            border-left: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        .timeline-item:before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            position: absolute;
+            left: -6px;
+            top: 5px;
+        }
+        .timeline-item:last-child {
+            border-left: 2px solid transparent;
+        }
+        .command-suggestion {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .command-suggestion:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+        .chart-container {
+            position: relative;
+            height: 80px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-content">
+        <div class="slide-container relative">
+            <div class="grid-pattern"></div>
+            <div class="content p-10 h-full flex flex-col">
+                <!-- Header -->
+                <div class="text-center mb-3">
+                    <p class="text-sm text-gray-400 mb-1">시나리오 4</p>
+                    <h2 class="text-3xl font-bold gradient-text">실시간 에이전트 대시보드</h2>
+                    <p class="text-gray-300 mt-1">다중 AI 에이전트 모니터링 및 제어 인터페이스</p>
+                </div>
+                
+                <!-- Dashboard Visualization -->
+                <div class="grid grid-cols-3 gap-4 mb-4">
+                    <!-- Left Section: Agent Status Cards -->
+                    <div class="dashboard-section">
+                        <h3 class="text-lg font-semibold mb-3">
+                            <i class="fas fa-robot text-blue-300 mr-2"></i>
+                            Agent 상태
+                        </h3>
+                        
+                        <div class="agent-card">
+                            <div class="flex justify-between items-center">
+                                <h4 class="font-semibold">리뷰 에이전트</h4>
+                                <span class="text-xs px-2 py-1 bg-yellow-500 rounded-full">혼잡</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill bg-yellow-500" style="width: 85%"></div>
+                            </div>
+                            <p class="text-xs mt-2 text-gray-300">작업 부하: 85%</p>
+                            <div class="chart-container mt-2">
+                                <canvas id="reviewChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="agent-card">
+                            <div class="flex justify-between items-center">
+                                <h4 class="font-semibold">VE 제안 에이전트</h4>
+                                <span class="text-xs px-2 py-1 bg-green-500 rounded-full">원활</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill bg-green-500" style="width: 42%"></div>
+                            </div>
+                            <p class="text-xs mt-2 text-gray-300">작업 부하: 42%</p>
+                        </div>
+                        
+                        <div class="agent-card">
+                            <div class="flex justify-between items-center">
+                                <h4 class="font-semibold">보고서 생성 에이전트</h4>
+                                <span class="text-xs px-2 py-1 bg-blue-500 rounded-full">대기</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill bg-blue-500" style="width: 5%"></div>
+                            </div>
+                            <p class="text-xs mt-2 text-gray-300">작업 부하: 5%</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Middle Section: Processing Timeline -->
+                    <div class="dashboard-section">
+                        <h3 class="text-lg font-semibold mb-3">
+                            <i class="fas fa-history text-blue-300 mr-2"></i>
+                            처리 이력 타임라인
+                        </h3>
+                        
+                        <div class="overflow-y-auto h-full pr-2">
+                            <div class="timeline-item" style="padding-bottom: 18px;">
+                                <div class="text-xs text-gray-400">13:05</div>
+                                <div class="text-sm font-semibold">설계 리뷰 #328 분석 시작</div>
+                                <div class="text-xs">리뷰 에이전트 작업 중</div>
+                            </div>
+                            
+                            <div class="timeline-item" style="padding-bottom: 18px;">
+                                <div class="text-xs text-gray-400">12:58</div>
+                                <div class="text-sm font-semibold">신규 자재 가격 데이터 업데이트</div>
+                                <div class="text-xs">DB 에이전트 완료</div>
+                            </div>
+                            
+                            <div class="timeline-item" style="padding-bottom: 18px;">
+                                <div class="text-xs text-gray-400">12:41</div>
+                                <div class="text-sm font-semibold text-green-300">VE 제안 자동 삽입 완료</div>
+                                <div class="text-xs">설계 비용 12% 절감 제안</div>
+                            </div>
+                            
+                            <div class="timeline-item" style="padding-bottom: 18px;">
+                                <div class="text-xs text-gray-400">12:15</div>
+                                <div class="text-sm font-semibold">클라이언트 A 견적 생성</div>
+                                <div class="text-xs">PDF + Excel 자동 생성</div>
+                            </div>
+                            
+                            <div class="timeline-item" style="padding-bottom: 0;">
+                                <div class="text-xs text-gray-400">11:52</div>
+                                <div class="text-sm font-semibold">일일 데이터 백업 완료</div>
+                                <div class="text-xs">MCP Storage API 요청 처리됨</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Section: Command Suggestions + Voice UI -->
+                    <div class="dashboard-section">
+                        <h3 class="text-lg font-semibold mb-3">
+                            <i class="fas fa-terminal text-blue-300 mr-2"></i>
+                            명령어 추천 & 음성 입력
+                        </h3>
+                        
+                        <div class="bg-gray-800 bg-opacity-50 rounded-lg p-3 mb-4 flex items-center">
+                            <i class="fas fa-microphone text-blue-300 mr-3 text-xl"></i>
+                            <div class="text-sm">
+                                "명령을 말씀해주세요..."
+                            </div>
+                        </div>
+                        
+                        <p class="text-xs text-gray-300 mb-2">추천 명령어:</p>
+                        
+                        <div class="command-suggestion">
+                            <div class="flex items-center">
+                                <i class="fas fa-bolt text-yellow-400 mr-2"></i>
+                                <div>
+                                    <p class="text-sm font-semibold">리뷰 에이전트 작업 우선순위 조정</p>
+                                    <p class="text-xs text-gray-400">현재 혼잡도 85% → 부하 분산 필요</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="command-suggestion">
+                            <div class="flex items-center">
+                                <i class="fas fa-file-export text-green-400 mr-2"></i>
+                                <div>
+                                    <p class="text-sm font-semibold">오늘 처리된 VE 제안 요약 생성</p>
+                                    <p class="text-xs text-gray-400">총 8개 제안, 예상 비용 절감: ₩12.4M</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="command-suggestion">
+                            <div class="flex items-center">
+                                <i class="fas fa-clock text-blue-400 mr-2"></i>
+                                <div>
+                                    <p class="text-sm font-semibold">일일 팀 미팅용 보고서 준비</p>
+                                    <p class="text-xs text-gray-400">17:00 회의 - 자동 프리젠테이션 생성</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Technical Stack -->
+                <div class="mb-5">
+                    <h3 class="text-lg font-semibold mb-3 gradient-text">⚙️ 사용 기술</h3>
+                    <div class="grid grid-cols-4 gap-4">
+                        <div class="tech-stack-item">
+                            <div class="flex items-center mb-1">
+                                <i class="fas fa-cube text-blue-300 mr-2"></i>
+                                <h4 class="text-md font-semibold">Zustand + Radix UI</h4>
+                            </div>
+                            <p class="text-xs text-gray-300">상태관리 + 컴포넌트 라이브러리</p>
+                        </div>
+                        <div class="tech-stack-item">
+                            <div class="flex items-center mb-1">
+                                <i class="fas fa-chart-bar text-blue-300 mr-2"></i>
+                                <h4 class="text-md font-semibold">MCP Metrics + Supabase</h4>
+                            </div>
+                            <p class="text-xs text-gray-300">실시간 데이터 연동</p>
+                        </div>
+                        <div class="tech-stack-item">
+                            <div class="flex items-center mb-1">
+                                <i class="fas fa-exchange-alt text-blue-300 mr-2"></i>
+                                <h4 class="text-md font-semibold">WebSocket</h4>
+                            </div>
+                            <p class="text-xs text-gray-300">데이터 스트림 실시간 처리</p>
+                        </div>
+                        <div class="tech-stack-item">
+                            <div class="flex items-center mb-1">
+                                <i class="fas fa-chart-line text-blue-300 mr-2"></i>
+                                <h4 class="text-md font-semibold">Recharts + Analytics SDK</h4>
+                            </div>
+                            <p class="text-xs text-gray-300">시각화 및 분석 도구</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Code Snippet -->
+                <div class="code-snippet w-full text-gray-300 text-xs mb-5">
+                    <span class="text-blue-300">// 대시보드 실시간 데이터 스트림 구현</span><br>
+                    <span class="text-green-300">import</span> { create } <span class="text-green-300">from</span> <span class="text-red-300">'zustand'</span>;<br>
+                    <span class="text-green-300">import</span> { createClient } <span class="text-green-300">from</span> <span class="text-red-300">'@supabase/supabase-js'</span>;<br>
+                    <span class="text-green-300">import</span> { MCPAnalytics } <span class="text-green-300">from</span> <span class="text-red-300">'@mcp/analytics-sdk'</span>;<br>
+                    <br>
+                    <span class="text-green-300">const</span> <span class="text-yellow-300">useAgentStore</span> = create(<span class="text-purple-300">set</span> => ({<br>
+                    &nbsp;&nbsp;agents: [],<br>
+                    &nbsp;&nbsp;timeline: [],<br>
+                    &nbsp;&nbsp;suggestions: [],<br>
+                    <br>
+                    &nbsp;&nbsp;<span class="text-yellow-300">initializeRealtime</span>: () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-300">const</span> <span class="text-blue-300">socket</span> = <span class="text-green-300">new</span> WebSocket(<span class="text-red-300">'wss://api.snapcodex.com/agents'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">socket</span>.onmessage = <span class="text-purple-300">event</span> => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-300">const</span> <span class="text-blue-300">data</span> = JSON.parse(<span class="text-purple-300">event</span>.data);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-purple-300">set</span>(<span class="text-purple-300">state</span> => ({ <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;agents: <span class="text-blue-300">data</span>.agents || <span class="text-purple-300">state</span>.agents,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timeline: [<span class="text-blue-300">data</span>.event, ...<span class="text-purple-300">state</span>.timeline].slice(0, 20),<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;suggestions: <span class="text-blue-300">data</span>.suggestions || <span class="text-purple-300">state</span>.suggestions<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}));<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MCPAnalytics.track(<span class="text-red-300">'agent_status_update'</span>, <span class="text-blue-300">data</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;}<br>
+                    }));
+                </div>
+                
+                <!-- Automation Results -->
+                <div class="mt-auto">
+                    <h3 class="text-xl font-bold mb-3 gradient-text">🎯 자동화 성과</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="automation-card">
+                            <h4 class="flex items-center font-semibold mb-2">
+                                <i class="fas fa-eye text-blue-400 mr-2"></i>
+                                직관적 상황 파악 및 모니터링
+                            </h4>
+                            <p class="text-sm text-gray-300">EO 팀장에게 현재 상황을 한눈에 직관적으로 제공, 이슈 발생 시 즉시 식별</p>
+                        </div>
+                        <div class="automation-card">
+                            <h4 class="flex items-center font-semibold mb-2">
+                                <i class="fas fa-bolt text-blue-400 mr-2"></i>
+                                의사결정 속도 향상
+                            </h4>
+                            <p class="text-sm text-gray-300">경영층에 직관적인 상황 보고 가능, 로그 기반 회의자료 자동 생성</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="text-right mt-4">
+                    <p class="text-xs text-gray-400">SnapCodex EO + MCP 기반 풀세팅 자동화 환경</p>
+                    <p class="text-xs text-gray-400">5 / 8</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize the review agent chart
+        const reviewCtx = document.getElementById('reviewChart').getContext('2d');
+        const reviewChart = new Chart(reviewCtx, {
+            type: 'line',
+            data: {
+                labels: ['9AM', '10AM', '11AM', '12PM', '1PM'],
+                datasets: [{
+                    label: '작업 부하',
+                    data: [45, 62, 75, 70, 85],
+                    borderColor: '#EAB308',
+                    backgroundColor: 'rgba(234, 179, 8, 0.2)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: false
+                    }
+                },
+                scales: {
+                    x: {
+                        display: false
+                    },
+                    y: {
+                        display: false,
+                        min: 0,
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        // Apply styles to timeline items
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        timelineItems.forEach((item, index) => {
+            const dot = document.createElement('div');
+            let color;
+            
+            if (index === 0) color = '#3B82F6'; // blue
+            else if (index === 1) color = '#8B5CF6'; // purple
+            else if (index === 2) color = '#10B981'; // green
+            else if (index === 3) color = '#F59E0B'; // amber
+            else color = '#6B7280'; // gray
+            
+            item.querySelector(':first-child').style.color = color;
+            item.style.setProperty('--dot-color', color);
+            item.style.setProperty('--before-background', color);
+            item.querySelector(':before').style.background = color;
+            
+            const beforeElem = item.getElementsByTagName('div')[0];
+            if (beforeElem) {
+                const before = window.getComputedStyle(item, ':before');
+                before.backgroundColor = color;
+            }
+        });
+    </script>
+</body>
+</html> 
