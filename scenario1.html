@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapCodex EO + MCP - 시나리오 1</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #f5f7fa;
+        }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+        }
+        .tech-stack-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        .tech-stack-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .code-snippet {
+            background: #18181b;
+            border: 2px solid #4facfe;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: monospace;
+            position: relative;
+            overflow: hidden;
+            color: #f1f5f9;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+        }
+        .code-snippet::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: 0;
+        }
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+        .phone-notification {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            width: 350px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            color: #333;
+            position: relative;
+            margin: 0 auto;
+        }
+        .phone-notification:before {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .workflow-arrow {
+            color: #4facfe;
+            font-size: 28px;
+        }
+        .automation-card {
+            background: rgba(79, 172, 254, 0.1);
+            border-left: 4px solid #4facfe;
+            padding: 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .automation-card:hover {
+            background: rgba(79, 172, 254, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-content">
+        <div class="slide-container relative">
+            <div class="grid-pattern"></div>
+            <div class="content p-10 h-full flex flex-col">
+                <!-- Header -->
+                <div class="text-center mb-8">
+                    <p class="text-sm text-gray-400 mb-2">시나리오 1</p>
+                    <h2 class="text-3xl font-bold gradient-text">자동 업무 브리핑 <span class="text-white font-normal">(아침 9시)</span></h2>
+                    <p class="text-gray-300 mt-2">AI 기반 사전 업무 분석 및 우선순위 자동화</p>
+                </div>
+                
+                <!-- Main Content -->
+                <div class="flex flex-col items-center">
+                    <!-- Phone Notification -->
+                    <div class="phone-notification mb-8">
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
+                                <i class="fas fa-bell text-white"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="font-bold">OneSignal</p>
+                                <p class="text-xs text-gray-500">지금</p>
+                            </div>
+                        </div>
+                        <div class="text-center py-2 bg-gray-100 rounded-lg mb-2">
+                            <p class="font-bold text-lg">업무 자동 분석 완료</p>
+                        </div>
+                        <p class="text-sm mb-2">🧾 <span class="font-semibold">밤새 처리된 설계 리뷰 3건, 신규 요청 2건</span></p>
+                        <div class="text-xs text-blue-500 text-right">→ 1분 내 확인</div>
+                    </div>
+
+                    <!-- Workflow Diagram -->
+                    <div class="grid grid-cols-3 gap-x-4 gap-y-6 w-full mb-8">
+                        <div class="tech-stack-item text-center">
+                            <div class="w-14 h-14 rounded-full bg-gradient-to-r from-blue-400 to-cyan-300 flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-calendar-check text-white text-xl"></i>
+                            </div>
+                            <h3 class="text-md font-semibold mb-2">MCP Background<br/>Task Scheduler</h3>
+                            <p class="text-xs text-gray-300">심야 데이터 처리 &<br/>모닝 브리핑 자동화</p>
+                        </div>
+                        <div class="flex items-center justify-center">
+                            <span class="workflow-arrow">→</span>
+                        </div>
+                        <div class="tech-stack-item text-center">
+                            <div class="w-14 h-14 rounded-full bg-gradient-to-r from-green-400 to-cyan-300 flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-database text-white text-xl"></i>
+                            </div>
+                            <h3 class="text-md font-semibold mb-2">Supabase 로그<br/>→ EO 대시보드 연동</h3>
+                            <p class="text-xs text-gray-300">실시간 데이터 집계 &<br/>시각화 처리</p>
+                        </div>
+                        <div class="tech-stack-item text-center">
+                            <div class="w-14 h-14 rounded-full bg-gradient-to-r from-purple-400 to-blue-300 flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-robot text-white text-xl"></i>
+                            </div>
+                            <h3 class="text-md font-semibold mb-2">FastAPI LLM 에이전트</h3>
+                            <p class="text-xs text-gray-300">설계 리뷰 분석 &<br/>AI 기반 작업 우선순위 결정</p>
+                        </div>
+                        <div class="flex items-center justify-center">
+                            <span class="workflow-arrow">→</span>
+                        </div>
+                        <div class="tech-stack-item text-center">
+                            <div class="w-14 h-14 rounded-full bg-gradient-to-r from-red-400 to-yellow-300 flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-bolt text-white text-xl"></i>
+                            </div>
+                            <h3 class="text-md font-semibold mb-2">Redis 캐시</h3>
+                            <p class="text-xs text-gray-300">고속 데이터 처리 &<br/>즉시 응답</p>
+                        </div>
+                    </div>
+
+                    <!-- Code Snippet -->
+                    <div class="code-snippet w-5/6 text-gray-300 text-sm mb-8">
+                        <span class="text-blue-300">// MCP 모닝 브리핑 스케줄러 코드</span><br>
+                        <span class="text-green-300">async function</span> <span class="text-yellow-300">generateMorningBriefing</span>() {<br>
+                        &nbsp;&nbsp;<span class="text-purple-300">// 야간 처리된 데이터 가져오기</span><br>
+                        &nbsp;&nbsp;const <span class="text-blue-300">reviews</span> = <span class="text-green-300">await</span> supabase.from(<span class="text-red-300">'design_reviews'</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.select(<span class="text-red-300">'*'</span>).gt(<span class="text-red-300">'processed_at'</span>, getYesterdayDate());<br>
+                        <br>
+                        &nbsp;&nbsp;<span class="text-purple-300">// LLM 에이전트로 요약 생성</span><br>
+                        &nbsp;&nbsp;const <span class="text-blue-300">summary</span> = <span class="text-green-300">await</span> LLMAgent.summarize(reviews.data);<br>
+                        <br>
+                        &nbsp;&nbsp;<span class="text-purple-300">// 푸시 알림 전송</span><br>
+                        &nbsp;&nbsp;<span class="text-green-300">return</span> OneSignal.push({<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;content: summary,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;priority: <span class="text-red-300">'high'</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;schedule: <span class="text-red-300">'09:00'</span><br>
+                        &nbsp;&nbsp;});<br>
+                        }
+                    </div>
+                </div>
+
+                <!-- Automation Effects -->
+                <div class="mt-auto">
+                    <h3 class="text-xl font-bold mb-3 gradient-text">✅ 자동화 효과</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="automation-card">
+                            <h4 class="flex items-center font-semibold mb-2">
+                                <i class="fas fa-check-circle text-blue-400 mr-2"></i>
+                                출근 전 처리현황 요약 알림
+                            </h4>
+                            <p class="text-sm text-gray-300">사무실 도착하기 전 중요 업무 파악 및 대응 준비 완료</p>
+                        </div>
+                        <div class="automation-card">
+                            <h4 class="flex items-center font-semibold mb-2">
+                                <i class="fas fa-check-circle text-blue-400 mr-2"></i>
+                                전체 업무 우선순위 자동 제안
+                            </h4>
+                            <p class="text-sm text-gray-300">AI 기반 데이터 분석으로 최적의 업무 흐름 자동 구성</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="text-right mt-4">
+                    <p class="text-xs text-gray-400">SnapCodex EO + MCP 기반 풀세팅 자동화 환경</p>
+                    <p class="text-xs text-gray-400">2 / 8</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

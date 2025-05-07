@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapCodex EO + MCP - 시나리오 5</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #f5f7fa;
+        }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+        }
+        .tech-stack-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        .tech-stack-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .code-snippet {
+            background: #18181b;
+            border: 2px solid #4facfe;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: monospace;
+            position: relative;
+            overflow: hidden;
+            color: #f1f5f9;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+        }
+        .code-snippet::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: 0;
+        }
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+        .automation-card {
+            background: rgba(79, 172, 254, 0.1);
+            border-left: 4px solid #4facfe;
+            padding: 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .automation-card:hover {
+            background: rgba(79, 172, 254, 0.2);
+        }
+        .report-example {
+            background: rgba(255, 255, 255, 0.97);
+            color: #333;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        .report-example:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        .report-header {
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            padding: 12px 15px;
+        }
+        .report-body {
+            padding: 15px;
+        }
+        .report-footer {
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            padding: 10px 15px;
+            font-size: 12px;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        .data-table th {
+            background: #f1f3f5;
+            text-align: left;
+            padding: 8px;
+            font-size: 12px;
+        }
+        .data-table td {
+            border-top: 1px solid #dee2e6;
+            padding: 8px;
+            font-size: 12px;
+        }
+        .data-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        .share-method {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        .share-method:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+        .method-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        .workflow-arrow {
+            color: #4facfe;
+            font-size: 28px;
+        }
+        .feature-badge {
+            background: rgba(79, 172, 254, 0.15);
+            color: #4facfe;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-right: 5px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+  <div class="slide-content">
+    <div class="slide-container relative">
+        <div class="grid-pattern"></div>
+        <div class="content p-10 h-full flex flex-col">
+            <!-- Header -->
+            <div class="text-center mb-4">
+                <p class="text-sm text-gray-400 mb-2">시나리오 5</p>
+                <h2 class="text-3xl font-bold gradient-text">클라이언트 자동 리포트 전송</h2>
+                <p class="text-gray-300 mt-2">설계 변경 데이터 자동 분석 및 맞춤형 보고서 생성/공유 시스템</p>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="grid grid-cols-5 gap-5 mb-5">
+                <!-- Left: Report Example -->
+                <div class="col-span-3">
+                    <h3 class="text-lg font-semibold mb-3 gradient-text">
+                        <i class="fas fa-file-alt mr-2"></i>
+                        자동 생성 보고서 예시
+                    </h3>
+                    <div class="report-example">
+                        <div class="report-header flex items-center justify-between">
+                            <div class="flex items-center">
+                                <i class="fas fa-project-diagram text-blue-500 mr-2"></i>
+                                <span class="font-bold">Project A-127 설계 변경 리포트</span>
+                            </div>
+                            <div class="text-gray-500 text-sm">생성일: 2023.05.22</div>
+                        </div>
+                        <div class="report-body">
+                            <div class="text-sm mb-3">
+                                <span class="feature-badge">AI 분석</span>
+                                <span class="feature-badge">VE 자동 추천</span>
+                                <span class="feature-badge">비용 최적화</span>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <h4 class="text-sm font-bold text-gray-700 mb-2">1. 설계 변경 요약</h4>
+                                <p class="text-xs text-gray-600">5월 15일 대비 총 7개 영역 설계 변경 발생. 주요 변경사항: 내벽 구조 개선(+2.4%), 단열재 최적화(-1.7%), 창호 시스템 업그레이드(±0%)</p>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <h4 class="text-sm font-bold text-gray-700 mb-2">2. 공사비 비교표</h4>
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>항목</th>
+                                            <th>이전 견적</th>
+                                            <th>변경 견적</th>
+                                            <th>차이</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>구조공사</td>
+                                            <td>₩45,600,000</td>
+                                            <td>₩46,700,000</td>
+                                            <td class="text-red-500">+₩1,100,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>설비공사</td>
+                                            <td>₩23,400,000</td>
+                                            <td>₩22,800,000</td>
+                                            <td class="text-green-500">-₩600,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>마감공사</td>
+                                            <td>₩18,700,000</td>
+                                            <td>₩17,900,000</td>
+                                            <td class="text-green-500">-₩800,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-700 mb-2">3. VE 자동 추천</h4>
+                                <div class="bg-blue-50 p-2 rounded-md border border-blue-100">
+                                    <p class="text-xs text-blue-800">✓ 단열재 대체 자재(G-400) 적용 시 약 ₩1.2M 추가 절감 가능</p>
+                                    <p class="text-xs text-blue-800">✓ 내벽 구조 변경안 B-2 적용 시 구조성능 유지하며 ₩750K 절감</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="report-footer flex justify-between text-gray-500">
+                            <div class="flex items-center">
+                                <i class="fas fa-paperclip mr-1"></i>
+                                <span>첨부파일: 상세견적.xlsx, 도면비교.pdf</span>
+                            </div>
+                            <div>
+                                <i class="fas fa-lock mr-1"></i>
+                                <span>보안 링크: snap.cx/r/a127-05222023</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right: Sharing Methods + Tech -->
+                <div class="col-span-2">
+                    <h3 class="text-lg font-semibold mb-3 gradient-text">
+                        <i class="fas fa-share-alt mr-2"></i>
+                        공유 방식
+                    </h3>
+                    
+                    <div class="share-method">
+                        <div class="method-icon">
+                            <i class="fas fa-link text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-1">클라이언트별 커스텀 링크</h4>
+                            <p class="text-xs text-gray-300">개인화된 보안 URL + 만료기한 설정</p>
+                            <p class="text-xs text-gray-400 mt-1">예: snap.cx/client/{client-id}/{report-id}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="share-method">
+                        <div class="method-icon">
+                            <i class="fas fa-chart-line text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-1">열람 추적 로그 저장</h4>
+                            <p class="text-xs text-gray-300">접속 시간, 체류 시간, 열람 섹션 분석</p>
+                            <p class="text-xs text-gray-400 mt-1">EO 대시보드에 실시간 피드백</p>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-lg font-semibold mb-3 mt-5 gradient-text">
+                        <i class="fas fa-cogs mr-2"></i>
+                        사용 기술
+                    </h3>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="tech-stack-item">
+                            <div class="flex items-center mb-1">
+                                <i class="fas fa-server text-blue-300 mr-2"></i>
+                                <h4 class="text-md font-semibold">MCP API Gateway</h4>
+                            </div>
+                            <p class="text-xs text-gray-300">Report Generator 모듈 연동</p>
+                        </div>
+                        <div class="tech-stack-item">
+                            <div class="flex items-center mb-1">
+                                <i class="fab fa-node text-blue-300 mr-2"></i>
+                                <h4 class="text-md font-semibold">Vercel Functions</h4>
+                            </div>
+                            <p class="text-xs text-gray-300">서버리스 PDF/Excel 생성</p>
+                        </div>
+                        <div class="tech-stack-item">
+                            <div class="flex items-center mb-1">
+                                <i class="fas fa-bell text-blue-300 mr-2"></i>
+                                <h4 class="text-md font-semibold">OneSignal</h4>
+                            </div>
+                            <p class="text-xs text-gray-300">자동 알림 통합</p>
+                        </div>
+                        <div class="tech-stack-item">
+                            <div class="flex items-center mb-1">
+                                <i class="fab fa-slack text-blue-300 mr-2"></i>
+                                <h4 class="text-md font-semibold">Slack Webhook</h4>
+                            </div>
+                            <p class="text-xs text-gray-300">팀 내부 알림 전달</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Code Snippet -->
+            <div class="code-snippet w-full text-gray-300 text-xs mb-5">
+                <span class="text-blue-300">// 클라이언트별 맞춤형 보고서 생성 및 자동 전송</span><br>
+                <span class="text-green-300">async function</span> <span class="text-yellow-300">generateAndSendClientReport</span>(clientId, projectId, changes) {<br>
+                &nbsp;&nbsp;<span class="text-purple-300">// 1. 클라이언트 설정 로드 (템플릿, 연락처, 접근권한)</span><br>
+                &nbsp;&nbsp;const <span class="text-blue-300">clientSettings</span> = <span class="text-green-300">await</span> MCPClient.getSettings(clientId);<br>
+                <br>
+                &nbsp;&nbsp;<span class="text-purple-300">// 2. 변경사항 처리 및 비용 계산</span><br>
+                &nbsp;&nbsp;const <span class="text-blue-300">costComparison</span> = <span class="text-green-300">await</span> CostCalculator.compareChanges(changes);<br>
+                &nbsp;&nbsp;const <span class="text-blue-300">veProposals</span> = <span class="text-green-300">await</span> VEGenerator.suggest(projectId, costComparison);<br>
+                <br>
+                &nbsp;&nbsp;<span class="text-purple-300">// 3. 보고서 형식별 생성</span><br>
+                &nbsp;&nbsp;const <span class="text-blue-300">reportData</span> = {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;summary: <span class="text-green-300">await</span> ReportSummarizer.generate(changes),<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;costComparison,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;veProposals,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;client: clientSettings<br>
+                &nbsp;&nbsp;};<br>
+                <br>
+                &nbsp;&nbsp;const <span class="text-blue-300">files</span> = <span class="text-green-300">await</span> Promise.all([<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;ReportRenderer.toPDF(reportData),<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;ReportRenderer.toExcel(costComparison)<br>
+                &nbsp;&nbsp;]);<br>
+                <br>
+                &nbsp;&nbsp;<span class="text-purple-300">// 4. 안전한 공유 링크 생성 및 전송</span><br>
+                &nbsp;&nbsp;const <span class="text-blue-300">shareLink</span> = <span class="text-green-300">await</span> SecureShare.createLink({<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;clientId,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;projectId,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;expiry: <span class="text-red-300">'14d'</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;files<br>
+                &nbsp;&nbsp;});<br>
+                <br>
+                &nbsp;&nbsp;<span class="text-purple-300">// 5. 알림 전송 및 로깅</span><br>
+                &nbsp;&nbsp;<span class="text-green-300">await</span> Promise.all([<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;Notifications.sendToClient(clientId, shareLink),<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;Slack.notifyTeam(<span class="text-red-300">`클라이언트 ${</span>clientSettings.name<span class="text-red-300">} 보고서 전송 완료`</span>),<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;Analytics.logReportGeneration(clientId, projectId)<br>
+                &nbsp;&nbsp;]);<br>
+                <br>
+                &nbsp;&nbsp;<span class="text-green-300">return</span> { shareLink, trackingId: shareLink.trackingId };<br>
+                }
+            </div>
+            
+            <!-- Report Generation Workflow -->
+            <div class="mb-5">
+                <h3 class="text-lg font-semibold mb-3 gradient-text">리포트 생성 워크플로우</h3>
+                <div class="flex items-center justify-between">
+                    <div class="text-center px-4 py-3 bg-opacity-10 bg-blue-500 rounded-lg">
+                        <i class="fas fa-database text-blue-300 text-2xl mb-2"></i>
+                        <p class="text-sm">데이터 수집</p>
+                    </div>
+                    
+                    <span class="workflow-arrow">→</span>
+                    
+                    <div class="text-center px-4 py-3 bg-opacity-10 bg-blue-500 rounded-lg">
+                        <i class="fas fa-magic text-purple-300 text-2xl mb-2"></i>
+                        <p class="text-sm">AI 분석</p>
+                    </div>
+                    
+                    <span class="workflow-arrow">→</span>
+                    
+                    <div class="text-center px-4 py-3 bg-opacity-10 bg-blue-500 rounded-lg">
+                        <i class="fas fa-file-pdf text-red-300 text-2xl mb-2"></i>
+                        <p class="text-sm">문서 생성</p>
+                    </div>
+                    
+                    <span class="workflow-arrow">→</span>
+                    
+                    <div class="text-center px-4 py-3 bg-opacity-10 bg-blue-500 rounded-lg">
+                        <i class="fas fa-lock text-green-300 text-2xl mb-2"></i>
+                        <p class="text-sm">보안 링크</p>
+                    </div>
+                    
+                    <span class="workflow-arrow">→</span>
+                    
+                    <div class="text-center px-4 py-3 bg-opacity-10 bg-blue-500 rounded-lg">
+                        <i class="fas fa-paper-plane text-yellow-300 text-2xl mb-2"></i>
+                        <p class="text-sm">자동 전송</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-right mt-auto">
+                <p class="text-xs text-gray-400">SnapCodex EO + MCP 기반 풀세팅 자동화 환경</p>
+                <p class="text-xs text-gray-400">6 / 8</p>
+            </div>
+        </div>
+    </div>
+  </div>
+</body>
+</html> 
