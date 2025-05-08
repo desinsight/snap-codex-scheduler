@@ -32,6 +32,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Defer non-critical JavaScript -->
+    <style>
+        body { font-family: 'Poppins', 'Noto Sans KR', sans-serif; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); color: #1f2937; }
+        .gradient-bg { background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%); color: white; }
+        .nav-walletus { background: #fff; border-radius: 2rem; box-shadow: 0 4px 24px rgba(59,130,246,0.08); padding: 0.5rem 2rem; }
+        .nav-walletus a { color: #2563eb; font-weight: 600; border-radius: 1rem; padding: 0.5rem 1.2rem; transition: background 0.2s, color 0.2s; }
+        .nav-walletus a:hover { background: #e0f2fe; color: #1d4ed8; }
+        .walletus-card { background: #fff; border-radius: 2rem; box-shadow: 0 8px 32px rgba(59,130,246,0.10); padding: 2.5rem 2rem; margin-bottom: 2rem; }
+        .walletus-btn { border-radius: 9999px; font-weight: 700; box-shadow: 0 2px 8px rgba(59,130,246,0.10); transition: background 0.2s, color 0.2s, box-shadow 0.2s; }
+        .walletus-btn-primary { background: #2563eb; color: #fff; }
+        .walletus-btn-primary:hover { background: #1d4ed8; box-shadow: 0 4px 16px rgba(59,130,246,0.15); }
+        .walletus-btn-outline { background: #e0f2fe; color: #2563eb; border: 2px solid #60a5fa; }
+        .walletus-btn-outline:hover { background: #60a5fa; color: #fff; }
+        .accordion-section { margin-bottom: 1.5rem; }
+        .accordion-header { cursor: pointer; border-radius: 1.5rem 1.5rem 0 0; background: #f0f9ff; font-weight: 700; color: #2563eb; box-shadow: 0 2px 8px rgba(59,130,246,0.06); transition: background 0.2s; }
+        .accordion-header:hover { background: #e0f2fe; }
+        .accordion-content { display: none; padding: 2rem 1.5rem 1.5rem 1.5rem; background: #fff; border-radius: 0 0 1.5rem 1.5rem; box-shadow: 0 4px 16px -4px rgba(59,130,246,0.08); }
+        .accordion-content.open { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px);} to { opacity: 1; transform: none; } }
+    </style>
     <script type="module" crossorigin src="./assets/js/main-PnT9xE20.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/js/style-BWOeU2Ow.js">
     <link rel="modulepreload" crossorigin href="./assets/js/slider-DrpXyTuL.js">
@@ -39,59 +58,78 @@
   </head>
   <body class="bg-gray-900 text-white">
     <!-- Navigation -->
-    <nav class="fixed w-full z-50 bg-gray-900 bg-opacity-90 backdrop-blur-sm" role="navigation" aria-label="메인 네비게이션">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <a href="/" class="flex items-center space-x-2" aria-label="SnapCodex 홈">
-                      <span class="text-2xl font-bold gradient-text">SnapCodex</span>
-                    </a>
-                </div>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#features" class="text-gray-300 hover:text-white transition" aria-label="기능 소개">기능</a>
-                    <a href="/demo" class="text-gray-300 hover:text-white transition" aria-label="데모">데모</a>
-                    <a href="#contact" class="btn-primary" aria-label="문의하기">문의하기</a>
-                </div>
+    <header class="py-6 bg-transparent">
+        <div class="container mx-auto flex justify-between items-center">
+            <nav class="nav-walletus flex items-center space-x-6">
+                <img src="snap-codex-logo.png" alt="SnapCodex 로고" class="h-10 w-auto mr-2" style="display:inline-block;vertical-align:middle;" />
+                <a href="index.html">홈</a>
+                <a href="blockchain.html">블록체인</a>
+                <a href="nft.html">NFT</a>
+                <a href="copyright.html">저작권</a>
+                <a href="techstack.html">기술스택</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <button id="go-scenarios" class="walletus-btn walletus-btn-primary px-6 py-2 text-lg">체험하기</button>
+                <a href="#contact" class="walletus-btn walletus-btn-outline px-6 py-2 text-lg">문의하기</a>
+                <button class="walletus-btn walletus-btn-outline px-6 py-2 text-lg">로그인</button>
             </div>
         </div>
-    </nav>
+    </header>
 
     <!-- Hero Section -->
-    <section class="hero-section min-h-screen flex items-center" role="banner">
-        <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto text-center">
-                <h1 class="text-4xl md:text-6xl font-bold gradient-text mb-6">
-                    SnapCodex EO + MCP
-                </h1>
-                <p class="text-xl text-gray-300 mb-8">
-                    건축 및 엔지니어링을 위한 AI 기반 자동화 플랫폼
-                </p>
-                <div class="flex justify-center space-x-4">
-                    <a href="https://desinsight.github.ioimage.png/snap-codex-scheduler/demo.html" class="btn-primary" aria-label="체험하기">체험하기</a>
-                    <a href="#contact" class="btn-secondary" aria-label="문의하기">문의하기</a>
+    <section class="walletus-card text-center mb-12">
+        <h2 class="text-4xl font-extrabold text-blue-700 mb-4">AI 기반 건축 자동화 플랫폼</h2>
+        <p class="text-xl text-blue-400 mb-8">SnapCodex EO + MCP로 설계부터 수주까지 혁신적인 자동화 경험을 시작하세요.</p>
+        <div class="flex justify-center space-x-4">
+            <button id="go-scenarios2" class="walletus-btn walletus-btn-primary px-8 py-3 text-lg">1분만에 체험하기</button>
+            <a href="#contact" class="walletus-btn walletus-btn-outline px-8 py-3 text-lg">문의하기</a>
+        </div>
+    </section>
+
+    <!-- 소개/핵심 메시지/기술 개요 -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        <div class="walletus-card">
+            <h3 class="text-2xl font-bold text-blue-700 mb-4">SnapCodex란?</h3>
+            <p class="text-lg text-gray-700 mb-4">클라우드 기반의 AI 설계 플랫폼으로, EDX 포맷의 설계 모델을 업로드하면 구조화된 데이터로 변환하고 공사비를 산출하는 시스템입니다.</p>
+            <ul class="list-disc pl-6 text-blue-500 space-y-2">
+                <li>AI/ML 기반 건축설계 자동화 기술 시연</li>
+                <li>투자자/고객에게 기술의 실용성과 가치 제시</li>
+                <li>블록체인 기반 저작권 보호 메커니즘</li>
+            </ul>
+        </div>
+        <div class="walletus-card">
+            <h3 class="text-2xl font-bold text-blue-700 mb-4">핵심 메시지</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="p-4 bg-blue-50 rounded-2xl">
+                    <div class="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center text-white mb-3">
+                        <i class="fas fa-brain text-2xl"></i>
+                    </div>
+                    <h4 class="font-bold mb-2 text-blue-700">AI 기반 분석</h4>
+                    <p class="text-sm text-blue-700">설계 자료를 AI가 분석하여 핵심 요소 추출</p>
+                </div>
+                <div class="p-4 bg-blue-50 rounded-2xl">
+                    <div class="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center text-white mb-3">
+                        <i class="fas fa-sync-alt text-2xl"></i>
+                    </div>
+                    <h4 class="font-bold mb-2 text-blue-700">자동 업데이트</h4>
+                    <p class="text-sm text-blue-700">설계 변경 시 공사비 자동 조정</p>
+                </div>
+                <div class="p-4 bg-blue-50 rounded-2xl">
+                    <div class="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center text-white mb-3">
+                        <i class="fas fa-link text-2xl"></i>
+                    </div>
+                    <h4 class="font-bold mb-2 text-blue-700">블록체인 보호</h4>
+                    <p class="text-sm text-blue-700">NFT 기반 저작권 보호 및 수익화</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Demo Section -->
-    <section id="demo" class="demo-section py-20" role="region" aria-label="데모 섹션">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">주요 기능 데모</h2>
-            <div class="demo-slider">
-                <div class="slide-container overflow-y-auto" role="region" aria-label="슬라이드 컨테이너">
-                    <!-- 슬라이드 내용이 여기에 동적으로 로드됩니다 -->
-                </div>
-                <div class="slide-controls">
-                    <button class="prev-slide" aria-label="이전 슬라이드">
-                        <i class="fas fa-chevron-left" aria-hidden="true"></i>
-                    </button>
-                    <div class="slide-dots" role="tablist" aria-label="슬라이드 네비게이션"></div>
-                    <button class="next-slide" aria-label="다음 슬라이드">
-                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </div>
+    <!-- 아코디언 UI: 시나리오별 -->
+    <section id="scenarios" class="mb-16">
+        <h2 class="text-3xl font-bold text-blue-700 mb-8 text-center">체험 시나리오</h2>
+        <div id="accordion">
+            <!-- 시나리오별 아코디언 패널이 JS로 삽입됩니다. -->
         </div>
     </section>
 
@@ -144,14 +182,95 @@
     </section>
 
     <!-- Footer -->
-    <footer class="footer py-8" role="contentinfo">
-        <div class="container mx-auto px-4">
-            <div class="text-center text-gray-400">
-                <p>&copy; 2024 SnapCodex. All rights reserved.</p>
+    <footer class="gradient-bg py-8 text-white rounded-t-2xl shadow-lg mt-16">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <h2 class="text-2xl font-bold mb-2">SnapCodex</h2>
+                    <p class="text-sm opacity-70">AI로 설계부터 수주까지 자동화</p>
+                </div>
+                <div class="flex space-x-8">
+                    <div>
+                        <h3 class="font-bold mb-3">문의하기</h3>
+                        <p class="text-sm opacity-70">contact@snap-codex.com</p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold mb-3">팔로우</h3>
+                        <div class="flex space-x-4">
+                            <a href="#" class="opacity-70 hover:opacity-100"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="opacity-70 hover:opacity-100"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="opacity-70 hover:opacity-100"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 pt-6 border-t border-white/20 text-sm opacity-60 text-center">
+                © 2024 SnapCodex. All rights reserved.
             </div>
         </div>
     </footer>
 
     <!-- Defer non-critical JavaScript -->
+    <script>
+    // 시나리오별 HTML(요약/주요 UI/코드/워크플로우 등) 삽입
+    const scenarios = [
+        {
+            title: 'AI 설계자료 분석 및 핵심 요소 추출',
+            content: `<!-- 시나리오1 주요 내용 HTML -->\n${`...`}\n` // 실제 시나리오1 HTML로 대체
+        },
+        {
+            title: '설계 변경 시 자동 공사비 업데이트',
+            content: `<!-- 시나리오2 주요 내용 HTML -->\n${`...`}\n` // 실제 시나리오2 HTML로 대체
+        },
+        {
+            title: 'CXD 파일 기반 컨셉 디자인 자동 생성',
+            content: `<!-- 시나리오3 주요 내용 HTML -->\n${`...`}\n` // 실제 시나리오3 HTML로 대체
+        },
+        {
+            title: 'CXD 저작권 관리 및 수익화',
+            content: `<!-- 시나리오4 주요 내용 HTML -->\n${`...`}\n` // 실제 시나리오4 HTML로 대체
+        },
+        {
+            title: '블록체인 기술과 건축물 NFT 발행',
+            content: `<!-- 시나리오5 주요 내용 HTML -->\n${`...`}\n` // 실제 시나리오5 HTML로 대체
+        }
+    ];
+    const accordion = document.getElementById('accordion');
+    scenarios.forEach((sc, idx) => {
+        const section = document.createElement('div');
+        section.className = 'accordion-section';
+        section.innerHTML = `
+            <div class="accordion-header flex items-center justify-between px-8 py-5 text-xl select-none" data-idx="${idx}">
+                <span class="font-bold">${sc.title}</span>
+                <i class="fas fa-chevron-down text-blue-500 transition-transform"></i>
+            </div>
+            <div class="accordion-content">${sc.content}</div>
+        `;
+        accordion.appendChild(section);
+    });
+    // 아코디언 동작
+    document.querySelectorAll('.accordion-header').forEach(header => {
+        header.addEventListener('click', function() {
+            const content = this.nextElementSibling;
+            const icon = this.querySelector('i');
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                icon.style.transform = '';
+            } else {
+                document.querySelectorAll('.accordion-content.open').forEach(c => c.classList.remove('open'));
+                document.querySelectorAll('.accordion-header i').forEach(i => i.style.transform = '');
+                content.classList.add('open');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        });
+    });
+    // 체험하기 버튼 클릭 시 아코디언 영역으로 스크롤
+    document.getElementById('go-scenarios').onclick = function() {
+        document.getElementById('scenarios').scrollIntoView({behavior: 'smooth'});
+    };
+    document.getElementById('go-scenarios2').onclick = function() {
+        document.getElementById('scenarios').scrollIntoView({behavior: 'smooth'});
+    };
+    </script>
   </body>
 </html>
