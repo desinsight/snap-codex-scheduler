@@ -4,14 +4,8 @@ import { Layout } from './components/common/Layout';
 import { PrinciplesPage } from './routes/principles';
 import { PrincipleDetail } from './components/principles/PrincipleDetail';
 import { principles } from './data/principles';
-
-// 임시 홈페이지 컴포넌트
-const HomePage: React.FC = () => (
-  <div className="text-center py-12">
-    <h1 className="text-4xl font-bold text-gray-900 mb-4">SnapCodex에 오신 것을 환영합니다</h1>
-    <p className="text-xl text-gray-600">AI 기반 프로젝트 관리 솔루션</p>
-  </div>
-);
+import { HomePage } from './routes/HomePage';
+import { OnboardingPage } from './routes/OnboardingPage';
 
 // 임시 데모 페이지 컴포넌트
 const DemoPage: React.FC = () => (
@@ -48,6 +42,7 @@ export const App: React.FC = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/principles" element={<PrinciplesPage />} />
           <Route path="/demo" element={<DemoPage />} />
+          <Route path="/onboarding" element={<OnboardingPage />} />
           {principles.map((principle) => (
             <Route
               key={principle.id}

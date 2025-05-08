@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faLayerGroup, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faLayerGroup, faPlay, faFlask } from '@fortawesome/free-solid-svg-icons';
 
 export const Navigation: React.FC = () => {
   const location = useLocation();
@@ -29,6 +29,7 @@ export const Navigation: React.FC = () => {
                 className={`inline-flex items-center px-1 pt-1 border-b-2 ${
                   location.pathname === '/' ? 'border-blue-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
                 }`}
+                aria-label="홈"
               >
                 <FontAwesomeIcon icon={faHome} className="mr-2" />
                 홈
@@ -39,16 +40,27 @@ export const Navigation: React.FC = () => {
                 className={`inline-flex items-center px-1 pt-1 border-b-2 ${
                   isActive('/principles') ? 'border-blue-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
                 }`}
+                aria-label="5대 원칙"
               >
                 <FontAwesomeIcon icon={faLayerGroup} className="mr-2" />
                 5대 원칙
               </Link>
-              
+              <Link
+                to="/scenarios"
+                className={`inline-flex items-center px-1 pt-1 border-b-2 ${
+                  isActive('/scenarios') ? 'border-blue-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                }`}
+                aria-label="체험 시나리오"
+              >
+                <FontAwesomeIcon icon={faFlask} className="mr-2" />
+                체험 시나리오
+              </Link>
               <Link
                 to="/demo"
                 className={`inline-flex items-center px-1 pt-1 border-b-2 ${
                   isActive('/demo') ? 'border-blue-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
                 }`}
+                aria-label="데모"
               >
                 <FontAwesomeIcon icon={faPlay} className="mr-2" />
                 데모
