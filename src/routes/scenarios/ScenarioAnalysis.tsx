@@ -1,6 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import analysisImg from '../../assets/scenario-analysis.png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
+
+const sampleResult = [
+  { title: '핵심 구조 벽체', value: '10개' },
+  { title: '기둥', value: '7개' },
+  { title: '슬래브', value: '4개' },
+  { title: 'AI 분석 요약', value: '주요 구조물 자동 추출 및 분류 완료' },
+];
+
+const feedbacks = [
+  { user: '박AI', comment: '핵심 요소 추출 결과가 명확해서 설계 검토가 쉬워졌어요.', rating: 5 },
+  { user: '최설계', comment: '분석 속도가 빨라서 반복 작업이 크게 줄었습니다.', rating: 4 },
+];
 
 export const ScenarioAnalysis: React.FC = () => (
   <div className="max-w-3xl mx-auto py-12 px-4">
@@ -14,6 +28,17 @@ export const ScenarioAnalysis: React.FC = () => (
     <div className="mb-6">
       <img src={analysisImg} alt="설계자료 분석 예시" className="rounded-lg shadow w-full max-w-md mx-auto" />
       <p className="text-sm text-center text-gray-500 mt-2">예시: 설계 도면 업로드 및 AI 분석 결과 화면</p>
+    </div>
+    <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-4 mb-8">
+      <strong>분석 결과 미리보기:</strong>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+        {sampleResult.map((item) => (
+          <div key={item.title} className="bg-white dark:bg-blue-950/40 rounded-lg p-4 flex flex-col items-center">
+            <span className="font-bold text-blue-700 dark:text-blue-200">{item.title}</span>
+            <span className="text-lg text-gray-800 dark:text-gray-100">{item.value}</span>
+          </div>
+        ))}
+      </div>
     </div>
     <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-4">
       <strong>주요 UI 흐름:</strong>

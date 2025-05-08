@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRobot, faPaperPlane, faLayerGroup, faPlay, faUserPlus, faChartLine, faCloud, faShieldAlt, faFlask } from '@fortawesome/free-solid-svg-icons';
+import { PrinciplesCardSection } from '../components/principles/PrinciplesCardSection';
+import { PrinciplesFlowChart } from '../components/principles/PrinciplesFlowChart';
 
 const features = [
   {
@@ -66,6 +68,33 @@ export const HomePage: React.FC = () => (
         </a>
       </div>
     </div>
+    {/* About SnapCodex 섹션 */}
+    <section className="relative z-10 w-full max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 mb-10 mt-4 flex flex-col items-center border border-blue-100 dark:border-blue-900">
+      <h2 className="text-2xl sm:text-3xl font-bold text-blue-700 dark:text-blue-200 mb-4">About SnapCodex</h2>
+      <p className="text-gray-700 dark:text-gray-300 text-center mb-6 max-w-2xl">
+        SnapCodex는 AI와 클라우드, 블록체인 기술을 융합하여 건축 설계의 혁신을 이끄는 자동화 플랫폼입니다. 누구나 쉽고 투명하게, 그리고 실질적인 가치를 경험할 수 있도록 설계되었습니다.
+      </p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+        <div className="bg-blue-50 dark:bg-blue-900/30 rounded-xl p-6 flex flex-col items-center">
+          <h3 className="text-lg font-bold text-blue-700 dark:text-blue-200 mb-2">미션</h3>
+          <p className="text-gray-600 dark:text-gray-300 text-center text-sm">AI와 데이터로 건축 설계의 효율성과 투명성을 극대화하여, 모든 사용자가 혁신을 경험하도록 한다.</p>
+        </div>
+        <div className="bg-purple-50 dark:bg-purple-900/30 rounded-xl p-6 flex flex-col items-center">
+          <h3 className="text-lg font-bold text-purple-700 dark:text-purple-200 mb-2">비전</h3>
+          <p className="text-gray-600 dark:text-gray-300 text-center text-sm">글로벌 표준이 되는 AI 건축 자동화 플랫폼으로, 누구나 쉽게 접근하고 신뢰할 수 있는 생태계 구축</p>
+        </div>
+        <div className="bg-green-50 dark:bg-green-900/30 rounded-xl p-6 flex flex-col items-center">
+          <h3 className="text-lg font-bold text-green-700 dark:text-green-200 mb-2">핵심 가치</h3>
+          <ul className="list-disc list-inside text-left text-gray-600 dark:text-gray-300 text-sm">
+            <li>사용자 중심의 쉬운 경험</li>
+            <li>지속적 진화와 혁신</li>
+            <li>투명한 AI 설명력</li>
+            <li>보편적 접근성</li>
+            <li>실질적 실용성</li>
+          </ul>
+        </div>
+      </div>
+    </section>
     {/* 주요 콘텐츠 바로가기 카드 섹션 */}
     <div className="relative z-10 w-full max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 mb-8 px-2 sm:px-4">
       {/* 5대 원칙 카드 */}
@@ -131,6 +160,10 @@ export const HomePage: React.FC = () => (
         <li>블록체인 기반 저작권 보호 메커니즘</li>
       </ul>
     </div>
+    {/* 5대 원칙 카드 섹션 */}
+    <PrinciplesCardSection />
+    {/* 5대 원칙 플로우차트 시각화 */}
+    <PrinciplesFlowChart />
     {/* 간단한 애니메이션 효과용 스타일 */}
     <style>{`
       @keyframes fade-in { from { opacity: 0; transform: translateY(20px);} to { opacity: 1; transform: none; } }
