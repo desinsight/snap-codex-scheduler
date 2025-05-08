@@ -16,6 +16,7 @@ import { ExplainablePage } from './routes/principles/ExplainablePage';
 import { UniversalPage } from './routes/principles/UniversalPage';
 import { UsefulPage } from './routes/principles/UsefulPage';
 import { AboutPage } from './routes/AboutPage';
+import { NotFoundPage } from './routes/NotFoundPage';
 
 // 임시 데모 페이지 컴포넌트
 const DemoPage: React.FC = () => (
@@ -80,6 +81,7 @@ export const App: React.FC = () => {
           <Route path="/principles/universal" element={<UniversalPage />} />
           <Route path="/principles/useful" element={<UsefulPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Layout>
     </Router>
