@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapCodex - Easy</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            overflow: hidden;
+        }
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            background-color: #f9fafb;
+            color: #854d0e;
+            overflow: hidden;
+        }
+        .table-row {
+            transition: all 0.3s ease;
+        }
+        .table-row:hover {
+            background-color: rgba(251, 191, 36, 0.05);
+            transform: translateX(5px);
+        }
+        .check-icon {
+            color: #10b981;
+            font-size: 20px;
+            margin-right: 8px;
+        }
+        .sidebar-accent {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 8px;
+            height: 100%;
+            background: linear-gradient(to bottom, #fbbf24, #d97706);
+        }
+        .puzzle-bg {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            font-size: 200px;
+            opacity: 0.03;
+            color: #854d0e;
+            transform: rotate(15deg);
+        }
+        .ui-showcase {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: -5px 0 15px;
+        }
+        .ui-element {
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        .ui-element:hover {
+            transform: scale(1.05);
+        }
+        .ui-icon {
+            font-size: 24px;
+            color: #fbbf24;
+            background-color: rgba(251, 191, 36, 0.2);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            margin: 0 auto 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide p-12 flex flex-col">
+        <!-- Background Elements -->
+        <div class="puzzle-bg">
+            <i class="fas fa-puzzle-piece"></i>
+        </div>
+        <div class="sidebar-accent"></div>
+        
+        <!-- Header -->
+        <div class="flex items-center mb-8">
+            <div class="bg-amber-500 text-white rounded-full p-4 mr-4">
+                <i class="fas fa-puzzle-piece text-3xl"></i>
+            </div>
+            <div>
+                <h6 class="text-amber-600 text-xl font-medium mb-1">원칙 5</h6>
+                <h1 class="text-4xl font-bold">Easy <span class="text-2xl font-normal text-gray-500">무학습, 무매뉴얼 UI</span></h1>
+            </div>
+        </div>
+        
+        <!-- Main Content: Implementation Table -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8 flex-grow">
+            <h2 class="text-xl font-semibold mb-4 text-amber-800 border-b pb-2">주요 구성요소</h2>
+            
+            <!-- UI Elements Showcase -->
+            <div class="ui-showcase">
+                <div class="ui-element">
+                    <div class="ui-icon">
+                        <i class="fas fa-mouse-pointer"></i>
+                    </div>
+                    <span class="text-sm font-medium text-amber-700">클릭 한 번</span>
+                </div>
+                <div class="ui-element">
+                    <div class="ui-icon">
+                        <i class="far fa-clock"></i>
+                    </div>
+                    <span class="text-sm font-medium text-amber-700">즉시 응답</span>
+                </div>
+                <div class="ui-element">
+                    <div class="ui-icon">
+                        <i class="fas fa-th-large"></i>
+                    </div>
+                    <span class="text-sm font-medium text-amber-700">직관적 레이아웃</span>
+                </div>
+            </div>
+            
+            <div class="space-y-6">
+                <!-- 버튼 중심의 작동방식 -->
+                <div class="table-row flex p-2 border-b border-gray-100">
+                    <div class="w-1/4">
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span class="font-bold text-amber-900">버튼 중심의 작동방식</span>
+                    </div>
+                    <div class="w-3/4">
+                        <p class="text-gray-700">"설계 분석 시작", "유사 사례 검색", "일정 생성" 등 <span class="font-medium text-amber-700">자연어 대신 버튼으로 작동</span></p>
+                    </div>
+                </div>
+                
+                <!-- 카드형 UI -->
+                <div class="table-row flex p-2 border-b border-gray-100">
+                    <div class="w-1/4">
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span class="font-bold text-amber-900">카드형 UI</span>
+                    </div>
+                    <div class="w-3/4">
+                        <p class="text-gray-700">Apple Reminder처럼 <span class="font-medium text-amber-700">시각적 우선순위와 완료상태 표시</span> (e.g. 오늘의 업무 위젯)</p>
+                    </div>
+                </div>
+                
+                <!-- 모달 인터페이스 -->
+                <div class="table-row flex p-2">
+                    <div class="w-1/4">
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span class="font-bold text-amber-900">모달 인터페이스</span>
+                    </div>
+                    <div class="w-3/4">
+                        <p class="text-gray-700">복잡한 설정 없이 <span class="font-medium text-amber-700">1~2단계로 주요 기능 접근 가능</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- UI Examples -->
+        <div class="flex justify-center mb-4 space-x-8">
+            <div class="px-4 py-2 bg-amber-100 text-amber-800 rounded-full shadow-sm flex items-center">
+                <i class="fas fa-search mr-2"></i> 설계 분석 시작
+            </div>
+            <div class="px-4 py-2 bg-amber-50 text-amber-700 border border-amber-300 rounded-full flex items-center">
+                <i class="far fa-calendar-check mr-2"></i> 일정 생성
+            </div>
+            <div class="px-4 py-2 bg-amber-50 text-amber-700 border border-amber-300 rounded-full flex items-center">
+                <i class="fas fa-chart-line mr-2"></i> 보고서 작성
+            </div>
+        </div>
+        
+        <!-- Summary Box -->
+        <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r">
+            <p class="text-amber-900">
+                <span class="font-bold">요약:</span> 
+                사용자는 <span class="line-through">'학습'</span>할 필요 없이 <span class="bg-amber-200 px-1 font-medium">'작동'</span>에만 집중하면 됩니다.
+                SnapCodex는 <span class="font-medium">UI 자체가 매뉴얼</span>입니다.
+            </p>
+        </div>
+    </div>
+</body>
+</html> 

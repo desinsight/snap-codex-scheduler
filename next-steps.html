@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapCodex - Next Steps</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            overflow: hidden;
+        }
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            color: #1e293b;
+            overflow: hidden;
+        }
+        .timeline-container {
+            position: relative;
+            padding-left: 30px;
+        }
+        .timeline-bar {
+            position: absolute;
+            left: 0;
+            top: 20px;
+            bottom: 20px;
+            width: 4px;
+            background: linear-gradient(to bottom, #3b82f6, #6366f1, #8b5cf6, #22c55e);
+            border-radius: 4px;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding-left: 20px;
+            transition: all 0.3s ease;
+        }
+        .timeline-item:hover {
+            transform: translateX(5px);
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -12px;
+            top: 14px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid;
+        }
+        .timeline-item:nth-child(1)::before {
+            border-color: #3b82f6;
+        }
+        .timeline-item:nth-child(2)::before {
+            border-color: #6366f1;
+        }
+        .timeline-item:nth-child(3)::before {
+            border-color: #8b5cf6;
+        }
+        .timeline-item:nth-child(4)::before {
+            border-color: #22c55e;
+        }
+        .principle-pill {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 4px;
+        }
+        .footer-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+        .footer-container::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #6366f1, #8b5cf6, #22c55e, #fbbf24);
+        }
+    </style>
+</head>
+<body>
+    <div class="slide p-12 flex flex-col">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Next Steps - SnapCodex 확장 계획</h1>
+            <p class="text-gray-600">5대 원칙을 기반으로 한 지속적인 발전</p>
+        </div>
+        
+        <!-- Main Content: Timeline and Next Steps -->
+        <div class="flex flex-grow">
+            <!-- Left: Timeline -->
+            <div class="w-3/5 pr-8">
+                <h2 class="text-xl font-semibold mb-6 text-gray-700">
+                    <i class="fas fa-map-signs mr-2 text-blue-600"></i>
+                    개발 로드맵
+                </h2>
+                <div class="timeline-container">
+                    <div class="timeline-bar"></div>
+                    
+                    <!-- Step 1 -->
+                    <div class="timeline-item">
+                        <div class="bg-white p-4 rounded-lg shadow-md">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="font-bold text-blue-800">온보딩 매뉴얼 완성</h3>
+                                <span class="text-sm text-gray-500">6월 중순</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-2">5대 원칙 기반의 사용자 온보딩 문서화</p>
+                            <div class="flex items-center text-xs text-gray-500">
+                                <span class="principle-pill bg-amber-500"></span> Easy
+                                <span class="principle-pill bg-indigo-500 ml-2"></span> Universal
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 2 -->
+                    <div class="timeline-item">
+                        <div class="bg-white p-4 rounded-lg shadow-md">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="font-bold text-indigo-800">MVP 프레젠테이션 확정</h3>
+                                <span class="text-sm text-gray-500">6월 말</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-2">핵심 기능과 가치 제안을 담은 데모 버전</p>
+                            <div class="flex items-center text-xs text-gray-500">
+                                <span class="principle-pill bg-green-500"></span> Useful
+                                <span class="principle-pill bg-blue-500 ml-2"></span> Explainable
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 3 -->
+                    <div class="timeline-item">
+                        <div class="bg-white p-4 rounded-lg shadow-md">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="font-bold text-purple-800">Figma 인터랙션 구현</h3>
+                                <span class="text-sm text-gray-500">7월 중순</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-2">UI/UX 디자인 프로토타입 제작 및 테스트</p>
+                            <div class="flex items-center text-xs text-gray-500">
+                                <span class="principle-pill bg-amber-500"></span> Easy
+                                <span class="principle-pill bg-indigo-500 ml-2"></span> Universal
+                                <span class="principle-pill bg-purple-500 ml-2"></span> Evolution
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 4 -->
+                    <div class="timeline-item">
+                        <div class="bg-white p-4 rounded-lg shadow-md">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="font-bold text-green-800">실제 코드 개발</h3>
+                                <span class="text-sm text-gray-500">8월 ~ </span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-2">프로토타입을 실제 작동하는 시스템으로 구현</p>
+                            <div class="flex items-center text-xs text-gray-500">
+                                <span class="principle-pill bg-blue-500"></span> Explainable
+                                <span class="principle-pill bg-purple-500 ml-2"></span> Evolution
+                                <span class="principle-pill bg-green-500 ml-2"></span> Useful
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right: Key Targets -->
+            <div class="w-2/5 bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-semibold mb-6 text-gray-700 flex items-center">
+                    <i class="fas fa-bullseye text-red-500 mr-2"></i>
+                    핵심 목표
+                </h2>
+                
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <div class="bg-blue-100 p-2 rounded-lg mr-3">
+                            <i class="fas fa-users text-blue-600"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800">초기 사용자 10팀 확보</h3>
+                            <p class="text-sm text-gray-600">건축 설계 및 시공 분야 중심</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="bg-green-100 p-2 rounded-lg mr-3">
+                            <i class="fas fa-chart-line text-green-600"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800">업무 효율 30% 향상 입증</h3>
+                            <p class="text-sm text-gray-600">시간/비용 절약 측정 메트릭 구축</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="bg-purple-100 p-2 rounded-lg mr-3">
+                            <i class="fas fa-code-branch text-purple-600"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800">피드백 통합 프로세스 구축</h3>
+                            <p class="text-sm text-gray-600">지속적 개선 체계 확립</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="mt-8 footer-container bg-gray-800 text-white p-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-xl font-bold mb-1">SnapCodex</h2>
+                    <p class="text-gray-300">5대 원칙으로 구현하는 AI 기반 업무 자동화</p>
+                </div>
+                <div class="flex space-x-6">
+                    <div class="text-center">
+                        <i class="fas fa-brain text-blue-400 text-2xl mb-1"></i>
+                        <p class="text-xs">Explainable</p>
+                    </div>
+                    <div class="text-center">
+                        <i class="fas fa-globe text-indigo-400 text-2xl mb-1"></i>
+                        <p class="text-xs">Universal</p>
+                    </div>
+                    <div class="text-center">
+                        <i class="fas fa-dna text-purple-400 text-2xl mb-1"></i>
+                        <p class="text-xs">Evolution</p>
+                    </div>
+                    <div class="text-center">
+                        <i class="fas fa-tools text-green-400 text-2xl mb-1"></i>
+                        <p class="text-xs">Useful</p>
+                    </div>
+                    <div class="text-center">
+                        <i class="fas fa-puzzle-piece text-amber-400 text-2xl mb-1"></i>
+                        <p class="text-xs">Easy</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
