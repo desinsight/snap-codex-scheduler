@@ -32,6 +32,11 @@
                 <a href="#pricing" class="nav__link">요금제</a>
                 <a href="https://app.snap-codex.com" class="nav__link nav__link--primary">시작하기</a>
             </div>
+            <div class="flex items-center gap-4">
+                <button class="button nav__link" id="theme-toggle" aria-label="테마 전환"><i id="theme-icon" class="fas fa-moon"></i></button>
+                <a href="#contact" class="nav__link nav__link--primary">문의하기</a>
+                <a href="#login" class="nav__link">로그인</a>
+            </div>
         </nav>
     </header>
 
@@ -114,5 +119,26 @@
 
     <!-- 최소한의 JavaScript -->
     <script src="assets/js/main.js" defer></script>
+    <script src="assets/js/theme.js"></script>
+    <script>
+    // 테마 토글 버튼 아이콘 동기화
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    function updateThemeIcon() {
+        const theme = document.documentElement.getAttribute('data-theme');
+        if (theme === 'dark') {
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        } else {
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+        }
+    }
+    themeToggleBtn.addEventListener('click', () => {
+        themeToggle();
+        updateThemeIcon();
+    });
+    updateThemeIcon();
+    </script>
 </body>
 </html> 

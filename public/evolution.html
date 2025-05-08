@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapCodex - Evolution</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            overflow: hidden;
+        }
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            background-color: #f9fafb;
+            color: #6d28d9;
+            overflow: hidden;
+        }
+        .table-row {
+            transition: all 0.3s ease;
+        }
+        .table-row:hover {
+            background-color: rgba(139, 92, 246, 0.05);
+            transform: translateX(5px);
+        }
+        .check-icon {
+            color: #10b981;
+            font-size: 20px;
+            margin-right: 8px;
+        }
+        .sidebar-accent {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 8px;
+            height: 100%;
+            background: linear-gradient(to bottom, #8b5cf6, #6d28d9);
+        }
+        .dna-bg {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            font-size: 200px;
+            opacity: 0.03;
+            color: #6d28d9;
+            transform: rotate(15deg);
+        }
+        .evolution-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            padding: 0 50px;
+        }
+        .evolution-stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #8b5cf6;
+        }
+        .evolution-arrow {
+            color: #c4b5fd;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide p-12 flex flex-col">
+        <!-- Background Elements -->
+        <div class="dna-bg">
+            <i class="fas fa-dna"></i>
+        </div>
+        <div class="sidebar-accent"></div>
+        
+        <!-- Header -->
+        <div class="flex items-center mb-8">
+            <div class="bg-purple-600 text-white rounded-full p-4 mr-4">
+                <i class="fas fa-dna text-3xl"></i>
+            </div>
+            <div>
+                <h6 class="text-purple-600 text-xl font-medium mb-1">원칙 3</h6>
+                <h1 class="text-4xl font-bold">Evolution <span class="text-2xl font-normal text-gray-500">진화하는 시스템</span></h1>
+            </div>
+        </div>
+        
+        <!-- Main Content: Implementation Table -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8 flex-grow">
+            <h2 class="text-xl font-semibold mb-4 text-purple-800 border-b pb-2">주요 구현 요소</h2>
+            
+            <!-- Evolution Flow Visualization -->
+            <div class="evolution-flow">
+                <div class="evolution-stage">
+                    <i class="fas fa-code-branch text-2xl mb-1"></i>
+                    <span>프롬프트 개발</span>
+                </div>
+                <div class="evolution-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                <div class="evolution-stage">
+                    <i class="fas fa-users text-2xl mb-1"></i>
+                    <span>사용자 피드백</span>
+                </div>
+                <div class="evolution-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                <div class="evolution-stage">
+                    <i class="fas fa-sync-alt text-2xl mb-1"></i>
+                    <span>시스템 개선</span>
+                </div>
+                <div class="evolution-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                <div class="evolution-stage">
+                    <i class="fas fa-rocket text-2xl mb-1"></i>
+                    <span>배포</span>
+                </div>
+            </div>
+            
+            <div class="space-y-6">
+                <!-- PromptOps -->
+                <div class="table-row flex p-2 border-b border-gray-100">
+                    <div class="w-1/4">
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span class="font-bold text-purple-900">PromptOps</span>
+                    </div>
+                    <div class="w-3/4">
+                        <p class="text-gray-700">모든 프롬프트에 <span class="font-medium text-purple-700">Git-like 버전 관리 구조</span> 적용. 커밋, 비교, 롤백 지원</p>
+                    </div>
+                </div>
+                
+                <!-- Slack 피드백 통합 -->
+                <div class="table-row flex p-2 border-b border-gray-100">
+                    <div class="w-1/4">
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span class="font-bold text-purple-900">Slack 피드백 통합</span>
+                    </div>
+                    <div class="w-3/4">
+                        <p class="text-gray-700">팀원이 사용 중 발견한 문제 → Slack에 의견 남기면, Prompt 수정 반영 후 <span class="font-medium text-purple-700">자동 Slack 알림</span> (Diff 포함)</p>
+                    </div>
+                </div>
+                
+                <!-- FeatureFlags 시스템 -->
+                <div class="table-row flex p-2">
+                    <div class="w-1/4">
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span class="font-bold text-purple-900">FeatureFlags 시스템</span>
+                    </div>
+                    <div class="w-3/4">
+                        <p class="text-gray-700">실험 중인 기능은 <span class="font-medium text-purple-700">특정 사용자에게만 노출</span>, 안정화 후 전체 배포 가능</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Summary Box -->
+        <div class="bg-purple-50 border-l-4 border-purple-600 p-4 rounded-r">
+            <p class="text-purple-900">
+                <span class="font-bold">요약:</span> 
+                사용자가 시스템을 '가르치는' 구조. SnapCodex는 고정된 툴이 아니라, 
+                <span class="bg-purple-200 px-1 font-medium">사용자의 작업 방식에 맞춰 '진화하는 생명체'</span>입니다.
+            </p>
+        </div>
+    </div>
+</body>
+</html> 

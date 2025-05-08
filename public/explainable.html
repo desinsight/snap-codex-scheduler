@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapCodex - Explainable</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            overflow: hidden;
+        }
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            background-color: #f9fafb;
+            color: #1e3a8a;
+            overflow: hidden;
+        }
+        .table-row {
+            transition: all 0.3s ease;
+        }
+        .table-row:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+            transform: translateX(5px);
+        }
+        .check-icon {
+            color: #10b981;
+            font-size: 20px;
+            margin-right: 8px;
+        }
+        .sidebar-accent {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 8px;
+            height: 100%;
+            background: linear-gradient(to bottom, #3b82f6, #1e3a8a);
+        }
+        .brain-bg {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            font-size: 200px;
+            opacity: 0.03;
+            color: #1e3a8a;
+            transform: rotate(15deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="slide p-12 flex flex-col">
+        <!-- Background Elements -->
+        <div class="brain-bg">
+            <i class="fas fa-brain"></i>
+        </div>
+        <div class="sidebar-accent"></div>
+        
+        <!-- Header -->
+        <div class="flex items-center mb-8">
+            <div class="bg-blue-600 text-white rounded-full p-4 mr-4">
+                <i class="fas fa-brain text-3xl"></i>
+            </div>
+            <div>
+                <h6 class="text-blue-600 text-xl font-medium mb-1">원칙 1</h6>
+                <h1 class="text-4xl font-bold">Explainable <span class="text-2xl font-normal text-gray-500">설명 가능한 AI</span></h1>
+            </div>
+        </div>
+        
+        <!-- Main Content: Implementation Table -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8 flex-grow">
+            <h2 class="text-xl font-semibold mb-4 text-blue-800 border-b pb-2">주요 구현 요소</h2>
+            
+            <div class="space-y-6">
+                <!-- LangTrace -->
+                <div class="table-row flex p-2 border-b border-gray-100">
+                    <div class="w-1/4">
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span class="font-bold text-blue-900">LangTrace</span>
+                    </div>
+                    <div class="w-3/4">
+                        <p class="text-gray-700">모든 LLM 요청에 대해 <span class="font-medium text-blue-700">"프롬프트 → 응답 → 토큰/시간"</span> 로그 자동 기록. 사용자/팀별 에이전트 작동 내역을 시각화</p>
+                    </div>
+                </div>
+                
+                <!-- PromptOps -->
+                <div class="table-row flex p-2 border-b border-gray-100">
+                    <div class="w-1/4">
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span class="font-bold text-blue-900">PromptOps</span>
+                    </div>
+                    <div class="w-3/4">
+                        <p class="text-gray-700">프롬프트 버전별 성능 비교, A/B 실험 가능. <span class="font-medium text-blue-700">변경 이력 추적과 롤백 기능</span>으로 투명한 프롬프트 관리</p>
+                    </div>
+                </div>
+                
+                <!-- Agent Log System -->
+                <div class="table-row flex p-2">
+                    <div class="w-1/4">
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span class="font-bold text-blue-900">Agent Log System</span>
+                    </div>
+                    <div class="w-3/4">
+                        <p class="text-gray-700">EO ↔ Cursor ↔ GPT Insight 간의 작업 흐름 기록, <span class="font-medium text-blue-700">Slack 알림 연동</span>으로 실시간 검토 가능</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Summary Box -->
+        <div class="bg-blue-50 border-l-4 border-blue-600 p-4 rounded-r">
+            <p class="text-blue-900">
+                <span class="font-bold">요약:</span> 
+                SnapCodex는 "왜 이런 결과가 나왔는가?"를 누구나 이해할 수 있게 시각화하고 기록하는 구조를 탑재했습니다. 
+                이로써 AI가 <span class="line-through">블랙박스</span>가 아닌 <span class="bg-blue-200 px-1 font-medium">협업자</span>가 됩니다.
+            </p>
+        </div>
+    </div>
+</body>
+</html> 

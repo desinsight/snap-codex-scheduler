@@ -350,4 +350,67 @@ img {
 .landing-404-btn {
     margin-top: 2rem;
     display: inline-block;
+}
+
+/* 버튼 스타일 개선 */
+.button, .walletus-btn, .cta-button {
+    background-color: var(--color-primary);
+    color: #fff;
+    border: none;
+    border-radius: 9999px;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(59,130,246,0.10);
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+}
+.button:hover, .walletus-btn:hover, .cta-button:hover {
+    background-color: var(--color-primary-dark);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(59,130,246,0.15);
+}
+.button:focus, .walletus-btn:focus, .cta-button:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+/* 카드/아코디언 대비 및 그림자 */
+.walletus-card, .feature-card, .accordion-header, .accordion-content {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 24px rgba(59,130,246,0.08);
+    border: 1px solid var(--color-border);
+}
+.accordion-header {
+    font-weight: 700;
+    color: var(--color-primary);
+    background: var(--bg-primary);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+.accordion-header:hover {
+    background: #e0f2fe;
+    color: var(--color-primary-dark);
+}
+.accordion-content {
+    background: #f9fafb;
+    color: var(--text-primary);
+    border-radius: 0 0 1.5rem 1.5rem;
+    box-shadow: 0 4px 16px -4px rgba(59,130,246,0.08);
+}
+[data-theme="dark"] .walletus-card, [data-theme="dark"] .feature-card, [data-theme="dark"] .accordion-header, [data-theme="dark"] .accordion-content {
+    background: #23272f;
+    color: #fff;
+    border: 1px solid #374151;
+}
+[data-theme="dark"] .accordion-content {
+    background: #18181b;
+    color: #fff;
+}
+
+/* 포커스/선택 상태 */
+*:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
 } 
