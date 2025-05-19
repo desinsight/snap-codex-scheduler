@@ -47,7 +47,7 @@
     "axios": "^1.9.0",
     "bull": "^4.16.5",
     "date-fns": "^3.0.6",
-    "framer-motion": "^10.17.9",
+    "framer-motion": "^12.12.1",
     "graphql": "^16.8.1",
     "graphql-ws": "^5.15.0",
     "handlebars": "^4.7.8",
